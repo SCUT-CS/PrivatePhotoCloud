@@ -8,33 +8,33 @@ Part A是项目代码的相关规范，Part B是项目架构。
 
 ## 目录
 
-[Part A](#Part A)
+    [Part A](#Part A)
 
-​	[IDE和Git](#IDE和Git)
+​	    [IDE和Git](#IDE和Git)
 
-​	[代码规范](#代码规范)
+​	    [代码规范](#代码规范)
 
-​		[Code Style](#Code Style)
+​		    [Code Style](#Code Style)
 
-​		[注释](#注释)
+​		    [注释](#注释)
 
-​		[Check Style](#Check Style)
+​	    	[Check Style](#Check Style)
 
-[Part B](#Part B)
+    [Part B](#Part B)
 
-​	[UI](#UI)
+​	    [UI](#UI)
 
-​	[加密部分](#加密部分)
+​	    [加密部分](#加密部分)
 
-​	[多线程](#多线程)
+​	    [多线程](#多线程)
 
-​	[Camera API](#Camera API)
+​	    [Camera API](#Camera API)
 
-​	[相册API](#相册API)
+​	    [相册API](#相册API)
 
-​	[云服务API](云服务API)
+​	    [云服务API](云服务API)
 
-[TODO](#TODO)
+    [TODO](#TODO)
 
 ## Part A
 
