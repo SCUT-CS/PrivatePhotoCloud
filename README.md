@@ -8,7 +8,13 @@ Part A是项目代码的相关规范，Part B是项目架构。
 
 ## Updates
 
-#### 2022.7.21
+### 2022.7.23
+
+创建Android项目。
+
+- Android Studio第一次加载需要从Google下载一部分包和依赖，可能需要科学上网。
+
+### 2022.7.21
 
 1. Demo已上传到`PPPS-Algorithm`文件夹。
 2. 使用JDK17。
