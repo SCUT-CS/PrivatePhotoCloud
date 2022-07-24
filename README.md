@@ -91,11 +91,10 @@ UI的制作。
 
 ### 云服务API
 
-- 官方提供API的云服务可以直接使用。
-- 多种云服务的支持（Interface）。
-- 不提供API的云服务可能需要打开登录网页，获取Cookie或者Token得到云服务的访问权限。
-  - 可以在GitHub搜索相关实现，但要注意其开源协议。
-  - 使用其他来源的代码或者函数需要**在注释区域的@source字段表明来源**。
+- 创建通用的Cloud Interface
+- 使用阿里云OSS对象云存储服务
+  - [云存储API](https://help.aliyun.com/document_detail/31947.html)
+  - [图像处理API](https://help.aliyun.com/document_detail/101260.html)
 
 ## TODO：
 
