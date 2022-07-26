@@ -47,16 +47,21 @@ Some of the most important features of good coding style are:
 #### 注释格式
 
 ```java
-/** [Description here]
- *  @author [Your name]
- *  @param [Parameters]
- *  @source (optional)
+/** 
+ * [Description here（return what）]
+ * @param [Parameters and Description](optional)
+ * @param [Parameters and Description](optional)
+ * @author [Your name]
+ * @source (optional)
  */
-public class Main {
-    
-    public static void main(String[] args) {
+
+/**
+ * encrypt a image and return true if success.
+ * @param img the image to be encrypted.
+ * @author Cui Yuxin
+ */
+private boolean encrypt(Bitmap img) {
         
-    }
 }
 ```
 
@@ -74,8 +79,18 @@ UI的制作。
 
 包括加密、解密以及缩略图的本地计算。
 
-- 加密不足一格的bug。
-- 图像EXIF信息的加密。
+TODO：图像EXIF信息的加密。
+
+- 使用Android API 28 提供的ImageDecoder类进行图片处理。
+- 新增对HEIF文件的支持。
+- 新增对透明度的支持。
+- 由于API的限制，色域限制在了8bit sRGB。
+
+Demo时间测试结果：
+
+1. 低分辨率JPG：0.1s
+2. 中分辨率JPG：3.8s
+3. 高分辨率JPG：27s
 
 ### 多线程
 
@@ -92,13 +107,12 @@ UI的制作。
 ### 云服务API
 
 - 创建通用的Cloud Interface
-- 使用阿里云OSS对象云存储服务
+- 先使用阿里云OSS对象云存储服务实现
   - [云存储API](https://help.aliyun.com/document_detail/31947.html)
   - [图像处理API](https://help.aliyun.com/document_detail/101260.html)
 
 ## TODO：
 
-- 多种图片格式的支持（*.heif 等）
-- 不同色彩范围（黑白？）和色深的支持
+- 黑白图片的支持？
 - 后台、服务、状态栏
 - 自动同步

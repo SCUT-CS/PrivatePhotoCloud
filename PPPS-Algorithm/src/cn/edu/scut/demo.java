@@ -10,16 +10,15 @@ import javax.imageio.ImageIO;
 public class demo {
 
     private static int encrypt(int x, int r, int d) {
-
         int c = x - r % d;
         c = c < 0 ? c + d : c;
         return c;
     }
+
     /**
      * 读取一张图片的RGB值
      */
     public static int[][][] getImagePixel(String image, String image1, String image2) {
-
         Random rnd = new Random();
         File file = new File(image);
         BufferedImage bi = null;
@@ -40,6 +39,7 @@ public class demo {
         for(int y = minY; y < height; y++) {
             for(int x = minX; x < width; x++) {
                 //获取包含这个像素的颜色信息的值, int型
+
                 int pixel = bi.getRGB(x, y);
                 //从pixel中获取rgb的值
                 rgb[0] = (pixel & 0xff0000) >> 16; //r
@@ -226,5 +226,10 @@ public class demo {
         genThumbnail("images/zbw1.jpg", "images/zbw1_thumbnail.jpg", 15);
         genThumbnail("images/zbw2.jpg", "images/zbw2_thumbnail.jpg", 15);
         reConstruct("images/zbw1_thumbnail.jpg", "images/zbw2_thumbnail.jpg", "images/zbw_thumbnail.jpg", record);
+
+
+        //时间测试
+
+
     }
 }
