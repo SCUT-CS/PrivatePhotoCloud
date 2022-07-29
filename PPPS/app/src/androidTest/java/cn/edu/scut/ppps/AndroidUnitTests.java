@@ -15,12 +15,13 @@ public class AndroidUnitTests {
     @Test
     public void timeTest() {
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        /*
         Encrypt encrypt = new Encrypt("./images/ZHAO.jpg");
         long startTime = System.currentTimeMillis();
         encrypt.run();
         long endTime = System.currentTimeMillis();
         long usedTime = endTime - startTime;
-        System.out.println("demo" + usedTime);
+        System.out.println("demo" + usedTime);*/
     }
 }
 
