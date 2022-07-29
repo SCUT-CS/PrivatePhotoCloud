@@ -1,12 +1,12 @@
 package cn.edu.scut;
-//不可行
+//不可行，溢出数组不可计算
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 
-public class TestNoRecord {
+public class test3in1 {
 
     private static int encrypt(int x, int r, int d) {
         int c = x - r % d;
@@ -35,8 +35,8 @@ public class TestNoRecord {
         int minX = bi.getMinX();
         int minY = bi.getMinY();
         int[] rgb = new int[3];
-        for (int y = minY; y < height; y++) {
-            for (int x = minX; x < width; x++) {
+        for(int y = minY; y < height; y++) {
+            for(int x = minX; x < width; x++) {
                 //获取包含这个像素的颜色信息的值, int型
 
                 int pixel = bi.getRGB(x, y);
@@ -44,9 +44,9 @@ public class TestNoRecord {
                 rgb[0] = (pixel & 0xff0000) >> 16; //r
                 rgb[1] = (pixel & 0xff00) >> 8; //g
                 rgb[2] = (pixel & 0xff); //b
-                int r1 = rnd.nextInt(rgb[0]+1);
-                int g1 = rnd.nextInt(rgb[1]+1);
-                int b1 = rnd.nextInt(rgb[2]+1);
+                int r1 = rnd.nextInt(256);
+                int g1 = rnd.nextInt(256);
+                int b1 = rnd.nextInt(256);
 //                pixel = rgb[2] & 0xff | (rgb[1] & 0xff) << 8 | (rgb[0] & 0xff) << 16;
                 pixel = b1 & 0xff | (g1 & 0xff) << 8 | (r1 & 0xff) << 16;
                 bi1.setRGB(x, y, pixel);
@@ -59,11 +59,11 @@ public class TestNoRecord {
                 bi2.setRGB(x, y, pixel);
 
                 //------Record-----
-                if (rgb[0] < r1)
+                if(rgb[0] < r1)
                     record[0][x][y] = 1;
-                if (rgb[1] < g1)
+                if(rgb[1] < g1)
                     record[1][x][y] = 1;
-                if (rgb[2] < b1)
+                if(rgb[2] < b1)
                     record[2][x][y] = 1;
             }
         }
@@ -75,10 +75,10 @@ public class TestNoRecord {
             e.printStackTrace();
         }
 
-        String newfile = "images/allsum.jpg";
+        String newfile = "images/zbw.jpg";
         BufferedImage bi3 = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-        for (int y = minY; y < height; y++) {
-            for (int x = minX; x < width; x++) {
+        for(int y = minY; y < height; y++) {
+            for(int x = minX; x < width; x++) {
                 //获取包含这个像素的颜色信息的值, int型
                 int pixel1 = bi1.getRGB(x, y);
                 //从pixel中获取rgb的值
@@ -121,15 +121,15 @@ public class TestNoRecord {
         }
         int width = bi.getWidth();
         int height = bi.getHeight();
-        BufferedImage bi1 = new BufferedImage(width / size, height / size, BufferedImage.TYPE_INT_RGB);
+        BufferedImage bi1 = new BufferedImage(width/size, height/size, BufferedImage.TYPE_INT_RGB);
 
         int k = 0, t = 0;
-        for (int y = 0; y < height; y += size) {
-            for (int x = 0; x < width; x += size) {
+        for(int y = 0; y < height; y += size) {
+            for(int x = 0; x < width; x += size) {
 
                 int sumr = 0, sumg = 0, sumb = 0;
-                for (int j = y; j < y + size; j++) {
-                    for (int i = x; i < x + size; i++) {
+                for(int j = y; j < y + size; j++) {
+                    for(int i = x; i < x + size; i++) {
 
                         int pixel = bi.getRGB(i, j);
                         sumr += (pixel & 0xff0000) >> 16; //r
@@ -142,7 +142,7 @@ public class TestNoRecord {
                 sumb /= (size * size);
 
                 int pixel1 = sumb & 0xff | (sumg & 0xff) << 8 | (sumr & 0xff) << 16;
-                bi1.setRGB(x / size, y / size, pixel1);
+                bi1.setRGB(x / size, y /size, pixel1);
             }
         }
         try {
@@ -156,11 +156,11 @@ public class TestNoRecord {
     public static void reConstruct(String origin1, String origin2, String newfile, int[][][] record) {
 
         int[][][] ncord = new int[3][30][30];
-        for (int x = 0; x < record[0].length; x += 15) {
-            for (int y = 0; y < record[0][0].length; y += 15) {
+        for(int x = 0; x < record[0].length; x += 15) {
+            for(int y = 0; y < record[0][0].length; y += 15) {
 
-                for (int i = x; i < x + 15; i++) {
-                    for (int j = y; j < y + 15; j++) {
+                for(int i = x; i < x + 15; i++) {
+                    for(int j = y; j < y + 15; j++) {
 
                         ncord[0][x / 15][y / 15] += record[0][i][j];
                         ncord[1][x / 15][y / 15] += record[1][i][j];
@@ -188,8 +188,8 @@ public class TestNoRecord {
         BufferedImage image3 = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 
         int[] rgb = new int[3];
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
+        for(int y = 0; y < height; y++) {
+            for(int x = 0; x < width; x++) {
                 //获取包含这个像素的颜色信息的值, int型
                 int pixel1 = image1.getRGB(x, y);
                 //从pixel中获取rgb的值
@@ -203,11 +203,9 @@ public class TestNoRecord {
                 int g2 = (pixel2 & 0xff00) >> 8; //g
                 int b2 = (pixel2 & 0xff); //b
 
-                rgb[0] = r1 + r2 ;
-                rgb[1] = (g1 + g2) ;
-                ;
-                rgb[2] = (b1 + b2) ;
-                ;
+                rgb[0] = r1 + r2 - (ncord[0][x][y] * 255 / 225);
+                rgb[1] = (g1 + g2) - (ncord[1][x][y] * 255 / 225);;
+                rgb[2] = (b1 + b2) - (ncord[2][x][y] * 255 / 225);;
                 int pixel = rgb[2] & 0xff | (rgb[1] & 0xff) << 8 | (rgb[0] & 0xff) << 16;
                 image3.setRGB(x, y, pixel);
             }
@@ -220,62 +218,17 @@ public class TestNoRecord {
         }
     }
 
-    public static void compare(String image1, String image2){
-        System.out.println("sss");
-        File file = new File(image1);
-        BufferedImage bi = null;
-        try {
-            bi = ImageIO.read(file);
-        } catch (IOException e) {
-
-            e.printStackTrace();
-        }
-        int width = bi.getWidth();
-        int height = bi.getHeight();
-        int[] rgb = new int[3];
-
-        File file2 = new File(image2);
-        BufferedImage bi2 = null;
-        try {
-            bi2 = ImageIO.read(file);
-        } catch (IOException e) {
-
-            e.printStackTrace();
-        }
-        int[] rgb2 = new int[3];
-
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                //获取包含这个像素的颜色信息的值, int型
-                int pixel = bi.getRGB(x, y);
-                //从pixel中获取rgb的值
-                rgb[0] = (pixel & 0xff0000) >> 16; //r
-                rgb[1] = (pixel & 0xff00) >> 8; //g
-                rgb[2] = (pixel & 0xff); //b
-                //获取包含这个像素的颜色信息的值, int型
-                int pixel2 = bi2.getRGB(x, y);
-                //从pixel中获取rgb的值
-                rgb2[0] = (pixel & 0xff0000) >> 16; //r
-                rgb2[1] = (pixel & 0xff00) >> 8; //g
-                rgb2[2] = (pixel & 0xff); //b
-
-                if(rgb[0] != rgb2[0] || rgb[1] != rgb2[1] || rgb[2] != rgb2[2]){
-                    System.out.println(x + " " + y);
-                }
-
-            }
-        }
-    }
-
-    public static void main(String[] args) {
+    public static void main(String [] args){
 
         int[][][] record = getImagePixel("images/ZHAO.jpg", "images//zbw1.jpg", "images//zbw2.jpg");
-
-        compare("images/ZHAO.jpg", "images/allsum.jpg");
-       genThumbnail("images/ZHAO.jpg", "images/ZHAO_thumbnail.jpg", 15);
+        genThumbnail("images/ZHAO.jpg", "images/ZHAO_thumbnail.jpg", 15);
         genThumbnail("images/zbw1.jpg", "images/zbw1_thumbnail.jpg", 15);
         genThumbnail("images/zbw2.jpg", "images/zbw2_thumbnail.jpg", 15);
         reConstruct("images/zbw1_thumbnail.jpg", "images/zbw2_thumbnail.jpg", "images/zbw_thumbnail.jpg", record);
+
+
+        //时间测试
+
 
     }
 }
