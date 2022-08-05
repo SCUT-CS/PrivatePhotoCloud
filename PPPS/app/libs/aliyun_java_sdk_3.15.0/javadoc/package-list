@@ -1,0 +1,9 @@
+com.aliyun.oss
+com.aliyun.oss.common.auth
+com.aliyun.oss.common.comm
+com.aliyun.oss.common.comm.io
+com.aliyun.oss.common.parser
+com.aliyun.oss.common.utils
+com.aliyun.oss.crypto
+com.aliyun.oss.event
+com.aliyun.oss.model

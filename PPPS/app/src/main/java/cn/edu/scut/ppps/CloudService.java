@@ -1,6 +1,9 @@
 package cn.edu.scut.ppps;
 
 public interface CloudService {
-    //boolean upload(String filePath, String fileName);
+    void upload(String filePath);
+    void upload(byte[] file, String fileName);
+    void download(String fileName);
+    void getThumbnail(String fileName);
 
 }
