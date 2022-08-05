@@ -1,6 +1,8 @@
 package cn.edu.scut.ppps;
 
 import android.content.Context;
+import android.os.Environment;
+import android.util.Log;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -13,15 +15,13 @@ import static org.junit.Assert.*;
 @RunWith(AndroidJUnit4.class)
 public class AndroidUnitTests {
     @Test
-    public void timeTest() {
+    public void environmentTest() {
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        /*
-        Encrypt encrypt = new Encrypt("./images/ZHAO.jpg");
-        long startTime = System.currentTimeMillis();
-        encrypt.run();
-        long endTime = System.currentTimeMillis();
-        long usedTime = endTime - startTime;
-        System.out.println("demo" + usedTime);*/
+        String a = Environment.getDataDirectory().getAbsolutePath();
+        String b = Environment.getExternalStorageDirectory().getAbsolutePath();
+        String c = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath();
+        String d = appContext.getFilesDir().getAbsolutePath();
+        String e = appContext.getCacheDir().getAbsolutePath();
     }
 }
 

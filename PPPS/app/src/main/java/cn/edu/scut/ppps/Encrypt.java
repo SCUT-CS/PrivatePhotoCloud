@@ -5,8 +5,14 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.ColorSpace;
 import android.graphics.ImageDecoder;
+import android.os.Build;
 
+import androidx.annotation.RequiresApi;
+
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Random;
 
@@ -16,20 +22,22 @@ import java.util.Random;
  */
 public class Encrypt implements Runnable {
 
-    private String filePath;
+    private final String filePath;
     private String fileName;
-    private Context context;
+    private final Context context;
     private Bitmap img1;
     private Bitmap img2;
-    private Random rnd = new Random();
+    private final Random rnd = new Random();
 
     /**
      * Constructor.
      * @param file Path of the image file to be encrypted.
+     * @param context Android context from caller.
      * @author Cui Yuxin
      */
-    public Encrypt(String file) {
+    public Encrypt(String file, Context context) {
         this.filePath = file;
+        this.context = context;
     }
 
     /**
@@ -122,11 +130,37 @@ public class Encrypt implements Runnable {
     }
 
     /**
-     * save a image and return true if success.
+     * Save images and return true if success.
+     * This method may take several seconds to complete, so it should only be called from a worker thread.
      * @author Cui Yuxin
      */
-    private Boolean saveFile() {
-        /* TODO: save the image to the filePath */
+    private Boolean saveFile() throws IOException {
+        String cachePath = context.getCacheDir().getAbsolutePath();
+        String savePath1 = cachePath + File.separator+ "Disk1";
+        String savePath2 = cachePath + File.separator+ "Disk2";
+        File saveDir1 = new File(savePath1);
+        File saveDir2 = new File(savePath2);
+        if (!saveDir1.exists()) {
+            saveDir1.mkdirs();
+        }
+        if (!saveDir2.exists()) {
+            saveDir2.mkdirs();
+        }
+        File saveFile1 = new File(savePath1 + File.separator + fileName + ".webp");
+        File saveFile2 = new File(savePath2 + File.separator + fileName + ".webp");
+        BufferedOutputStream outStream1 = new BufferedOutputStream(new FileOutputStream(saveFile1));
+        BufferedOutputStream outStream2 = new BufferedOutputStream(new FileOutputStream(saveFile2));
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
+            // lossless compression quality 100, resulting in a smaller file. (optimize for small files or high speed.)
+            img1.compress(Bitmap.CompressFormat.WEBP_LOSSLESS, 100, outStream1);
+            img2.compress(Bitmap.CompressFormat.WEBP_LOSSLESS, 100, outStream2);
+        } else {
+            // lossless compression quality 100
+            img1.compress(Bitmap.CompressFormat.WEBP, 100, outStream1);
+            img2.compress(Bitmap.CompressFormat.WEBP, 100, outStream2);
+        }
+        outStream1.flush();
+        outStream2.flush();
         return true;
     }
 
@@ -139,6 +173,13 @@ public class Encrypt implements Runnable {
         try {
             Bitmap img = openFile();
             encrypt(img);
+
+
+
+
+
+
+
         } catch (IOException e) {
             e.printStackTrace();
         }
