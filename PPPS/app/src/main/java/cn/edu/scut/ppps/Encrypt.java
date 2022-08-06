@@ -19,18 +19,18 @@ import java.util.concurrent.Callable;
  */
 public class Encrypt implements Callable {
 
-    private final String filePath;
+    private String filePath;
     private String fileName;
-    private final Context context;
+    private Context context;
     private Bitmap img;
     private Bitmap img1;
     private Bitmap img2;
-    private final Random rnd = new Random();
+    private Random rnd = new Random();
 
     /**
      * Constructor.
      * @param file Path of the image file to be encrypted.
-     * @param context Android context from caller.
+     * @param context Context of the application.
      * @author Cui Yuxin
      */
     public Encrypt(String file, Context context) {
