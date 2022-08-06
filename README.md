@@ -157,7 +157,7 @@ UI的制作。
 - 创建通用的Cloud Interface
 
 - 先使用阿里云OSS对象云存储服务实现
-  - [云存储API](https://help.aliyun.com/document_detail/31947.html)
+  - [云存储API](https://help.aliyun.com/document_detail/32007.html)
   - [图像处理API](https://help.aliyun.com/document_detail/101260.html)
   
 - 为了方便云服务的开发和调试，分配了以下阿里云子账户，并赋予了管理对象存储服务(OSS)权限，如果需要其他权限请联系我。
@@ -170,7 +170,11 @@ UI的制作。
 
   hzx@1059439782476091.onaliyun.com DiCN{(zJvoBzy3IA0BmU45rdPOYk$sq$
 
-- OSS存储桶已创建(ppps-lks)，**Bucket 域名：ppps-lks.oss-cn-hangzhou.aliyuncs.com**
+- OSS存储桶已创建(ppps1和ppps2)
+
+  **Bucket 域名：ppps1.oss-cn-hangzhou.aliyuncs.com  ppps2.oss-cn-hangzhou.aliyuncs.com**
+
+  地域节点： oss-cn-hangzhou.aliyuncs.com
 
 - 调用API使用以下AccessKey
 
