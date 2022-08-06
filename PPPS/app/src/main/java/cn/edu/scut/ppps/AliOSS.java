@@ -1,9 +1,12 @@
 package cn.edu.scut.ppps;
 
+import android.content.Context;
+
 import com.aliyun.oss.ClientException;
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.OSSException;
+import com.aliyun.oss.model.GetObjectRequest;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -26,14 +29,17 @@ public class AliOSS implements CloudService {
      */
     private Map<String,String> token;
     private OSS ossClient;
+    private Context context;
 
     /**
      * Constructor.
      * @param tokenName Token`s name.
+     * @param context Context of the application.
      * @author Cui Yuxin
      */
-    public AliOSS(String tokenName) {
+    public AliOSS(String tokenName, Context context) {
         this.token = token;
+        this.context = context;
         ossClient = new OSSClientBuilder().build(token.get("endpoint"),
                 token.get("accessId"),
                 token.get("accessSecret"));
@@ -119,7 +125,39 @@ public class AliOSS implements CloudService {
      */
     @Override
     public boolean download(String fileName) {
-        return false;
+        String cachePath = context.getCacheDir().getAbsolutePath();
+        String savePath = cachePath + File.separator + "Disk1";
+        File saveDir = new File(savePath);
+        if (!saveDir.exists()) {
+            saveDir.mkdirs();
+        }
+        String pathName = savePath + File.separator + fileName;
+        String objectName = token.get("filePath") + fileName;
+        try {
+            // 下载Object到本地文件，并保存到指定的本地路径中。如果指定的本地文件存在会覆盖，不存在则新建。
+            ossClient.getObject(new GetObjectRequest(token.get("bucketName"), objectName), new File(pathName));
+        } catch (OSSException oe) {
+            // TODO Error handling.
+            System.out.println("Caught an OSSException, which means your request made it to OSS, "
+                    + "but was rejected with an error response for some reason.");
+            System.out.println("Error Message:" + oe.getErrorMessage());
+            System.out.println("Error Code:" + oe.getErrorCode());
+            System.out.println("Request ID:" + oe.getRequestId());
+            System.out.println("Host ID:" + oe.getHostId());
+            return false;
+        } catch (ClientException ce) {
+            // TODO Error handling.
+            System.out.println("Caught an ClientException, which means the client encountered "
+                    + "a serious internal problem while trying to communicate with OSS, "
+                    + "such as not being able to access the network.");
+            System.out.println("Error Message:" + ce.getMessage());
+            return false;
+        } finally {
+            if (ossClient != null) {
+                ossClient.shutdown();
+            }
+        }
+        return true;
     }
 
     /**
