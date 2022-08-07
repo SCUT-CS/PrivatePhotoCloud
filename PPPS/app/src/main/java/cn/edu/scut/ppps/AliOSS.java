@@ -166,13 +166,45 @@ public class AliOSS implements CloudService {
     }
 
     /**
-     * Get a thumbnail of a file from the cloud storage and return.
-     * @param fileName Name of the file to be downloaded.
+     * Save a thumbnail of a file from the cloud storage and return if success.
+     * @param fileName     Name of the file to be downloaded.
+     * @param downloadPath Path to store the file, e.g. "Disk1Thumbnail".
      * @author Cui Yuxin
      */
     @Override
-    public void getThumbnail(String fileName) {
-
+    public boolean getThumbnail(String fileName, String downloadPath) {
+        String cachePath = context.getCacheDir().getAbsolutePath();
+        String savePath = cachePath + File.separator + downloadPath;
+        File saveDir = new File(savePath);
+        if (!saveDir.exists()) {
+            saveDir.mkdirs();
+        }
+        String localPath = savePath + File.separator + fileName;
+        String objectName = token.get("filePath") + fileName;
+        try {
+            // 将图片等比缩放，缩放图为延伸出指定w与h的矩形框外的最小图片。
+            String style = "image/resize,m_mfit,w_400,h_400";
+            GetObjectRequest request = new GetObjectRequest(token.get("bucketName"), objectName);
+            request.setProcess(style);
+            ossClient.getObject(request, new File(localPath));
+        } catch (OSSException oe) {
+            // TODO Error handling.
+            System.out.println("Caught an OSSException, which means your request made it to OSS, "
+                    + "but was rejected with an error response for some reason.");
+            System.out.println("Error Message:" + oe.getErrorMessage());
+            System.out.println("Error Code:" + oe.getErrorCode());
+            System.out.println("Request ID:" + oe.getRequestId());
+            System.out.println("Host ID:" + oe.getHostId());
+            return false;
+        } catch (ClientException ce) {
+            // TODO Error handling.
+            System.out.println("Caught an ClientException, which means the client encountered "
+                    + "a serious internal problem while trying to communicate with OSS, "
+                    + "such as not being able to access the network.");
+            System.out.println("Error Message:" + ce.getMessage());
+            return false;
+        }
+        return true;
     }
 
     /**

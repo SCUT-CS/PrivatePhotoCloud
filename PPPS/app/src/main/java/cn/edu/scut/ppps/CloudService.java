@@ -33,11 +33,12 @@ public interface CloudService {
     boolean download(String fileName, String downloadPath);
 
     /**
-     * Get a thumbnail of a file from the cloud storage and return.
+     * Save a thumbnail of a file from the cloud storage and return if success.
      * @param fileName Name of the file to be downloaded.
+     * @param downloadPath Path to store the file, e.g. "Disk1Thumbnail".
      * @author Cui Yuxin
      */
-    void getThumbnail(String fileName);
+    boolean getThumbnail(String fileName, String downloadPath);
 
     /**
      * Get a list of files in the cloud storage and return.
