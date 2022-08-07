@@ -1,6 +1,7 @@
 package cn.edu.scut.ppps;
 
 import java.io.FileNotFoundException;
+import java.util.List;
 
 /**
  * Cloud storage service interface.
@@ -26,9 +27,10 @@ public interface CloudService {
     /**
      * Download a file from the cloud storage and return if success.
      * @param fileName Name of the file to be downloaded.
+     * @param downloadPath Path to store the file, e.g. "Disk1".
      * @author Cui Yuxin
      */
-    boolean download(String fileName);
+    boolean download(String fileName, String downloadPath);
 
     /**
      * Get a thumbnail of a file from the cloud storage and return.
@@ -36,5 +38,31 @@ public interface CloudService {
      * @author Cui Yuxin
      */
     void getThumbnail(String fileName);
+
+    /**
+     * Get a list of files in the cloud storage and return.
+     * @author Cui Yuxin
+     */
+    List<String> getFileList();
+
+    /**
+     * Delete a file from the cloud storage and return if success.
+     * @param fileName Name of the file to be deleted.
+     * @author Cui Yuxin
+     */
+    boolean delete(String fileName);
+
+    /**
+     * Delete all files from the cloud storage and return if success.
+     * @author Cui Yuxin
+     */
+    boolean deleteAll();
+
+    /**
+     * Delete files from the cloud storage and return if success.
+     * @param fileNames Names of the files to be deleted.
+     * @author Cui Yuxin
+     */
+    boolean delete(List<String> fileNames);
 
 }
