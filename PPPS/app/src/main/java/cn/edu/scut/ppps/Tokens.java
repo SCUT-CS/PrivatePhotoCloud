@@ -17,7 +17,7 @@ import java.util.Set;
  */
 public class Tokens {
 
-    private Map<String, Map<String,String>> tokens;
+    private Map<String, Map<String, String>> tokens;
     private Context context;
 
     /**

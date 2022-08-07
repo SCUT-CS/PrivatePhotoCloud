@@ -7,7 +7,6 @@ import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.OSSException;
 import com.aliyun.oss.model.DeleteObjectsRequest;
-import com.aliyun.oss.model.DeleteObjectsResult;
 import com.aliyun.oss.model.GetObjectRequest;
 import com.aliyun.oss.model.ListObjectsRequest;
 import com.aliyun.oss.model.ListObjectsV2Request;
@@ -20,8 +19,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -39,7 +36,7 @@ public class AliOSS implements CloudService {
      * "filePath" is the directory in the bucket to store files, e.g. "exampleDir/".
      * @author Cui Yuxin
      */
-    private Map<String,String> token;
+    private Map<String, String> token;
     private OSS ossClient;
     private Context context;
 
