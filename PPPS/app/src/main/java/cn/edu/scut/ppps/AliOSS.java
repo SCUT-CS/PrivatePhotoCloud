@@ -179,8 +179,8 @@ public class AliOSS implements CloudService {
         String localPath = savePath + File.separator + fileName;
         String objectName = token.get("filePath") + fileName;
         try {
-            // 将图片等比缩放，缩放图为延伸出指定w与h的矩形框外的最小图片。
-            String style = "image/resize,m_mfit,w_400,h_400";
+            // 将图片等比缩放为延伸出指定w与h的矩形框外的最小图片，之后按照固定宽高进行裁剪.
+            String style = "image/resize,m_fill,w_400,h_800";
             GetObjectRequest request = new GetObjectRequest(token.get("bucketName"), objectName);
             request.setProcess(style);
             ossClient.getObject(request, new File(localPath));

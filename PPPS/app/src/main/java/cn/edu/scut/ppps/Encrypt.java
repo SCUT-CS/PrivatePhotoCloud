@@ -128,10 +128,12 @@ public class Encrypt implements Callable {
      */
     private class EncryptThread extends Thread {
 
-        private final int rowStart;
-        private final int rowEnd;
-        private final int colStart;
-        private final int colEnd;
+        private int rowStart;
+        private int rowEnd;
+        private int colStart;
+        private int colEnd;
+        private int height;
+        private int width;
 
         /**
          * encrypt a channel of a pixel.
@@ -154,8 +156,8 @@ public class Encrypt implements Callable {
          * @author Cui Yuxin, Zhao Bowen
          */
         EncryptThread(int id, int threadNum) {
-            int width = img.getWidth();
-            int height = img.getHeight();
+            width = img.getWidth();
+            height = img.getHeight();
             colStart = 0;
             colEnd = width;
             if (id == threadNum - 1) {
@@ -165,11 +167,11 @@ public class Encrypt implements Callable {
                 rowStart = (height / threadNum) * id;
                 rowEnd = (height / threadNum) * (id + 1);
             }
-            img1 = Bitmap.createBitmap(width, height,
+            img1 = Bitmap.createBitmap(width, height * 2,
                     Bitmap.Config.RGBA_F16,
                     img.hasAlpha(),
                     ColorSpace.get(ColorSpace.Named.SRGB));
-            img2 = Bitmap.createBitmap(width, height,
+            img2 = Bitmap.createBitmap(width, height * 2,
                     Bitmap.Config.RGBA_F16,
                     img.hasAlpha(),
                     ColorSpace.get(ColorSpace.Named.SRGB));
@@ -181,11 +183,11 @@ public class Encrypt implements Callable {
          */
         @Override
         public void run() {
-            // TODO Save overflow information in the images
             if (img.hasAlpha()) {
                 int[] argb = new int[4];
                 for (int row = rowStart; row < rowEnd; row++) {
                     for (int col = colStart; col < colEnd; col++) {
+                        // TODO optimize the function call
                         int pixel = img.getPixel(row, col);
                         argb[0] = Color.red(pixel);
                         argb[1] = Color.green(pixel);
@@ -203,12 +205,42 @@ public class Encrypt implements Callable {
                         int a2 = encrypt(argb[3], b1, 256);
                         pixel = Color.argb(r2, g2, b2, a2);
                         img2.setPixel(row, col, pixel);
+                        // encrypt the overflow information
+                        int r3, g3, b3, a3;
+                        int r4, g4, b4, a4;
+                        if (argb[0] < r1){
+                            r3 = rnd.nextInt(256);
+                            r4 = 255 - r3;
+                        } else{
+                            r3 = r4 = 0;
+                        }
+                        if (argb[1] < g1){
+                            g3 = rnd.nextInt(256);
+                            g4 = 255 - g3;
+                        } else{
+                            g3 = g4 = 0;
+                        }
+                        if (argb[2] < b1){
+                            b3 = rnd.nextInt(256);
+                            b4 = 255 - b3;
+                        } else{
+                            b3 = b4 = 0;
+                        }
+                        if (argb[3] < a1){
+                            a3 = rnd.nextInt(256);
+                            a4 = 255 - a3;
+                        } else{
+                            a3 = a4 = 0;
+                        }
+                        img1.setPixel(row + height, col, Color.argb(r3, g3, b3, a3));
+                        img2.setPixel(row + height, col, Color.argb(r4, g4, b4, a4));
                     }
                 }
             } else {
                 int[] rgb = new int[3];
                 for (int row = rowStart; row < rowEnd; row++) {
                     for (int col = colStart; col < colEnd; col++) {
+                        // TODO optimize the function call
                         int pixel = img.getPixel(row, col);
                         rgb[0] = Color.red(pixel);
                         rgb[1] = Color.green(pixel);
@@ -223,6 +255,29 @@ public class Encrypt implements Callable {
                         int b2 = encrypt(rgb[2], b1, 256);
                         pixel = Color.rgb(r2, g2, b2);
                         img2.setPixel(row, col, pixel);
+                        // encrypt the overflow information
+                        int r3, g3, b3;
+                        int r4, g4, b4;
+                        if (rgb[0] < r1){
+                            r3 = rnd.nextInt(256);
+                            r4 = 255 - r3;
+                        } else{
+                            r3 = r4 = 0;
+                        }
+                        if (rgb[1] < g1){
+                            g3 = rnd.nextInt(256);
+                            g4 = 255 - g3;
+                        } else{
+                            g3 = g4 = 0;
+                        }
+                        if (rgb[2] < b1){
+                            b3 = rnd.nextInt(256);
+                            b4 = 255 - b3;
+                        } else{
+                            b3 = b4 = 0;
+                        }
+                        img1.setPixel(row + height, col, Color.rgb(r3, g3, b3));
+                        img2.setPixel(row + height, col, Color.rgb(r4, g4, b4));
                     }
                 }
             }
