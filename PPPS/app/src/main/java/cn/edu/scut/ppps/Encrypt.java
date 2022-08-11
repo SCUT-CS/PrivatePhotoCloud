@@ -114,8 +114,6 @@ public class Encrypt implements Callable {
         private int rowEnd;
         private int colStart;
         private int colEnd;
-        private int height;
-        private int width;
 
         /**
          * Constructor.
@@ -177,7 +175,7 @@ public class Encrypt implements Callable {
                         int a2 = encrypt(argb[3], b1, 256);
                         pixel = Color.argb(a2, r2, g2, b2);
                         img2.setPixel(row, col, pixel);
-                        // encrypt the overflow information
+                        // TODO encrypt the overflow information
                         int r3, g3, b3, a3;
                         int r4, g4, b4, a4;
                         if (argb[0] < r1){
@@ -227,7 +225,7 @@ public class Encrypt implements Callable {
                         int b2 = encrypt(rgb[2], b1, 256);
                         pixel = Color.rgb(r2, g2, b2);
                         img2.setPixel(row, col, pixel);
-                        // encrypt the overflow information
+                        // TODO encrypt the overflow information
                         int r3, g3, b3;
                         int r4, g4, b4;
                         if (rgb[0] < r1){

@@ -21,6 +21,20 @@ public class Decrypt implements Callable {
     private String imgName;
     private int width;
     private int height;
+    private boolean isThumbnail;
+
+    /**
+     * Constructor.
+     * @param imgFilePath1 The path of the first image.
+     * @param imgFilePath2 The path of the second image.
+     * @param isThumbnail Whether the image is a thumbnail.
+     * @author Cui Yuxin
+     */
+    public Decrypt(String imgFilePath1, String imgFilePath2, boolean isThumbnail) {
+        this.imgFilePath1 = imgFilePath1;
+        this.imgFilePath2 = imgFilePath2;
+        this.isThumbnail = isThumbnail;
+    }
 
     /**
      * Constructor.
@@ -31,6 +45,7 @@ public class Decrypt implements Callable {
     public Decrypt(String imgFilePath1, String imgFilePath2) {
         this.imgFilePath1 = imgFilePath1;
         this.imgFilePath2 = imgFilePath2;
+        this.isThumbnail = false;
     }
 
     /**
@@ -43,16 +58,23 @@ public class Decrypt implements Callable {
     }
 
     /**
-     * Decrypt a image in some new threads.
-     * @author Cui Yuxin, Zhao Bowen
+     * Initialize the images.
+     * @author Cui Yuxin
      */
-    private void decrypt() {
+    private void initialize(){
         width = img1.getWidth();
         height = img1.getHeight() / 2;
         img = Bitmap.createBitmap(width, height,
                 Bitmap.Config.RGBA_F16,
                 img1.hasAlpha(),
                 ColorSpace.get(ColorSpace.Named.SRGB));
+    }
+
+    /**
+     * Decrypt a image in some new threads.
+     * @author Cui Yuxin, Zhao Bowen
+     */
+    private void decrypt() {
         // TODO: optimize for the number of threads.
         int threadNum = height / 1000;
         if (threadNum == 0) {
@@ -74,13 +96,52 @@ public class Decrypt implements Callable {
     }
 
     /**
+     * Decrypt a image`s thumbnail.
+     * @author Cui Yuxin, Zhao Bowen
+     */
+    private void decryptThumbnail(){
+        if (img.hasAlpha()) {
+            for (int row = 0; row < height; row++) {
+                for (int col = 0; col < width; col++) {
+                    // TODO optimize the function call
+                    int pixel1 = img1.getPixel(row, col);
+                    int pixel2 = img2.getPixel(row, col);
+                    // TODO record!!!
+                    int pixel = Color.argb((Color.alpha(pixel1) + Color.alpha(pixel2)) % 256,
+                            (Color.red(pixel1) + Color.red(pixel2)) % 256,
+                            (Color.green(pixel1) + Color.green(pixel2)) % 256,
+                            (Color.blue(pixel1) + Color.blue(pixel2)) % 256);
+                    img.setPixel(row, col, pixel);
+                }
+            }
+        } else {
+            for (int row = 0; row < height; row++) {
+                for (int col = 0; col < width; col++) {
+                    // TODO optimize the function call
+                    int pixel1 = img1.getPixel(row, col);
+                    int pixel2 = img2.getPixel(row, col);
+                    int pixel = Color.rgb((Color.red(pixel1) + Color.red(pixel2)) % 256,
+                            (Color.green(pixel1) + Color.green(pixel2)) % 256,
+                            (Color.blue(pixel1) + Color.blue(pixel2)) % 256);
+                    img.setPixel(row, col, pixel);
+                }
+            }
+        }
+    }
+
+    /**
      * Run decryption and return results.
      * @author Cui Yuxin
      */
     @Override
     public Bitmap call() throws IOException {
         openFile();
-        decrypt();
+        initialize();
+        if (isThumbnail) {
+            decryptThumbnail();
+        } else {
+            decrypt();
+        }
         return img;
     }
 
@@ -94,8 +155,6 @@ public class Decrypt implements Callable {
         private int rowEnd;
         private int colStart;
         private int colEnd;
-        private int height;
-        private int width;
 
         /**
          * Constructor.

@@ -227,9 +227,5 @@ public class demo {
         genThumbnail("images/zbw2.jpg", "images/zbw2_thumbnail.jpg", 15);
         reConstruct("images/zbw1_thumbnail.jpg", "images/zbw2_thumbnail.jpg", "images/zbw_thumbnail.jpg", record);
 
-
-        //时间测试
-
-
     }
 }

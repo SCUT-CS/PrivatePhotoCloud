@@ -6,7 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 
-public class test3in1 {
+public class Test3in1 {
 
     private static int encrypt(int x, int r, int d) {
         int c = x - r % d;
