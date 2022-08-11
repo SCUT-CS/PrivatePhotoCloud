@@ -4,11 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.ColorSpace;
-import android.graphics.ImageDecoder;
-import android.os.Build;
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Random;
 import java.util.concurrent.Callable;
@@ -26,27 +22,26 @@ public class Encrypt implements Callable {
     private Bitmap img1;
     private Bitmap img2;
     private Random rnd = new Random();
+    private int width;
+    private int height;
 
     /**
      * Constructor.
-     * @param file Path of the image file to be encrypted.
+     * @param filePath Path of the image file to be encrypted.
      * @param context Context of the application.
      * @author Cui Yuxin
      */
-    public Encrypt(String file, Context context) {
-        this.filePath = file;
+    public Encrypt(String filePath, Context context) {
+        this.filePath = filePath;
         this.context = context;
     }
 
     /**
-     * Open the image and return.
+     * Open the image.
      * @author Cui Yuxin
      */
     private void openFile() throws IOException {
-        File file = new File(filePath);
-        fileName = file.getName();
-        ImageDecoder.Source source = ImageDecoder.createSource(file);
-        img = ImageDecoder.decodeBitmap(source);
+        Utils.openImg(filePath, img, fileName);
     }
 
     /**
@@ -54,8 +49,21 @@ public class Encrypt implements Callable {
      * @author Cui Yuxin, Zhao Bowen
      */
     private void encrypt() {
+        width = img.getWidth();
+        height = img.getHeight();
+        img1 = Bitmap.createBitmap(width, height * 2,
+                Bitmap.Config.RGBA_F16,
+                img.hasAlpha(),
+                ColorSpace.get(ColorSpace.Named.SRGB));
+        img2 = Bitmap.createBitmap(width, height * 2,
+                Bitmap.Config.RGBA_F16,
+                img.hasAlpha(),
+                ColorSpace.get(ColorSpace.Named.SRGB));
         // TODO: optimize for the number of threads.
-        int threadNum = img.getHeight() / 1000;
+        int threadNum = height / 1000;
+        if (threadNum == 0) {
+            threadNum = 1;
+        }
         Thread[] threads = new EncryptThread[threadNum];
         for (int i = 0; i < threadNum; i++) {
             threads[i] = new EncryptThread(i, threadNum);
@@ -65,6 +73,7 @@ public class Encrypt implements Callable {
             try {
                 threads[i].join();
             } catch (InterruptedException e) {
+                // TODO handle exception.
                 e.printStackTrace();
             }
         }
@@ -77,32 +86,10 @@ public class Encrypt implements Callable {
      */
     private void saveFile() throws IOException {
         String cachePath = context.getCacheDir().getAbsolutePath();
-        String savePath1 = cachePath + File.separator + "Disk1";
-        String savePath2 = cachePath + File.separator + "Disk2";
-        File saveDir1 = new File(savePath1);
-        File saveDir2 = new File(savePath2);
-        if (!saveDir1.exists()) {
-            saveDir1.mkdirs();
-        }
-        if (!saveDir2.exists()) {
-            saveDir2.mkdirs();
-        }
-        File saveFile1 = new File(savePath1 + File.separator + fileName + ".webp");
-        File saveFile2 = new File(savePath2 + File.separator + fileName + ".webp");
-        BufferedOutputStream outStream1 = new BufferedOutputStream(new FileOutputStream(saveFile1));
-        BufferedOutputStream outStream2 = new BufferedOutputStream(new FileOutputStream(saveFile2));
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            // lossless compression quality 100, resulting in a smaller file.
-            // TODO: optimize for small files or high speed.
-            img1.compress(Bitmap.CompressFormat.WEBP_LOSSLESS, 100, outStream1);
-            img2.compress(Bitmap.CompressFormat.WEBP_LOSSLESS, 100, outStream2);
-        } else {
-            // lossless compression quality 100
-            img1.compress(Bitmap.CompressFormat.WEBP, 100, outStream1);
-            img2.compress(Bitmap.CompressFormat.WEBP, 100, outStream2);
-        }
-        outStream1.flush();
-        outStream2.flush();
+        String savePath1 = cachePath + File.separator + "Disk1" + File.separator + fileName + ".webp";
+        String savePath2 = cachePath + File.separator + "Disk2" + File.separator + fileName + ".webp";
+        Utils.saveImg(img1, savePath1);
+        Utils.saveImg(img2, savePath2);
     }
 
     /**
@@ -110,16 +97,11 @@ public class Encrypt implements Callable {
      * @author Cui Yuxin
      */
     @Override
-    public Bitmap[] call() {
-        try {
-            openFile();
-            encrypt();
-            saveFile();
-            return new Bitmap[]{img1, img2};
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
+    public Bitmap[] call() throws IOException {
+        openFile();
+        encrypt();
+        saveFile();
+        return new Bitmap[]{img1, img2};
     }
 
     /**
@@ -136,6 +118,24 @@ public class Encrypt implements Callable {
         private int width;
 
         /**
+         * Constructor.
+         * @param id The thread id.
+         * @param threadNum The number of threads.
+         * @author Cui Yuxin
+         */
+        EncryptThread(int id, int threadNum) {
+            colStart = 0;
+            colEnd = width;
+            if (id == threadNum - 1) {
+                rowStart = (height / threadNum) * id;
+                rowEnd = height;
+            } else {
+                rowStart = (height / threadNum) * id;
+                rowEnd = (height / threadNum) * (id + 1);
+            }
+        }
+
+        /**
          * encrypt a channel of a pixel.
          * @param x the original value.
          * @param r the random value.
@@ -147,34 +147,6 @@ public class Encrypt implements Callable {
             int c = x - r % d;
             c = c < 0 ? c + d : c;
             return c;
-        }
-
-        /**
-         * Constructor.
-         * @param id The thread id.
-         * @param threadNum The number of threads.
-         * @author Cui Yuxin, Zhao Bowen
-         */
-        EncryptThread(int id, int threadNum) {
-            width = img.getWidth();
-            height = img.getHeight();
-            colStart = 0;
-            colEnd = width;
-            if (id == threadNum - 1) {
-                rowStart = (height / threadNum) * id;
-                rowEnd = height;
-            } else {
-                rowStart = (height / threadNum) * id;
-                rowEnd = (height / threadNum) * (id + 1);
-            }
-            img1 = Bitmap.createBitmap(width, height * 2,
-                    Bitmap.Config.RGBA_F16,
-                    img.hasAlpha(),
-                    ColorSpace.get(ColorSpace.Named.SRGB));
-            img2 = Bitmap.createBitmap(width, height * 2,
-                    Bitmap.Config.RGBA_F16,
-                    img.hasAlpha(),
-                    ColorSpace.get(ColorSpace.Named.SRGB));
         }
 
         /**
@@ -197,13 +169,13 @@ public class Encrypt implements Callable {
                         int g1 = rnd.nextInt(256);
                         int b1 = rnd.nextInt(256);
                         int a1 = rnd.nextInt(256);
-                        pixel = Color.argb(r1, g1, b1, a1);
+                        pixel = Color.argb(a1, r1, g1, b1);
                         img1.setPixel(row, col, pixel);
                         int r2 = encrypt(argb[0], r1, 256);
                         int g2 = encrypt(argb[1], g1, 256);
                         int b2 = encrypt(argb[2], b1, 256);
                         int a2 = encrypt(argb[3], b1, 256);
-                        pixel = Color.argb(r2, g2, b2, a2);
+                        pixel = Color.argb(a2, r2, g2, b2);
                         img2.setPixel(row, col, pixel);
                         // encrypt the overflow information
                         int r3, g3, b3, a3;
@@ -211,29 +183,29 @@ public class Encrypt implements Callable {
                         if (argb[0] < r1){
                             r3 = rnd.nextInt(256);
                             r4 = 255 - r3;
-                        } else{
+                        } else {
                             r3 = r4 = 0;
                         }
                         if (argb[1] < g1){
                             g3 = rnd.nextInt(256);
                             g4 = 255 - g3;
-                        } else{
+                        } else {
                             g3 = g4 = 0;
                         }
                         if (argb[2] < b1){
                             b3 = rnd.nextInt(256);
                             b4 = 255 - b3;
-                        } else{
+                        } else {
                             b3 = b4 = 0;
                         }
                         if (argb[3] < a1){
                             a3 = rnd.nextInt(256);
                             a4 = 255 - a3;
-                        } else{
+                        } else {
                             a3 = a4 = 0;
                         }
-                        img1.setPixel(row + height, col, Color.argb(r3, g3, b3, a3));
-                        img2.setPixel(row + height, col, Color.argb(r4, g4, b4, a4));
+                        img1.setPixel(row + height, col, Color.argb(a3, r3, g3, b3));
+                        img2.setPixel(row + height, col, Color.argb(a4, r4, g4, b4));
                     }
                 }
             } else {
@@ -261,19 +233,19 @@ public class Encrypt implements Callable {
                         if (rgb[0] < r1){
                             r3 = rnd.nextInt(256);
                             r4 = 255 - r3;
-                        } else{
+                        } else {
                             r3 = r4 = 0;
                         }
                         if (rgb[1] < g1){
                             g3 = rnd.nextInt(256);
                             g4 = 255 - g3;
-                        } else{
+                        } else {
                             g3 = g4 = 0;
                         }
                         if (rgb[2] < b1){
                             b3 = rnd.nextInt(256);
                             b4 = 255 - b3;
-                        } else{
+                        } else {
                             b3 = b4 = 0;
                         }
                         img1.setPixel(row + height, col, Color.rgb(r3, g3, b3));

@@ -53,19 +53,19 @@ public class TestRecordImg {
                 int r2 = encrypt(rgb[0], r1, 256);
                 int g2 = encrypt(rgb[1], g1, 256);
                 int b2 = encrypt(rgb[2], b1, 256);
-                //------Record-----
+                //------Record----- 这里使用了反色
                 if(rgb[0] < r1)
-                    r2 = 255;
-                else
                     r2 = 0;
+                else
+                    r2 = 255;
                 if(rgb[1] < g1)
-                    g2 = 255;
-                else
                     g2 = 0;
-                if(rgb[2] < b1)
-                    b2 = 255;
                 else
+                    g2 = 255;
+                if(rgb[2] < b1)
                     b2 = 0;
+                else
+                    b2 = 255;
 
 //                System.out.println(rgb[0] + ", " + rgb[1] + ", " + rgb[2]);
 //                System.out.println(((r1 + r2) % 256) + ", " + ((g1 + g2) % 256) + ", " + ((b1 + b2) % 256));
