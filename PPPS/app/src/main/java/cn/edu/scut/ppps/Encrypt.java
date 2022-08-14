@@ -41,7 +41,8 @@ public class Encrypt implements Callable {
      * @author Cui Yuxin
      */
     private void openFile() throws IOException {
-        Utils.openImg(filePath, img, fileName);
+        img = Utils.openImg(filePath);
+        fileName = Utils.getFileName(filePath);
     }
 
     /**

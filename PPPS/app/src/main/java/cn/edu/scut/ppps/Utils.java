@@ -1,8 +1,12 @@
 package cn.edu.scut.ppps;
 
+import android.Manifest;
 import android.graphics.Bitmap;
 import android.graphics.ImageDecoder;
 import android.os.Build;
+
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -18,27 +22,26 @@ public class Utils {
     /**
      * Open an image.
      * @param imgPath The path of the image.
-     * @param img The image.
-     * @param imgName The name of the image.
      * @author Cui Yuxin
      */
-    public static void openImg(String imgPath, Bitmap img, String imgName) throws IOException {
-        File file = new File(imgPath);
-        if (imgName != null) {
-            imgName = file.getName();
-        }
-        ImageDecoder.Source source = ImageDecoder.createSource(file);
-        img = ImageDecoder.decodeBitmap(source);
+    public static Bitmap openImg(String imgPath) throws IOException {
+        ImageDecoder.Source source = ImageDecoder.createSource(new File(imgPath));
+        return ImageDecoder.decodeBitmap(source);
     }
 
     /**
-     * Open an image.
-     * @param imgPath The path of the image.
-     * @param img The image.
+     * Get file name.
+     * @param filePath The path of the file.
      * @author Cui Yuxin
      */
-    public static void openImg(String imgPath, Bitmap img) throws IOException {
-        Utils.openImg(imgPath, img, null);
+    public static String getFileName(String filePath) throws IOException {
+        File file = new File(filePath);
+        if (file.exists() && file.isFile()) {
+            return file.getName();
+        } else {
+            // TODO handle exception
+            throw new IOException("File not found or ?.");
+        }
     }
 
     /**
@@ -68,4 +71,17 @@ public class Utils {
         }
         outStream.flush();
     }
+
+
+    /*// 请求权限
+        ActivityCompat.requestPermissions(, new String[]{
+        Manifest.permission.READ_PHONE_STATE
+    }, 1);
+    // 检查权限是否已经授予
+    int PermissionState = ContextCompat.checkSelfPermission(appContext, Manifest.permission.READ_PHONE_STATE);
+        if(PermissionState == PackageManager.PERMISSION_GRANTED){
+        Toast.makeText(this, "已授权！", Toast.LENGTH_LONG).show();
+    }else if(PermissionState == PackageManager.PERMISSION_DENIED){
+        Toast.makeText(this, "未授权！", Toast.LENGTH_LONG).show();
+    }*/
 }

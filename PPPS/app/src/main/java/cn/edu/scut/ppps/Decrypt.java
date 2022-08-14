@@ -53,8 +53,9 @@ public class Decrypt implements Callable {
      * @author Cui Yuxin
      */
     private void openFile() throws IOException {
-        Utils.openImg(imgFilePath1, img1, imgName);
-        Utils.openImg(imgFilePath2, img2);
+        img1 = Utils.openImg(imgFilePath1);
+        img2 = Utils.openImg(imgFilePath2);
+        imgName = Utils.getFileName(imgFilePath1);
     }
 
     /**
