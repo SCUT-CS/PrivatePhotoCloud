@@ -8,6 +8,24 @@ Part A是项目代码的相关规范，Part B是项目架构。
 
 ## Updates
 
+### 2022.8.14
+
+#### Task1：
+
+仿照AndroidUnitTests.java里面完成的saveImgTest方法，编写后面的getFileNameTest和saveImgTest
+
+完成对应位置的4个“TODO”
+
+**Files you'll edit:**
+
+AndroidUnitTests.java
+
+**Files you might want to look at:**
+
+Decrypt.java
+
+Encrypt.java
+
 ### 2022.8.11
 
 部分特性需要Android API 30 支持。
