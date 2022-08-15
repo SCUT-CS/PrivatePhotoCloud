@@ -72,6 +72,16 @@ public class Utils {
         outStream.flush();
     }
 
+    /**
+     * Save bytes array.
+     * @param bytes The bytes array.
+     * @param filePath The path of the file.
+     * @author //TODO YOUR_NAME
+     */
+    public static void saveByteArray(byte[][][] bytes, String filePath) throws IOException {
+        // TODO YOUR CODE HERE
+    }
+
 
     /*// 请求权限
         ActivityCompat.requestPermissions(, new String[]{

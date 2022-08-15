@@ -84,15 +84,26 @@ public class AndroidUnitTests {
      * @author Feng YuCheng
      */
     @Test
-    public void utilsGetFileNameTest(){
-        String photoName;
+    public void utilsGetFileNameTest() {
+        // 获取设备上微信图片文件夹
         String imgFileDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + File.separator + "WeiXin";
         File weiXinPictureDir = new File(imgFileDir);
         Assert.assertTrue(weiXinPictureDir.exists());
-        if(weiXinPictureDir.getName().endsWith(".jpg")){
-            photoName=weiXinPictureDir.getName();
+        // 找到微信图片文件夹下的文件
+        File[] files = weiXinPictureDir.listFiles();
+        Assert.assertTrue(files.length > 0);
+        // 初始化测试方法的参数
+        String imgFilePath = files[0].getAbsolutePath();
+        String imgName = null;
+        // 调用测试方法
+        try {
+            imgName = Utils.getFileName(imgFilePath);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        System.out.println(photoName);
+        // 断言测试方法的结果
+        Assert.assertNotNull(imgName);
+        Assert.assertEquals(files[0].getName(), imgName);
     }
 
     /**
