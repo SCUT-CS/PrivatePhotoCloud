@@ -81,11 +81,18 @@ public class AndroidUnitTests {
 
     /**
      * Test Utils getFileName method.
-     * @author TODO:YOUR_NAME
+     * @author Feng YuCheng
      */
     @Test
     public void utilsGetFileNameTest(){
-        // TODO YOUR CODE HERE
+        String photoName;
+        String imgFileDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + File.separator + "WeiXin";
+        File weiXinPictureDir = new File(imgFileDir);
+        Assert.assertTrue(weiXinPictureDir.exists());
+        if(weiXinPictureDir.getName().endsWith(".jpg")){
+            photoName=weiXinPictureDir.getName();
+        }
+        System.out.println(photoName);
     }
 
     /**
