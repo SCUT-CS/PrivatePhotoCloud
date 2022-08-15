@@ -97,6 +97,8 @@ public class Encrypt implements Callable {
         String savePath2 = cachePath + File.separator + "Disk2" + File.separator + fileName + ".webp";
         Utils.saveImg(img1, savePath1);
         Utils.saveImg(img2, savePath2);
+        String savePath = context.getDataDir().getAbsolutePath() + File.separator + fileName;
+        Utils.saveByteArray(overflow, savePath);
     }
 
     /**

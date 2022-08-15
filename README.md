@@ -50,6 +50,8 @@ Assert.assertTrue(weiXinPictureDir.exists());
 Assert.assertTrue("微信图片文件夹不存在！请检查是否拥有读取外部存储权限或文件夹是否存在。",weiXinPictureDir.exists());
 ```
 
+部分报错信息已给出，请参照给出的报错信息，完成剩余部分。
+
 **Files you'll edit:**
 
 AndroidUnitTests.java

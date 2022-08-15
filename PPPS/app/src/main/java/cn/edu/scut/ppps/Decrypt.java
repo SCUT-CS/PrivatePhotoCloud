@@ -22,6 +22,7 @@ public class Decrypt implements Callable {
     private int width;
     private int height;
     private boolean isThumbnail;
+    private byte[][][] overflow = null;
 
     /**
      * Constructor.
@@ -56,6 +57,10 @@ public class Decrypt implements Callable {
         img1 = Utils.openImg(imgFilePath1);
         img2 = Utils.openImg(imgFilePath2);
         imgName = Utils.getFileName(imgFilePath1);
+        if (isThumbnail) {
+            //String filePath =
+            //overflow = Utils.loadByteArray(filePath);
+        }
     }
 
     /**
