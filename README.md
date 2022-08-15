@@ -8,11 +8,27 @@ Part A是项目代码的相关规范，Part B是项目架构。
 
 ## Updates
 
+### 2022.8.15
+
+#### Task2：
+
+仿照Utils.java里面的saveImg方法，编写后面的saveBytes方法。
+
+完成对应位置的2个"TODO"。
+
+**Files you'll edit:**
+
+Utils.java
+
+**Files you might want to look at:**
+
+Utils.java
+
 ### 2022.8.14
 
 #### Task1：
 
-仿照AndroidUnitTests.java里面完成的saveImgTest方法，编写后面的getFileNameTest和saveImgTest
+仿照AndroidUnitTests.java里面完成的openImgTest方法，编写后面的getFileNameTest和saveImgTest。
 
 完成对应位置的4个“TODO”
 
