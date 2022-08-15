@@ -62,9 +62,9 @@ public class Decrypt implements Callable {
      * Initialize the images.
      * @author Cui Yuxin
      */
-    private void initialize(){
+    private void initialize() {
         width = img1.getWidth();
-        height = img1.getHeight() / 2;
+        height = img1.getHeight();
         img = Bitmap.createBitmap(width, height,
                 Bitmap.Config.RGBA_F16,
                 img1.hasAlpha(),
@@ -100,7 +100,7 @@ public class Decrypt implements Callable {
      * Decrypt a image`s thumbnail.
      * @author Cui Yuxin, Zhao Bowen
      */
-    private void decryptThumbnail(){
+    private void decryptThumbnail() {
         if (img.hasAlpha()) {
             for (int row = 0; row < height; row++) {
                 for (int col = 0; col < width; col++) {
