@@ -222,6 +222,20 @@ UI的制作。
 
 小缩略图：400×265
 
+### 文件路径
+
+原图：img.*1
+
+密文1：img.*1.webp		$cacheDir$/Disk1/
+
+密文2：img.*1.webp		$cacheDir$/Disk2/
+
+溢出信息：img.*1		$dataDir$/overflow/
+
+缩略图：img.\*1.webp.*2
+
+阿里云部分未统计。
+
 ### 多线程
 
 加密和解密部分在文件层次上尝试使用多线程提高效率。

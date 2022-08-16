@@ -84,10 +84,11 @@ public class Utils {
 
     /**
      * Load bytes array.
-     * @param filePath The path of the file.
+     * @param fileDir The dir of the file.
+     * @param fileName The name of the file.
      * @author //TODO YOUR_NAME
      */
-    public static byte[][][] loadByteArray(String filePath) throws IOException {
+    public static byte[][][] loadByteArray(String fileDir, String fileName) throws IOException {
         // TODO YOUR CODE HERE
         return null;
     }

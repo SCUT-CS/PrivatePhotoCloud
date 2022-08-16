@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.ColorSpace;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.Callable;
 
@@ -64,8 +65,8 @@ public class Decrypt implements Callable {
         img2 = Utils.openImg(imgFilePath2);
         imgName = Utils.getFileName(imgFilePath1);
         if (isThumbnail) {
-            //String filePath =
-            //overflow = Utils.loadByteArray(filePath);
+            String filePath = context.getDataDir().getAbsolutePath() + File.separator + "overflow" + File.separator;
+            overflow = Utils.loadByteArray(filePath, imgName);
         }
     }
 
