@@ -1,5 +1,6 @@
 package cn.edu.scut.ppps;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.ColorSpace;
@@ -23,30 +24,35 @@ public class Decrypt implements Callable {
     private int height;
     private boolean isThumbnail;
     private byte[][][] overflow = null;
+    private Context context;
 
     /**
      * Constructor.
      * @param imgFilePath1 The path of the first image.
      * @param imgFilePath2 The path of the second image.
      * @param isThumbnail Whether the image is a thumbnail.
+     * @param context The context.
      * @author Cui Yuxin
      */
-    public Decrypt(String imgFilePath1, String imgFilePath2, boolean isThumbnail) {
+    public Decrypt(String imgFilePath1, String imgFilePath2, Context context, boolean isThumbnail) {
         this.imgFilePath1 = imgFilePath1;
         this.imgFilePath2 = imgFilePath2;
         this.isThumbnail = isThumbnail;
+        this.context = context;
     }
 
     /**
      * Constructor.
      * @param imgFilePath1 The path of the first image.
      * @param imgFilePath2 The path of the second image.
+     * @param context The context.
      * @author Cui Yuxin
      */
-    public Decrypt(String imgFilePath1, String imgFilePath2) {
+    public Decrypt(String imgFilePath1, String imgFilePath2, Context context) {
         this.imgFilePath1 = imgFilePath1;
         this.imgFilePath2 = imgFilePath2;
         this.isThumbnail = false;
+        this.context = context;
     }
 
     /**
@@ -189,25 +195,23 @@ public class Decrypt implements Callable {
             if (img.hasAlpha()) {
                 for (int row = rowStart; row < rowEnd; row++) {
                     for (int col = colStart; col < colEnd; col++) {
-                        // TODO optimize the function call
                         int pixel1 = img1.getPixel(row, col);
                         int pixel2 = img2.getPixel(row, col);
-                        int pixel = Color.argb((Color.alpha(pixel1) + Color.alpha(pixel2)) % 256,
-                                (Color.red(pixel1) + Color.red(pixel2)) % 256,
-                                (Color.green(pixel1) + Color.green(pixel2)) % 256,
-                                (Color.blue(pixel1) + Color.blue(pixel2)) % 256);
+                        int pixel = Color.argb((pixel1 >>> 24 + pixel2 >>> 24) & 0xff,
+                                ((pixel1 >> 16) & 0xFF + (pixel2 >> 16) & 0xFF) & 0xff,
+                                ((pixel1 >> 8) & 0xFF + (pixel2 >> 8) & 0xFF) & 0xff,
+                                (pixel1 & 0xFF + pixel2 & 0xFF) & 0xff);
                         img.setPixel(row, col, pixel);
                     }
                 }
             } else {
                 for (int row = rowStart; row < rowEnd; row++) {
                     for (int col = colStart; col < colEnd; col++) {
-                        // TODO optimize the function call
                         int pixel1 = img1.getPixel(row, col);
                         int pixel2 = img2.getPixel(row, col);
-                        int pixel = Color.rgb((Color.red(pixel1) + Color.red(pixel2)) % 256,
-                                (Color.green(pixel1) + Color.green(pixel2)) % 256,
-                                (Color.blue(pixel1) + Color.blue(pixel2)) % 256);
+                        int pixel = Color.rgb(((pixel1 >> 16) & 0xFF + (pixel2 >> 16) & 0xFF) & 0xff,
+                                ((pixel1 >> 8) & 0xFF + (pixel2 >> 8) & 0xFF) & 0xff,
+                                (pixel1 & 0xFF + pixel2 & 0xFF) & 0xff);
                         img.setPixel(row, col, pixel);
                     }
                 }
