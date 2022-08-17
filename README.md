@@ -26,21 +26,7 @@ Decrypt.java
 
 Encrypt.java
 
-#### TODO: Task2：
-
-仿照Utils.java里面的saveImg方法，编写后面的saveBytes方法。
-
-完成对应位置的2个"TODO"。
-
-**Files you'll edit:**
-
-Utils.java
-
-**Files you might want to look at:**
-
-Utils.java
-
-#### Task3：
+#### Task2：
 
 丰富报错信息，在AndroidUnitTests.java里面所有使用Assert的位置添加报错信息，例如：
 
@@ -56,7 +42,7 @@ Assert.assertTrue("微信图片文件夹不存在！请检查是否拥有读取�
 
 AndroidUnitTests.java
 
-#### Task4：
+#### Task3：
 
 测试Utils.java里面的openImg方法对不同格式的图片文件的支持，例如\*.HEIC，\*.webp
 
@@ -72,7 +58,7 @@ README.md
 
 Utils.java
 
-#### Task5：
+#### Task4：
 
 测试Utils.java里面的saveImg方法保存一张中等图片大小的时间，并记录在README文件中。
 
@@ -83,6 +69,34 @@ Utils.java
 AndroidUnitTests.java
 
 README.md
+
+**Files you might want to look at:**
+
+Utils.java
+
+#### Task5：
+
+仿照Utils.java里面的saveImg方法，编写后面的saveBytesArray方法。
+
+完成对应位置的2个"TODO"。
+
+**Files you'll edit:**
+
+Utils.java
+
+**Files you might want to look at:**
+
+Utils.java
+
+#### Task6：
+
+参考Task5，编完成loadBytesArray方法。
+
+完成对应位置的2个"TODO"。
+
+**Files you'll edit:**
+
+Utils.java
 
 **Files you might want to look at:**
 

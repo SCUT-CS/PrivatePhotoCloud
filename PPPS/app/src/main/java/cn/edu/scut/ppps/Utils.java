@@ -77,10 +77,10 @@ public class Utils {
     /**
      * Save bytes array.
      * @param bytesArray The bytes array.
-     * @param filePath The path of the file.
+     * @param filePath The path of the overflow array file.
      * @author //TODO YOUR_NAME
      */
-    public static void saveByteArray(byte[][][] bytesArray, String filePath) throws IOException {
+    public static void saveBytesArray(byte[][][] bytesArray, String filePath) throws IOException {
         // TODO YOUR CODE HERE
     }
 
@@ -89,7 +89,7 @@ public class Utils {
      * @param filePath The path of the overflow array file.
      * @author //TODO YOUR_NAME
      */
-    public static byte[][][] loadByteArray(String filePath) throws IOException {
+    public static byte[][][] loadBytesArray(String filePath) throws IOException {
         // TODO YOUR CODE HERE
         return null;
     }
