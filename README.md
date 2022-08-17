@@ -226,13 +226,13 @@ UI的制作。
 
 原图：img.*1
 
-密文1：img.*1.webp		$cacheDir$/Disk1/
+密文1：img.*1.ori.webp		$cacheDir$/Disk1/
 
-密文2：img.*1.webp		$cacheDir$/Disk2/
+密文2：img.*1.ori.webp		$cacheDir$/Disk2/
 
 溢出信息：img.*1		$dataDir$/overflow/
 
-缩略图：img.\*1.webp.*2
+缩略图：img.*1.ori.\*2
 
 阿里云部分未统计。
 

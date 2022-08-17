@@ -85,13 +85,24 @@ public class Utils {
 
     /**
      * Load bytes array.
-     * @param fileDir The dir of the file.
-     * @param fileName The name of the file.
+     * @param filePath The path of the overflow array file.
      * @author //TODO YOUR_NAME
      */
-    public static byte[][][] loadByteArray(String fileDir, String fileName) throws IOException {
+    public static byte[][][] loadByteArray(String filePath) throws IOException {
         // TODO YOUR CODE HERE
         return null;
+    }
+
+    /**
+     * Compress and overflow array into thumbnail size.
+     * @param bytesArray The bytes array.
+     * @param row The height of the thumbnail.
+     * @param col The column of the thumbnail.
+     * @author //TODO YOUR_NAME
+     */
+    public static int[][][] collapse(byte[][][] bytesArray, int row, int col) {
+        return null;
+        //  记得平均 记得×256 这个就是直接减的结果了
     }
 
 

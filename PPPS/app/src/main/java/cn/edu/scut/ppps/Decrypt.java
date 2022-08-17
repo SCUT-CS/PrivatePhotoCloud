@@ -20,7 +20,6 @@ public class Decrypt implements Callable {
     private Bitmap img2;
     private String imgFilePath1;
     private String imgFilePath2;
-    private String imgName;
     private int width;
     private int height;
     private boolean isThumbnail;
@@ -63,10 +62,11 @@ public class Decrypt implements Callable {
     private void openFile() throws IOException {
         img1 = Utils.openImg(imgFilePath1);
         img2 = Utils.openImg(imgFilePath2);
-        imgName = Utils.getFileName(imgFilePath1);
+        String imgName = Utils.getFileName(imgFilePath1);
+        String originalImgName = imgName.substring(0, imgName.lastIndexOf(".ori"));
         if (isThumbnail) {
             String filePath = context.getDataDir().getAbsolutePath() + File.separator + "overflow" + File.separator;
-            overflow = Utils.loadByteArray(filePath, imgName);
+            overflow = Utils.loadByteArray(filePath + originalImgName);
         }
     }
 
@@ -112,31 +112,30 @@ public class Decrypt implements Callable {
      * Decrypt a image`s thumbnail.
      * @author Cui Yuxin, Zhao Bowen
      */
-    private void decryptThumbnail() {
+    private void decryptThumbnail() throws IOException {
+        int[][][] overflow = Utils.collapse(this.overflow, height, width);
+        assert overflow != null;
         if (img.hasAlpha()) {
             for (int row = 0; row < height; row++) {
                 for (int col = 0; col < width; col++) {
-                    // TODO optimize the function call
                     int pixel1 = img1.getPixel(row, col);
                     int pixel2 = img2.getPixel(row, col);
-                    // TODO record!!!
-                    int pixel = Color.argb((Color.alpha(pixel1) + Color.alpha(pixel2)) % 256,
-                            (Color.red(pixel1) + Color.red(pixel2)) % 256,
-                            (Color.green(pixel1) + Color.green(pixel2)) % 256,
-                            (Color.blue(pixel1) + Color.blue(pixel2)) % 256);
-                    img.setPixel(row, col, pixel);
+                    int alpha = (pixel1 >>> 24 + pixel2 >>> 24 - overflow[0][row][col]) & 0xff;
+                    int red = ((pixel1 >> 16) & 0xFF + (pixel2 >> 16) & 0xFF - overflow[1][row][col]) & 0xff;
+                    int green =((pixel1 >> 8) & 0xFF + (pixel2 >> 8) & 0xFF - overflow[2][row][col]) & 0xff;
+                    int blue = (pixel1 & 0xFF + pixel2 & 0xFF - overflow[3][row][col]) & 0xff;
+                    img.setPixel(row, col, blue | green << 8 | red << 16 | alpha << 24);
                 }
             }
         } else {
             for (int row = 0; row < height; row++) {
                 for (int col = 0; col < width; col++) {
-                    // TODO optimize the function call
                     int pixel1 = img1.getPixel(row, col);
                     int pixel2 = img2.getPixel(row, col);
-                    int pixel = Color.rgb((Color.red(pixel1) + Color.red(pixel2)) % 256,
-                            (Color.green(pixel1) + Color.green(pixel2)) % 256,
-                            (Color.blue(pixel1) + Color.blue(pixel2)) % 256);
-                    img.setPixel(row, col, pixel);
+                    int red = ((pixel1 >> 16) & 0xFF + (pixel2 >> 16) & 0xFF - overflow[0][row][col]) & 0xff;
+                    int green =((pixel1 >> 8) & 0xFF + (pixel2 >> 8) & 0xFF - overflow[1][row][col]) & 0xff;
+                    int blue = (pixel1 & 0xFF + pixel2 & 0xFF - overflow[2][row][col]) & 0xff;
+                    img.setPixel(row, col, blue | green << 8 | red << 16);
                 }
             }
         }

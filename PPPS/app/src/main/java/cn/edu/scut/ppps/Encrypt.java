@@ -93,8 +93,8 @@ public class Encrypt implements Callable {
      */
     private void saveFile() throws IOException {
         String cachePath = context.getCacheDir().getAbsolutePath();
-        String savePath1 = cachePath + File.separator + "Disk1" + File.separator + fileName + ".webp";
-        String savePath2 = cachePath + File.separator + "Disk2" + File.separator + fileName + ".webp";
+        String savePath1 = cachePath + File.separator + "Disk1" + File.separator + fileName + ".ori" + ".webp";
+        String savePath2 = cachePath + File.separator + "Disk2" + File.separator + fileName +  ".ori" + ".webp";
         Utils.saveImg(img1, savePath1);
         Utils.saveImg(img2, savePath2);
         String savePath = context.getDataDir().getAbsolutePath() + File.separator + "overflow" + File.separator + fileName;
