@@ -8,23 +8,7 @@ Part A是项目代码的相关规范，Part B是项目架构。
 
 ## Updates
 
-### 2022.8.15
-
-#### Task2：
-
-仿照Utils.java里面的saveImg方法，编写后面的saveBytes方法。
-
-完成对应位置的2个"TODO"。
-
-**Files you'll edit:**
-
-Utils.java
-
-**Files you might want to look at:**
-
-Utils.java
-
-### 2022.8.14
+### 2022.8.14-2022.8.20
 
 #### Task1：
 
@@ -41,6 +25,68 @@ AndroidUnitTests.java
 Decrypt.java
 
 Encrypt.java
+
+#### Task2：
+
+仿照Utils.java里面的saveImg方法，编写后面的saveBytes方法。
+
+完成对应位置的2个"TODO"。
+
+**Files you'll edit:**
+
+Utils.java
+
+**Files you might want to look at:**
+
+Utils.java
+
+#### Task3：
+
+丰富报错信息，在AndroidUnitTests.java里面所有使用Assert的位置添加报错信息，例如：
+
+```java
+Assert.assertTrue(weiXinPictureDir.exists());
+// 修改为：
+Assert.assertTrue("微信图片文件夹不存在！请检查是否拥有读取外部存储权限或文件夹是否存在。",weiXinPictureDir.exists());
+```
+
+部分报错信息已给出，请参照给出的报错信息，完成剩余部分。
+
+**Files you'll edit:**
+
+AndroidUnitTests.java
+
+#### Task4：
+
+测试Utils.java里面的openImg方法对不同格式的图片文件的支持，例如\*.HEIC，\*.webp
+
+并对中等图片大小的打开时间计时，并记录在README文件中。
+
+**Files you'll edit:**
+
+AndroidUnitTests.java
+
+README.md
+
+**Files you might want to look at:**
+
+Utils.java
+
+#### Task5：
+
+测试Utils.java里面的saveImg方法保存一张中等图片大小的时间，并记录在README文件中。
+
+完成方法里面的“TODO: optimize for small files or high speed.”，将不同压缩率对应的文件大小和保存时间记录在README文件中。
+
+**Files you'll edit:**
+
+AndroidUnitTests.java
+
+README.md
+
+**Files you might want to look at:**
+
+Utils.java
 
 ### 2022.8.11
 
@@ -175,6 +221,20 @@ UI的制作。
 中缩略图：1488×989
 
 小缩略图：400×265
+
+### 文件路径
+
+原图：img.*1
+
+密文1：img.*1.webp		$cacheDir$/Disk1/
+
+密文2：img.*1.webp		$cacheDir$/Disk2/
+
+溢出信息：img.*1		$dataDir$/overflow/
+
+缩略图：img.\*1.webp.*2
+
+阿里云部分未统计。
 
 ### 多线程
 

@@ -15,7 +15,7 @@ import java.io.IOException;
 
 /**
  * Utils class.
- * @author Cui Yuxin
+ * @author Cui Yuxin, Feng Yucheng
  */
 public class Utils {
 
@@ -74,12 +74,23 @@ public class Utils {
 
     /**
      * Save bytes array.
-     * @param bytes The bytes array.
+     * @param bytesArray The bytes array.
      * @param filePath The path of the file.
      * @author //TODO YOUR_NAME
      */
-    public static void saveByteArray(byte[][][] bytes, String filePath) throws IOException {
+    public static void saveByteArray(byte[][][] bytesArray, String filePath) throws IOException {
         // TODO YOUR CODE HERE
+    }
+
+    /**
+     * Load bytes array.
+     * @param fileDir The dir of the file.
+     * @param fileName The name of the file.
+     * @author //TODO YOUR_NAME
+     */
+    public static byte[][][] loadByteArray(String fileDir, String fileName) throws IOException {
+        // TODO YOUR CODE HERE
+        return null;
     }
 
 

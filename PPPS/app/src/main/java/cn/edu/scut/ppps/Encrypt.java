@@ -24,6 +24,7 @@ public class Encrypt implements Callable {
     private Random rnd = new Random();
     private int width;
     private int height;
+    private byte[][][] overflow;
 
     /**
      * Constructor.
@@ -52,14 +53,19 @@ public class Encrypt implements Callable {
     private void encrypt() {
         width = img.getWidth();
         height = img.getHeight();
-        img1 = Bitmap.createBitmap(width, height * 2,
+        img1 = Bitmap.createBitmap(width, height,
                 Bitmap.Config.RGBA_F16,
                 img.hasAlpha(),
                 ColorSpace.get(ColorSpace.Named.SRGB));
-        img2 = Bitmap.createBitmap(width, height * 2,
+        img2 = Bitmap.createBitmap(width, height,
                 Bitmap.Config.RGBA_F16,
                 img.hasAlpha(),
                 ColorSpace.get(ColorSpace.Named.SRGB));
+        if (img.hasAlpha()) {
+            overflow = new byte[4][height][(int) Math.ceil(width / 8.0)];
+        } else {
+            overflow = new byte[3][height][(int) Math.ceil(width / 8.0)];
+        }
         // TODO: optimize for the number of threads.
         int threadNum = height / 1000;
         if (threadNum == 0) {
@@ -91,6 +97,8 @@ public class Encrypt implements Callable {
         String savePath2 = cachePath + File.separator + "Disk2" + File.separator + fileName + ".webp";
         Utils.saveImg(img1, savePath1);
         Utils.saveImg(img2, savePath2);
+        String savePath = context.getDataDir().getAbsolutePath() + File.separator + "overflow" + File.separator + fileName;
+        Utils.saveByteArray(overflow, savePath);
     }
 
     /**
@@ -143,9 +151,8 @@ public class Encrypt implements Callable {
          * @author Zhao Bowen
          */
         private int encrypt(int x, int r, int d) {
-            int c = x - r % d;
-            c = c < 0 ? c + d : c;
-            return c;
+            int c = x - r;
+            return c < 0 ? c + d : c;
         }
 
         /**
@@ -158,97 +165,69 @@ public class Encrypt implements Callable {
                 int[] argb = new int[4];
                 for (int row = rowStart; row < rowEnd; row++) {
                     for (int col = colStart; col < colEnd; col++) {
-                        // TODO optimize the function call
                         int pixel = img.getPixel(row, col);
-                        argb[0] = Color.red(pixel);
-                        argb[1] = Color.green(pixel);
-                        argb[2] = Color.blue(pixel);
-                        argb[3] = Color.alpha(pixel);
+                        argb[0] = pixel >>> 24;
+                        argb[1] = (pixel >> 16) & 0xFF;
+                        argb[2] = (pixel >> 8) & 0xFF;
+                        argb[3] = pixel & 0xFF;
+                        int a1 = rnd.nextInt(256);
                         int r1 = rnd.nextInt(256);
                         int g1 = rnd.nextInt(256);
                         int b1 = rnd.nextInt(256);
-                        int a1 = rnd.nextInt(256);
-                        pixel = Color.argb(a1, r1, g1, b1);
+                        //pixel = Color.argb(a1, r1, g1, b1);
+                        // int color = (A & 0xff) << 24 | (R & 0xff) << 16 | (G & 0xff) << 8 | (B & 0xff)
+                        pixel = b1 | g1 << 8 | r1 << 16 | a1 << 24;
                         img1.setPixel(row, col, pixel);
-                        int r2 = encrypt(argb[0], r1, 256);
-                        int g2 = encrypt(argb[1], g1, 256);
-                        int b2 = encrypt(argb[2], b1, 256);
-                        int a2 = encrypt(argb[3], b1, 256);
-                        pixel = Color.argb(a2, r2, g2, b2);
+                        int a2 = (argb[0] - a1) & 0xff;
+                        int r2 = (argb[1] - r1) & 0xff;
+                        int g2 = (argb[2] - g1) & 0xff;
+                        int b2 = (argb[3] - b1) & 0xff;
+                        //pixel = Color.argb(a2, r2, g2, b2);
+                        pixel = b2 | g2 << 8 | r2 << 16 | a2 << 24;
                         img2.setPixel(row, col, pixel);
-                        // TODO encrypt the overflow information
-                        int r3, g3, b3, a3;
-                        int r4, g4, b4, a4;
-                        if (argb[0] < r1){
-                            r3 = rnd.nextInt(256);
-                            r4 = 255 - r3;
-                        } else {
-                            r3 = r4 = 0;
+                        // encrypt the overflow information
+                        if (argb[0] < a1) {
+                            overflow[0][row][col & 037777777770] = (byte) (overflow[0][row][col & 037777777770] | (1 << (col & 0b111)));
                         }
-                        if (argb[1] < g1){
-                            g3 = rnd.nextInt(256);
-                            g4 = 255 - g3;
-                        } else {
-                            g3 = g4 = 0;
+                        if (argb[1] < r1) {
+                            overflow[1][row][col & 037777777770] = (byte) (overflow[1][row][col & 037777777770] | (1 << (col & 0b111)));
                         }
-                        if (argb[2] < b1){
-                            b3 = rnd.nextInt(256);
-                            b4 = 255 - b3;
-                        } else {
-                            b3 = b4 = 0;
+                        if (argb[2] < g1) {
+                            overflow[2][row][col & 037777777770] = (byte) (overflow[2][row][col & 037777777770] | (1 << (col & 0b111)));
                         }
-                        if (argb[3] < a1){
-                            a3 = rnd.nextInt(256);
-                            a4 = 255 - a3;
-                        } else {
-                            a3 = a4 = 0;
+                        if (argb[3] < b1) {
+                            overflow[3][row][col & 037777777770] = (byte) (overflow[3][row][col & 037777777770] | (1 << (col & 0b111)));
                         }
-                        img1.setPixel(row + height, col, Color.argb(a3, r3, g3, b3));
-                        img2.setPixel(row + height, col, Color.argb(a4, r4, g4, b4));
                     }
                 }
             } else {
                 int[] rgb = new int[3];
                 for (int row = rowStart; row < rowEnd; row++) {
                     for (int col = colStart; col < colEnd; col++) {
-                        // TODO optimize the function call
                         int pixel = img.getPixel(row, col);
-                        rgb[0] = Color.red(pixel);
-                        rgb[1] = Color.green(pixel);
-                        rgb[2] = Color.blue(pixel);
+                        rgb[0] = (pixel >> 16) & 0xFF;
+                        rgb[1] = (pixel >> 8) & 0xFF;
+                        rgb[2] = pixel & 0xFF;
                         int r1 = rnd.nextInt(256);
                         int g1 = rnd.nextInt(256);
                         int b1 = rnd.nextInt(256);
-                        pixel = Color.rgb(r1, g1, b1);
+                        pixel = b1 | g1 << 8 | r1 << 16;
                         img1.setPixel(row, col, pixel);
-                        int r2 = encrypt(rgb[0], r1, 256);
-                        int g2 = encrypt(rgb[1], g1, 256);
-                        int b2 = encrypt(rgb[2], b1, 256);
-                        pixel = Color.rgb(r2, g2, b2);
+                        int r2 = (rgb[0]- r1) & 0xff;
+                        int g2 = (rgb[1]- g1) & 0xff;
+                        int b2 = (rgb[2]- b1) & 0xff;
+                        pixel = b2 | g2 << 8 | r2 << 16;
                         img2.setPixel(row, col, pixel);
-                        // TODO encrypt the overflow information
-                        int r3, g3, b3;
-                        int r4, g4, b4;
-                        if (rgb[0] < r1){
-                            r3 = rnd.nextInt(256);
-                            r4 = 255 - r3;
-                        } else {
-                            r3 = r4 = 0;
+                        // encrypt the overflow information
+                        if (rgb[0] < r1) {
+                            overflow[0][row][col & 037777777770] = (byte) (overflow[0][row][col & 037777777770] | (1 << (col & 0b111)));
                         }
-                        if (rgb[1] < g1){
-                            g3 = rnd.nextInt(256);
-                            g4 = 255 - g3;
-                        } else {
-                            g3 = g4 = 0;
+                        if (rgb[1] < g1) {
+                            overflow[1][row][col & 037777777770] = (byte) (overflow[1][row][col & 037777777770] | (1 << (col & 0b111)));
                         }
-                        if (rgb[2] < b1){
-                            b3 = rnd.nextInt(256);
-                            b4 = 255 - b3;
-                        } else {
-                            b3 = b4 = 0;
+                        if (rgb[2] < b1) {
+                            overflow[2][row][col & 037777777770] = (byte) (overflow[2][row][col & 037777777770] | (1 << (col & 0b111)));
                         }
-                        img1.setPixel(row + height, col, Color.rgb(r3, g3, b3));
-                        img2.setPixel(row + height, col, Color.rgb(r4, g4, b4));
                     }
                 }
             }

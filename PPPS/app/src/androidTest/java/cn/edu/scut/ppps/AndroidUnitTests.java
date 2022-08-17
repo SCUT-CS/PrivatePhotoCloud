@@ -19,7 +19,7 @@ import java.io.IOException;
 
 /**
  * Android Unit Tests
- * @author Cui Yuxin
+ * @author Cui Yuxin, Feng Yucheng
  */
 @RunWith(AndroidJUnit4.class)
 public class AndroidUnitTests {
@@ -56,12 +56,14 @@ public class AndroidUnitTests {
         // 获取设备上微信图片文件夹
         String imgFileDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + File.separator + "WeiXin";
         File weiXinPictureDir = new File(imgFileDir);
-        Assert.assertTrue(weiXinPictureDir.exists());
+        Assert.assertTrue("微信图片文件夹不存在！请检查是否拥有读取外部存储权限或文件夹是否存在。",
+                weiXinPictureDir.exists());
         // 找到微信图片文件夹下的第一张图片
         File[] files = weiXinPictureDir.listFiles((file)->{
             return file.getName().endsWith(".jpg");
         });
-        Assert.assertTrue(files.length > 0);
+        Assert.assertTrue("微信图片文件夹下不存在文件图片",
+                files.length > 0);
         // 初始化测试方法的参数
         String imgFilePath = files[0].getAbsolutePath();
         String imgName = null;
@@ -71,18 +73,19 @@ public class AndroidUnitTests {
             imgName = Utils.getFileName(imgFilePath);
             img = Utils.openImg(imgFilePath);
         } catch (IOException e) {
+            Assert.fail("调用目标函数失败！");
             e.printStackTrace();
         }
         // 断言测试方法的结果
-        Assert.assertNotNull(img);
-        Assert.assertNotNull(imgName);
-        Assert.assertEquals(files[0].getName(), imgName);
-        Assert.assertTrue(img.getWidth() > 0);
+        Assert.assertNotNull("目标函数返回结果为空！", img);
+        Assert.assertNotNull("目标函数返回结果为空！", imgName);
+        Assert.assertEquals("目标函数返回结果不正确！", files[0].getName(), imgName);
+        Assert.assertTrue("目标函数结果返回不正确！", img.getWidth() > 0);
     }
 
     /**
      * Test Utils getFileName method.
-     * @author Feng YuCheng
+     * @author Feng Yucheng
      */
     @Test
     public void utilsGetFileNameTest() {
