@@ -112,20 +112,30 @@ public class AndroidUnitTests {
 
     /**
      * Test Utils saveImg method.
-     * @author Feng YuCheng
+     * @author Feng Yucheng
      */
     @Test
     public void utilsSaveImgTest(){
         String imgFileDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + File.separator + "WeiXin";
         File weiXinPictureDir = new File(imgFileDir);
+        Assert.assertTrue(weiXinPictureDir.exists());
         File[] files = weiXinPictureDir.listFiles((file)->{
-            return file.getName().endsWith(".jpg");
+            return file.getName().endsWith(".png");
         });
-
-        Utils.saveImg(Utils.openImg(files[0]),imgFileDir);
-        Assert(files[0].getName(),Utils.getFileName(weiXinPictureDir));
-
-
+        Assert.assertTrue(files.length > 0);
+        String imgFilePath = imgFileDir + File.separator + "test.webp";
+        try {
+            Utils.saveImg(Utils.openImg(files[0].getAbsolutePath()), imgFilePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        File imgFile = new File(imgFilePath);
+        Assert.assertTrue(imgFile.exists());
+        try {
+            Assert.assertNotNull(Utils.openImg(imgFilePath));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
 
