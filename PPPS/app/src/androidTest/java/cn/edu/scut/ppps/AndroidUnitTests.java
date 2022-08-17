@@ -16,6 +16,7 @@ import org.junit.runner.RunWith;
 import java.io.File;
 import java.io.IOException;
 
+
 /**
  * Android Unit Tests
  * @author Cui Yuxin
@@ -108,11 +109,20 @@ public class AndroidUnitTests {
 
     /**
      * Test Utils saveImg method.
-     * @author TODO:YOUR_NAME
+     * @author Feng YuCheng
      */
     @Test
     public void utilsSaveImgTest(){
-        // TODO YOUR CODE HERE
+        String imgFileDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + File.separator + "WeiXin";
+        File weiXinPictureDir = new File(imgFileDir);
+        File[] files = weiXinPictureDir.listFiles((file)->{
+            return file.getName().endsWith(".jpg");
+        });
+
+        Utils.saveImg(Utils.openImg(files[0]),imgFileDir);
+        Assert(files[0].getName(),Utils.getFileName(weiXinPictureDir));
+
+
     }
 }
 
