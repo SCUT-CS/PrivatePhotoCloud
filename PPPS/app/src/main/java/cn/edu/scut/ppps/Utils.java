@@ -12,6 +12,7 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Arrays;
 
 /**
@@ -105,6 +106,24 @@ public class Utils {
         //  记得平均 记得×256 这个就是直接减的结果了
     }
 
+    /**
+     * Wrap the bytes array into a serializable object.
+     * @author Cui Yuxin
+     */
+    public class Overflow implements Serializable {
+
+        public byte[][][] bytesArray;
+
+        /**
+         * Constructor.
+         * @param bytesArray The bytes array.
+         * @author Cui Yuxin
+         */
+        public Overflow(byte[][][] bytesArray) {
+            this.bytesArray = bytesArray;
+        }
+
+    }
 
     /*// 请求权限
         ActivityCompat.requestPermissions(, new String[]{
