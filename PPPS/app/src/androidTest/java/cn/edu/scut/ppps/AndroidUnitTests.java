@@ -137,5 +137,80 @@ public class AndroidUnitTests {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Test Utils openImg *.HEIC time.
+     * @author Feng Yucheng
+     */
+    @Test
+    public void utilsOpenImgHEICTimeTest(){
+        // 获取设备上微信图片文件夹
+        String imgFileDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + File.separator + "WeiXin";
+        File weiXinPictureDir = new File(imgFileDir);
+        Assert.assertTrue("微信图片文件夹不存在！请检查是否拥有读取外部存储权限或文件夹是否存在。",
+                weiXinPictureDir.exists());
+        // 找到微信图片文件夹下的第一张图片
+        File[] files = weiXinPictureDir.listFiles((file)->{
+            return file.getName().endsWith(".HEIC");
+        });
+        Assert.assertTrue("微信图片文件夹下不存在文件图片",
+                files.length > 0);
+        // 初始化测试方法的参数
+        String imgFilePath = files[0].getAbsolutePath();
+        String imgName = null;
+        Bitmap img = null;
+        // 调用测试方法
+        // TODO 计时
+        try {
+            img = Utils.openImg(imgFilePath);
+        } catch (IOException e) {
+            Assert.fail("调用目标函数失败！");
+            e.printStackTrace();
+        }
+        // 断言测试方法的结果
+        Assert.assertNotNull("目标函数返回结果为空！", img);
+        Assert.assertNotNull("目标函数返回结果为空！", imgName);
+        Assert.assertEquals("目标函数返回结果不正确！", files[0].getName(), imgName);
+        Assert.assertTrue("目标函数结果返回不正确！", img.getWidth() > 0);
+    }
+
+    /**
+     * Test Utils openImg *.webp time.
+     * @author Feng Yucheng
+     */
+    @Test
+    public void utilsOpenImgWebpTimeTest(){
+
+    }
+
+    /**
+     * Test Utils saveImg optimize time.
+     * @author Feng Yucheng
+     */
+    @Test
+    public void utilsSaveImgOptimizeTest(){
+        String imgFileDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + File.separator + "WeiXin";
+        File weiXinPictureDir = new File(imgFileDir);
+        Assert.assertTrue(weiXinPictureDir.exists());
+        File[] files = weiXinPictureDir.listFiles((file)->{
+            return file.getName().endsWith(".png");
+        });
+        Assert.assertTrue(files.length > 0);
+        String imgFilePath = imgFileDir + File.separator + "test.webp";
+        // TODO 计时
+        try {
+            Utils.saveImg(Utils.openImg(files[0].getAbsolutePath()), imgFilePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        // TODO 计算文件大小
+        File imgFile = new File(imgFilePath);
+        Assert.assertTrue(imgFile.exists());
+        try {
+            Assert.assertNotNull(Utils.openImg(imgFilePath));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
 
