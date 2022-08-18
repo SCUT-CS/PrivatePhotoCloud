@@ -1,19 +1,14 @@
 package cn.edu.scut.ppps;
 
-import android.Manifest;
 import android.graphics.Bitmap;
 import android.graphics.ImageDecoder;
 import android.os.Build;
-
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.Arrays;
 
 /**
  * Utils class.
@@ -22,7 +17,7 @@ import java.util.Arrays;
 public class Utils {
 
     /**
-     * Open an image.
+     * Open an image and return.
      * @param imgPath The path of the image.
      * @author Cui Yuxin
      */
@@ -32,7 +27,7 @@ public class Utils {
     }
 
     /**
-     * Get file name.
+     * Find file`s name and return.
      * @param filePath The path of the file.
      * @author Cui Yuxin
      */
@@ -85,7 +80,7 @@ public class Utils {
     }
 
     /**
-     * Load bytes array.
+     * Load bytes array and return.
      * @param filePath The path of the overflow array file.
      * @author //TODO YOUR_NAME
      */
@@ -95,7 +90,7 @@ public class Utils {
     }
 
     /**
-     * Compress and overflow matrix into thumbnail size.
+     * Compress and overflow matrix into thumbnail size and return results.
      * @param bytesArray The bytes array.
      * @param height The height of the thumbnail.
      * @param width The width of the thumbnail.
@@ -120,7 +115,7 @@ public class Utils {
     }
 
     /**
-     * A helping method to collapse the width of the matrix.
+     * A helping method to collapse the width of the matrix and return results.
      * @param bytesArray The bytes array.
      * @param width The width of the thumbnail.
      * @author Zuo Xiaole, Cui Yuxin
@@ -144,7 +139,7 @@ public class Utils {
     }
 
     /**
-     * A helping method to collapse the height of the matrix.
+     * A helping method to collapse the height of the matrix and return results.
      * @param bytesArray The bytes array.
      * @param height The height of the thumbnail.
      * @param ratio The compress ratio of the thumbnail.
@@ -169,7 +164,7 @@ public class Utils {
      */
     public class Overflow implements Serializable {
 
-        public byte[][][] bytesArray;
+        private byte[][][] bytesArray;
 
         /**
          * Constructor.
@@ -180,6 +175,13 @@ public class Utils {
             this.bytesArray = bytesArray;
         }
 
+        /**
+         * Get the bytes array and return.
+         * @author Cui Yuxin
+         */
+        public byte[][][] getBytesArray() {
+            return bytesArray;
+        }
     }
 
     /*// 请求权限

@@ -31,7 +31,7 @@ public class Tokens {
         File tokensFile = this.loadTokenFile();
         if (tokensFile.exists()) {
             ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(tokensFile));
-            this.tokens = (HashMap<String, Map<String,String>>) objectInputStream.readObject();
+            this.tokens = (HashMap<String, Map<String, String>>) objectInputStream.readObject();
         } else {
             // Create a new file
             tokensFile.createNewFile();
@@ -73,7 +73,7 @@ public class Tokens {
      * Get all the token names and return.
      * @author Cui Yuxin
      */
-    public Set<String> getNames(){
+    public Set<String> getNames() {
         return tokens.keySet();
     }
 

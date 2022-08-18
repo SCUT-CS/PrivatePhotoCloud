@@ -2,7 +2,6 @@ package cn.edu.scut.ppps;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.ColorSpace;
 import java.io.File;
 import java.io.IOException;
@@ -213,9 +212,9 @@ public class Encrypt implements Callable {
                         int b1 = rnd.nextInt(256);
                         pixel = b1 | g1 << 8 | r1 << 16;
                         img1.setPixel(row, col, pixel);
-                        int r2 = (rgb[0]- r1) & 0xff;
-                        int g2 = (rgb[1]- g1) & 0xff;
-                        int b2 = (rgb[2]- b1) & 0xff;
+                        int r2 = (rgb[0] - r1) & 0xff;
+                        int g2 = (rgb[1] - g1) & 0xff;
+                        int b2 = (rgb[2] - b1) & 0xff;
                         pixel = b2 | g2 << 8 | r2 << 16;
                         img2.setPixel(row, col, pixel);
                         // encrypt the overflow information
