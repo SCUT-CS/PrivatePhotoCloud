@@ -92,10 +92,10 @@ public class AndroidUnitTests {
         // 获取设备上微信图片文件夹
         String imgFileDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + File.separator + "WeiXin";
         File weiXinPictureDir = new File(imgFileDir);
-        Assert.assertTrue(weiXinPictureDir.exists());
+        Assert.assertTrue("该文件夹不存在！，请检查是否外部权限不足或文件夹不存在",weiXinPictureDir.exists());
         // 找到微信图片文件夹下的文件
         File[] files = weiXinPictureDir.listFiles();
-        Assert.assertTrue(files.length > 0);
+        Assert.assertTrue("该文件夹不存在文件内容！",files.length > 0);
         // 初始化测试方法的参数
         String imgFilePath = files[0].getAbsolutePath();
         String imgName = null;
@@ -106,8 +106,8 @@ public class AndroidUnitTests {
             e.printStackTrace();
         }
         // 断言测试方法的结果
-        Assert.assertNotNull(imgName);
-        Assert.assertEquals(files[0].getName(), imgName);
+        Assert.assertNotNull("调用目标函数失败！",imgName);
+        Assert.assertEquals("储存失败！与原照片不一致。",files[0].getName(), imgName);
     }
 
     /**
@@ -118,11 +118,11 @@ public class AndroidUnitTests {
     public void utilsSaveImgTest(){
         String imgFileDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + File.separator + "WeiXin";
         File weiXinPictureDir = new File(imgFileDir);
-        Assert.assertTrue(weiXinPictureDir.exists());
+        Assert.assertTrue("该路径不存在！请检查路径是否正确。",weiXinPictureDir.exists());
         File[] files = weiXinPictureDir.listFiles((file)->{
             return file.getName().endsWith(".png");
         });
-        Assert.assertTrue(files.length > 0);
+        Assert.assertTrue("该照片文件不存在！",files.length > 0);
         String imgFilePath = imgFileDir + File.separator + "test.webp";
         try {
             Utils.saveImg(Utils.openImg(files[0].getAbsolutePath()), imgFilePath);
@@ -130,9 +130,9 @@ public class AndroidUnitTests {
             e.printStackTrace();
         }
         File imgFile = new File(imgFilePath);
-        Assert.assertTrue(imgFile.exists());
+        Assert.assertTrue("该文件不存在！请检查路径是否正确",imgFile.exists());
         try {
-            Assert.assertNotNull(Utils.openImg(imgFilePath));
+            Assert.assertNotNull("目标文件无法正确打开！请检查路径是否正确。",Utils.openImg(imgFilePath));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -191,11 +191,11 @@ public class AndroidUnitTests {
     public void utilsSaveImgOptimizeTest(){
         String imgFileDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + File.separator + "WeiXin";
         File weiXinPictureDir = new File(imgFileDir);
-        Assert.assertTrue(weiXinPictureDir.exists());
+        Assert.assertTrue("该文件不存在！请检查路径是否正确。",weiXinPictureDir.exists());
         File[] files = weiXinPictureDir.listFiles((file)->{
             return file.getName().endsWith(".png");
         });
-        Assert.assertTrue(files.length > 0);
+        Assert.assertTrue("该文件夹不存在文件内容！",files.length > 0);
         String imgFilePath = imgFileDir + File.separator + "test.webp";
         // TODO 计时
         try {
@@ -205,7 +205,7 @@ public class AndroidUnitTests {
         }
         // TODO 计算文件大小
         File imgFile = new File(imgFilePath);
-        Assert.assertTrue(imgFile.exists());
+        Assert.assertTrue("该照片文件不存在！请检查路径是否正确",imgFile.exists());
         try {
             Assert.assertNotNull(Utils.openImg(imgFilePath));
         } catch (IOException e) {
