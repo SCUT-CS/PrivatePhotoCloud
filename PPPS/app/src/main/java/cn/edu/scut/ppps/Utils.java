@@ -95,15 +95,72 @@ public class Utils {
     }
 
     /**
-     * Compress and overflow array into thumbnail size.
+     * Compress and overflow matrix into thumbnail size.
      * @param bytesArray The bytes array.
-     * @param row The height of the thumbnail.
-     * @param col The column of the thumbnail.
-     * @author //TODO YOUR_NAME
+     * @param height The height of the thumbnail.
+     * @param width The width of the thumbnail.
+     * @author Zuo Xiaole, Cui Yuxin
      */
-    public static int[][][] collapse(byte[][][] bytesArray, int row, int col) {
-        return null;
-        //  记得平均 记得×256 这个就是直接减的结果了
+    public static int[][][] collapse(byte[][][] bytesArray, int height, int width) {
+        int originalHeight = bytesArray[0].length;
+        int originalWidth = bytesArray[0][0].length;
+        int originalChannel = bytesArray.length;
+        double averageRatio = ((double) (height * width)) / (originalHeight * originalWidth);
+        int[][][] collapsed = new int[4][][]; // 4 channels (R, G, B, A)
+        if (originalChannel == 3) {
+            for (int i = 0; i < 3; i++) {
+                collapsed[i] = collapseHeight(collapseWidth(bytesArray[i], width), height, averageRatio);
+            }
+        } else if (originalChannel == 4) {
+            for (int i = 0; i < 4; i++) {
+                collapsed[i] = collapseHeight(collapseWidth(bytesArray[i], width), height, averageRatio);
+            }
+        }
+        return collapsed;
+    }
+
+    /**
+     * A helping method to collapse the width of the matrix.
+     * @param bytesArray The bytes array.
+     * @param width The width of the thumbnail.
+     * @author Zuo Xiaole, Cui Yuxin
+     */
+    private static int[][] collapseWidth(byte[][] bytesArray, int width) {
+        int originalWidth = bytesArray[0].length;
+        int originalHeight = bytesArray.length;
+        int mappingSize = (int) Math.ceil(originalWidth * 8.0 / width);
+        int[][] result = new int[originalHeight][width];
+        for (int i = 0; i < originalHeight; i++) {
+            for (int j = 0; j < originalWidth; j++) {
+                byte currentByte = bytesArray[i][j];
+                for (int index = 0; index < 8; index++) {
+                    if ((currentByte & (1 << index)) != 0) {
+                        result[i][((j << 3) + index) / mappingSize] += 256;
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+    /**
+     * A helping method to collapse the height of the matrix.
+     * @param bytesArray The bytes array.
+     * @param height The height of the thumbnail.
+     * @param ratio The compress ratio of the thumbnail.
+     * @author Zuo Xiaole, Cui Yuxin
+     */
+    private static int[][] collapseHeight(int[][] bytesArray, int height, double ratio) {
+        int originalWidth = bytesArray[0].length;
+        int originalHeight = bytesArray.length;
+        int mappingSize = (int) Math.ceil(originalHeight * 1.0 / height);
+        int[][] result = new int[height][originalWidth];
+        for (int i = 0; i < originalHeight; i++) {
+            for (int j = 0; j < originalWidth; j++) {
+                result[i / mappingSize][j] += (bytesArray[i][j] * ratio);
+            }
+        }
+        return result;
     }
 
     /**
