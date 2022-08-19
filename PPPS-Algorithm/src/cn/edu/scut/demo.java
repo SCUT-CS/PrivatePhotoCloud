@@ -204,9 +204,9 @@ public class demo {
                 int g2 = (pixel2 & 0xff00) >> 8; //g
                 int b2 = (pixel2 & 0xff); //b
 
-                rgb[0] = r1 + r2 - (ncord[0][x][y] * 255 / 225);
-                rgb[1] = (g1 + g2) - (ncord[1][x][y] * 255 / 225);;
-                rgb[2] = (b1 + b2) - (ncord[2][x][y] * 255 / 225);;
+                rgb[0] = ((r1 + r2) - (ncord[0][x][y] * 255 / 225));
+                rgb[1] = (g1 + g2) - (ncord[1][x][y] * 255 / 225);
+                rgb[2] = ((b1 + b2) - (ncord[2][x][y] * 255 / 225));
                 int pixel = rgb[2] & 0xff | (rgb[1] & 0xff) << 8 | (rgb[0] & 0xff) << 16;
                 image3.setRGB(x, y, pixel);
             }
@@ -222,10 +222,11 @@ public class demo {
     public static void main(String [] args){
 
         int[][][] record = getImagePixel("images/ZHAO.jpg", "images//zbw1.jpg", "images//zbw2.jpg");
+
         genThumbnail("images/ZHAO.jpg", "images/ZHAO_thumbnail.jpg", 15);
         genThumbnail("images/zbw1.jpg", "images/zbw1_thumbnail.jpg", 15);
         genThumbnail("images/zbw2.jpg", "images/zbw2_thumbnail.jpg", 15);
-        reConstruct("images/zbw1_thumbnail.jpg", "images/zbw2_thumbnail.jpg", "images/zbw_thumbnail.jpg", record);
 
+        reConstruct("images/zbw1_thumbnail.jpg", "images/zbw2_thumbnail.jpg", "images/zbw_thumbnail.jpg", record);
     }
 }

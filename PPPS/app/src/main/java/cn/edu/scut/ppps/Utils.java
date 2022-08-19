@@ -130,7 +130,7 @@ public class Utils {
                 byte currentByte = bytesArray[i][j];
                 for (int index = 0; index < 8; index++) {
                     if ((currentByte & (1 << index)) != 0) {
-                        result[i][((j << 3) + index) / mappingSize] += 256;
+                        result[i][((j << 3) + index) / mappingSize] += 255;
                     }
                 }
             }
