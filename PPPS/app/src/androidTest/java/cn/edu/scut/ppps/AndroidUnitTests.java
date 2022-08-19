@@ -3,6 +3,7 @@ package cn.edu.scut.ppps;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Environment;
+import android.os.SystemClock;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -14,7 +15,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Calendar;
 
 
 /**
@@ -198,12 +201,23 @@ public class AndroidUnitTests {
         Assert.assertTrue("该文件夹不存在文件内容！",files.length > 0);
         String imgFilePath = imgFileDir + File.separator + "test.webp";
         // TODO 计时
+        Calendar nowTime = Calendar.getInstance();
+        int mins = nowTime.get(Calendar.MINUTE);
+        int secs = nowTime.get(Calendar.SECOND);
+        int sum1 = 60*mins+secs;
         try {
             Utils.saveImg(Utils.openImg(files[0].getAbsolutePath()), imgFilePath);
         } catch (IOException e) {
             e.printStackTrace();
         }
+        Calendar finishTime = Calendar.getInstance();
+        int mins2 = finishTime.get(Calendar.MINUTE);
+        int secs2 = finishTime.get(Calendar.SECOND);
+        int sum2 = 60*mins+secs;
+        int runningTime = sum2 - sum1;
         // TODO 计算文件大小
+        Long fileSize = files[0].length();
+        double fileSizeMB = new BigDecimal(fileSize/1024/1024).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
         File imgFile = new File(imgFilePath);
         Assert.assertTrue("该照片文件不存在！请检查路径是否正确",imgFile.exists());
         try {
@@ -212,5 +226,30 @@ public class AndroidUnitTests {
             e.printStackTrace();
         }
     }
+
+    /*
+    public static void getFileSize(File file){
+        //通过输出流获取长度
+        FileInputStream fis = null;
+        try {
+            if(file.exists() && file.isFile()){
+                String fileName = file.getName();
+                fis = new FileInputStream(file);
+                System.out.println("文件"+fileName+"的大小是："+fis.available()+"\n");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally{
+            if(null!=fis){
+                try {
+                    fis.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+    */
+
 }
 
