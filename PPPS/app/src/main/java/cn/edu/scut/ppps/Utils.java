@@ -60,8 +60,7 @@ public class Utils {
         BufferedOutputStream outStream = new BufferedOutputStream(new FileOutputStream(file));
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             // lossless compression quality 100, resulting in a smaller file.
-            // TODO: optimize for small files or high speed.
-            img.compress(Bitmap.CompressFormat.WEBP_LOSSLESS, 100, outStream);
+            img.compress(Bitmap.CompressFormat.WEBP_LOSSLESS, 0, outStream);
         } else {
             // lossless compression quality 100
             img.compress(Bitmap.CompressFormat.WEBP, 100, outStream);
