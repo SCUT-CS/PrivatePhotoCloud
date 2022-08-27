@@ -228,5 +228,7 @@ public class TestPNG {
         genThumbnail("images/zbw2.png", "images/zbw2_thumbnail.png", 15);
 
         reConstruct("images/zbw1_thumbnail.png", "images/zbw2_thumbnail.png", "images/zbw_thumbnail.png", record);
+
+
     }
 }
