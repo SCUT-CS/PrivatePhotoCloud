@@ -8,7 +8,37 @@ Part A是项目代码的相关规范，Part B是项目架构。
 
 ## Updates
 
-### 2022.8.14-2022.8.20
+### 2022.8.29-2022.9.4
+
+#### Task1：
+
+仿照Utils.java里面的saveImg方法，编写后面的saveBytesArray方法。
+
+完成对应位置的2个"TODO"。
+
+**Files you'll edit:**
+
+Utils.java
+
+**Files you might want to look at:**
+
+Utils.java
+
+#### Task2：
+
+参考Task5，编完成loadBytesArray方法。
+
+完成对应位置的2个"TODO"。
+
+**Files you'll edit:**
+
+Utils.java
+
+**Files you might want to look at:**
+
+Utils.java
+
+### 2022.8.14-2022.8.28
 
 #### Task1：
 
@@ -69,34 +99,6 @@ Utils.java
 AndroidUnitTests.java
 
 README.md
-
-**Files you might want to look at:**
-
-Utils.java
-
-#### Task5：
-
-仿照Utils.java里面的saveImg方法，编写后面的saveBytesArray方法。
-
-完成对应位置的2个"TODO"。
-
-**Files you'll edit:**
-
-Utils.java
-
-**Files you might want to look at:**
-
-Utils.java
-
-#### Task6：
-
-参考Task5，编完成loadBytesArray方法。
-
-完成对应位置的2个"TODO"。
-
-**Files you'll edit:**
-
-Utils.java
 
 **Files you might want to look at:**
 
@@ -303,7 +305,7 @@ UI的制作。
 
 - 保存时间测试(3次取平均)
 
-  HEIC格式编解码需要硬件支持。
+  HEIC格式编解码需要硬件支持。如果不支持HEVC硬件编码器，采用0%压缩率的webp格式。
 
   - webp格式
 
