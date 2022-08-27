@@ -12,7 +12,7 @@ Part A是项目代码的相关规范，Part B是项目架构。
 
 #### Task1：
 
-仿照Utils.java里面的saveImg方法，编写后面的saveBytesArray方法。
+编写saveBytesArray方法。
 
 完成对应位置的2个"TODO"。
 
@@ -26,13 +26,27 @@ Utils.java
 
 #### Task2：
 
-参考Task5，编完成loadBytesArray方法。
+参考Task1，编完成loadBytesArray方法。
 
 完成对应位置的2个"TODO"。
 
 **Files you'll edit:**
 
 Utils.java
+
+**Files you might want to look at:**
+
+Utils.java
+
+#### Task3：
+
+编写Utils里面压缩数组（collapse）方法的测试。
+
+完成对应位置的2个"TODO"。
+
+**Files you'll edit:**
+
+UtilsTests.java
 
 **Files you might want to look at:**
 
@@ -48,7 +62,7 @@ Utils.java
 
 **Files you'll edit:**
 
-AndroidUnitTests.java
+UtilsTests.java
 
 **Files you might want to look at:**
 
@@ -70,7 +84,7 @@ Assert.assertTrue("微信图片文件夹不存在！请检查是否拥有读取�
 
 **Files you'll edit:**
 
-AndroidUnitTests.java
+UtilsTests.java
 
 #### Task3：
 
@@ -80,7 +94,7 @@ AndroidUnitTests.java
 
 **Files you'll edit:**
 
-AndroidUnitTests.java
+TimeTests.java
 
 README.md
 
@@ -96,7 +110,7 @@ Utils.java
 
 **Files you'll edit:**
 
-AndroidUnitTests.java
+TimeTests.java
 
 README.md
 

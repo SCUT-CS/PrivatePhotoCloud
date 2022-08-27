@@ -20,13 +20,12 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Calendar;
 
-
 /**
- * Android Unit Tests
+ * Utils Unit Tests
  * @author Cui Yuxin, Feng Yucheng
  */
 @RunWith(AndroidJUnit4.class)
-public class AndroidUnitTests {
+public class UtilsTests {
 
     /**
      * Grant permissions.
@@ -140,6 +139,15 @@ public class AndroidUnitTests {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Test Utils collapse method.
+     * @author //TODO YOUR_NAME
+     */
+    @Test
+    public void utilsCollapseTest(){
+        // TODO YOUR CODE HERE
     }
 
     /*

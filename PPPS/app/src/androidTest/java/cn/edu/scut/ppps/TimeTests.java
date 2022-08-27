@@ -20,7 +20,7 @@ import java.io.IOException;
  * @author Cui Yuxin, Feng Yucheng
  */
 @RunWith(AndroidJUnit4.class)
-public class AndroidTimeTest {
+public class TimeTests {
 
     /**
      * Grant permissions.
