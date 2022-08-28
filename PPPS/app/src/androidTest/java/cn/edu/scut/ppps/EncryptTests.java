@@ -1,6 +1,8 @@
 package cn.edu.scut.ppps;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Environment;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -131,4 +133,96 @@ public class EncryptTests {
         }
     }
 
+    /**
+     * Test encrypt encryptFile method.
+     * @author Cui Yuxin
+     */
+    @Test
+    public void encryptTest() {
+        Bitmap img1 = null;
+        Bitmap img2 = null;
+        Bitmap img = null;
+        for (Method method : methods){
+            if (method.getName().equals("encryptFile")){
+                try {
+                    method.invoke(encrypt);
+                    for (Field field : fields){
+                        if (field.getName().equals("width")){
+                            Assert.assertNotNull(field.get(encrypt));
+                            Assert.assertEquals("图片宽度不一致！", 4512, field.get(encrypt));
+                        } else if (field.getName().equals("height")){
+                            Assert.assertNotNull(field.get(encrypt));
+                            Assert.assertEquals("图片高度不一致！", 6016, field.get(encrypt));
+                        } else if (field.getName().equals("img1")){
+                            Assert.assertNotNull(field.get(encrypt));
+                            img1 = (Bitmap) field.get(encrypt);
+                        } else if (field.getName().equals("img2")){
+                            Assert.assertNotNull(field.get(encrypt));
+                            img2 = (Bitmap) field.get(encrypt);
+                        } else if (field.getName().equals("overflow")){
+                            Assert.assertNotNull(field.get(encrypt));
+                        } else if (field.getName().equals("img")){
+                            Assert.assertNotNull(field.get(encrypt));
+                            img = (Bitmap) field.get(encrypt);
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Assert.fail();
+                }
+                break;
+            }
+        }
+        // 加密算法正确性检查
+        for (int i = 0; i < 100; i++){
+            int row = (int) (Math.random() * img.getHeight());
+            int col = (int) (Math.random() * img.getWidth());
+            int pixel = img.getPixel(col, row);
+            int pixel1 = img1.getPixel(row, col);
+            int pixel2 = img2.getPixel(row, col);
+            Assert.assertEquals("加密算法错误！", Color.red(pixel),
+                    (Color.red(pixel2) + Color.red(pixel1) % 256));
+            Assert.assertEquals("加密算法错误！", Color.green(pixel),
+                    (Color.green(pixel2) + Color.green(pixel1) % 256));
+            Assert.assertEquals("加密算法错误！", Color.blue(pixel),
+                    (Color.blue(pixel2) + Color.blue(pixel1) % 256));
+            Assert.assertEquals("加密算法错误！", Color.alpha(pixel),
+                    (Color.alpha(pixel2) + Color.alpha(pixel1) % 256));
+        }
+    }
+
+    /**
+     * Test encrypt saveFile method.
+     * @author Cui Yuxin
+     */
+    @Test
+    public void saveFileTest() {
+        for (Method method : methods){
+            if (method.getName().equals("saveFile")){
+                try {
+                    method.invoke(encrypt);
+                    for (Field field : fields){
+                        // TODO
+                        if (field.getName().equals("fileName")){
+                            Assert.assertNotNull(field.get(encrypt));
+                            Assert.assertEquals("文件名获取失败！",field.get(encrypt),"jpg_medium.jpg");
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Assert.fail();
+                }
+                break;
+            }
+        }
+    }
+
+    /**
+     * Test encrypt call method.
+     * @author Cui Yuxin
+     */
+    @Test
+    public void callTest() {
+        // TODO
+    }
 }

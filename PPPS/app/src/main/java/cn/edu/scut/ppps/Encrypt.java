@@ -3,6 +3,8 @@ package cn.edu.scut.ppps;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.ColorSpace;
+import android.util.Log;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Random;
@@ -61,8 +63,10 @@ public class Encrypt implements Callable {
                 img.hasAlpha(),
                 ColorSpace.get(ColorSpace.Named.SRGB));
         if (img.hasAlpha()) {
+            Log.d("Encrypt", "hasAlpha");
             overflow = new byte[4][height][(int) Math.ceil(width / 8.0)];
         } else {
+            Log.d("Encrypt", "noAlpha");
             overflow = new byte[3][height][(int) Math.ceil(width / 8.0)];
         }
         // TODO: optimize for the number of threads.
@@ -70,6 +74,7 @@ public class Encrypt implements Callable {
         if (threadNum == 0) {
             threadNum = 1;
         }
+        Log.d("Encrypt", "threadNum: " + threadNum);
         Thread[] threads = new EncryptThread[threadNum];
         for (int i = 0; i < threadNum; i++) {
             threads[i] = new EncryptThread(i, threadNum);
