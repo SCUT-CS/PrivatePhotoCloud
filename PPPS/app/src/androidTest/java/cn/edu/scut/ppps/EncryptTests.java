@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Environment;
+import android.util.Log;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -74,7 +75,7 @@ public class EncryptTests {
         }
         // 获取类内部变量和方法
         try {
-            fields = encryptClass.getFields();
+            fields = encryptClass.getDeclaredFields();
             for (Field field : fields) {
                 field.setAccessible(true);
             }
@@ -83,7 +84,7 @@ public class EncryptTests {
             Assert.fail();
         }
         try {
-            methods = encryptClass.getMethods();
+            methods = encryptClass.getDeclaredMethods();
             for (Method method : methods) {
                 method.setAccessible(true);
             }
@@ -103,6 +104,26 @@ public class EncryptTests {
         } catch (Exception e){
             e.printStackTrace();
             Assert.fail();
+        }
+    }
+
+    /**
+     * Test android environment.
+     * @author Cui Yuxin
+     */
+    @Test
+    public void environmentTest() {
+        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        String a = Environment.getDataDirectory().getAbsolutePath();
+        String b = Environment.getExternalStorageDirectory().getAbsolutePath();
+        String c = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath();
+        String d = appContext.getFilesDir().getAbsolutePath();
+        String e = appContext.getCacheDir().getAbsolutePath();
+        for (Field field : fields) {
+            Log.d("EncryptTests", field.getName());
+        }
+        for (Method method : methods){
+            Log.d("EncryptTests", method.getName());
         }
     }
 
@@ -143,7 +164,18 @@ public class EncryptTests {
         Bitmap img2 = null;
         Bitmap img = null;
         for (Method method : methods){
-            if (method.getName().equals("encryptFile")){
+            if (method.getName().equals("openFile")){
+                try {
+                    method.invoke(encrypt);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Assert.fail();
+                }
+                break;
+            }
+        }
+        for (Method method : methods){
+            if (method.getName().equals("encrypt")){
                 try {
                     method.invoke(encrypt);
                     for (Field field : fields){
@@ -173,6 +205,10 @@ public class EncryptTests {
                 break;
             }
         }
+        // 检查加密结果
+        Assert.assertNotNull(img);
+        Assert.assertNotNull(img1);
+        Assert.assertNotNull(img2);
         // 加密算法正确性检查
         for (int i = 0; i < 100; i++){
             int row = (int) (Math.random() * img.getHeight());
@@ -203,10 +239,10 @@ public class EncryptTests {
                     method.invoke(encrypt);
                     for (Field field : fields){
                         // TODO
-                        if (field.getName().equals("fileName")){
+                        /*if (field.getName().equals("fileName")){
                             Assert.assertNotNull(field.get(encrypt));
                             Assert.assertEquals("文件名获取失败！",field.get(encrypt),"jpg_medium.jpg");
-                        }
+                        }*/
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
