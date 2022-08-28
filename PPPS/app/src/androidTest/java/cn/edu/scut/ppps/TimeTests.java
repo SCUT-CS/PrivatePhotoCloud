@@ -44,7 +44,7 @@ public class TimeTests {
                 weiXinPictureDir.exists());
         // 找到微信图片文件夹下的第一张图片
         File[] files = weiXinPictureDir.listFiles((file) -> {
-            return file.getName().endsWith("high.HEIC");
+            return file.getName().endsWith("medium.HEIC");
         });
         Assert.assertTrue("微信图片文件夹下不存在文件图片",
                 files.length > 0);
@@ -62,7 +62,42 @@ public class TimeTests {
             }
             long end = System.currentTimeMillis();
             long time = end - start;
-            Log.w("打开HEIF图片计时", "打开时间: " + time + "ms");
+            Log.d("打开HEIF图片计时", "打开时间: " + time + "ms");
+        }
+    }
+
+    /**
+     * Test Utils openImg *.jpg time.
+     * @author Cui Yuxin
+     */
+    @Test
+    public void utilsOpenImgJPGTimeTest() {
+        // 获取设备上微信图片文件夹
+        String imgFileDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + File.separator + "WeiXin";
+        File weiXinPictureDir = new File(imgFileDir);
+        Assert.assertTrue("微信图片文件夹不存在！请检查是否拥有读取外部存储权限或文件夹是否存在。",
+                weiXinPictureDir.exists());
+        // 找到微信图片文件夹下的第一张图片
+        File[] files = weiXinPictureDir.listFiles((file) -> {
+            return file.getName().endsWith("high.jpg");
+        });
+        Assert.assertTrue("微信图片文件夹下不存在文件图片",
+                files.length > 0);
+        // 初始化测试方法的参数
+        String imgFilePath = files[0].getAbsolutePath();
+        Bitmap img = null;
+        // 调用测试方法并计时
+        for (int i = 0; i < 5; i++) {
+            long start = System.currentTimeMillis();
+            try {
+                img = Utils.openImg(imgFilePath);
+            } catch (IOException e) {
+                Assert.fail("调用目标函数失败！");
+                e.printStackTrace();
+            }
+            long end = System.currentTimeMillis();
+            long time = end - start;
+            Log.d("打开JPG图片计时", "打开时间: " + time + "ms");
         }
     }
 
@@ -79,7 +114,7 @@ public class TimeTests {
                 weiXinPictureDir.exists());
         // 找到微信图片文件夹下的第一张图片
         File[] files = weiXinPictureDir.listFiles((file) -> {
-            return file.getName().endsWith("high.webp");
+            return file.getName().endsWith("medium.webp");
         });
         Assert.assertTrue("微信图片文件夹下不存在文件图片",
                 files.length > 0);
@@ -97,7 +132,7 @@ public class TimeTests {
             }
             long end = System.currentTimeMillis();
             long time = end - start;
-            Log.w("打开webp图片计时", "打开时间: " + time + "ms");
+            Log.d("打开webp图片计时", "打开时间: " + time + "ms");
         }
     }
 
@@ -106,7 +141,7 @@ public class TimeTests {
      * @author Feng Yucheng
      */
     @Test
-    public void utilsSaveImgOptimizeTest() {
+    public void utilsSaveImgTimeTest() {
         // 获取设备上微信图片文件夹
         String imgFileDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + File.separator + "WeiXin";
         File weiXinPictureDir = new File(imgFileDir);
@@ -136,9 +171,7 @@ public class TimeTests {
             File file = new File(imgFilePath);
             long fileSize = file.length();
             double fileSizeMB = fileSize / 1024.0 / 1024.0;
-            Log.w("保存图片计时", "保存时间：" + time + "ms, 图片大小：" + fileSizeMB + "MB");
+            Log.d("保存图片计时", "保存时间：" + time + "ms, 图片大小：" + fileSizeMB + "MB");
         }
     }
-
-
 }

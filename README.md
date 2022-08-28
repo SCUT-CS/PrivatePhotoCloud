@@ -349,15 +349,21 @@ UI的制作。
 
 - 打开webp时间测试
 
-  M：611ms 692ms 686ms 690ms 692ms
+  M：547ms 609ms 674ms 661ms 679ms
 
   L：1942ms 1904ms 2048ms 1906ms 1883ms
 
 - 打开HEIC时间测试
 
-  M：375ms 511ms 657ms 688ms 647ms
+  M：810ms 710ms 620ms 643ms 632ms
 
   L：2640ms 2737ms 2739ms 2855ms 2737ms
+  
+- 打开JPG时间测试
+
+  M：238ms 200ms 198ms 214ms 205ms
+
+  L：614ms 574ms 579ms 589ms 586ms
 
 ## TODO：
 
