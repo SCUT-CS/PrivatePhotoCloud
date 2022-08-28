@@ -133,6 +133,7 @@ public class EncryptTests {
      */
     @Test
     public void openFileTest() {
+        Bitmap img = null;
         for (Method method : methods){
             if (method.getName().equals("openFile")){
                 try {
@@ -140,6 +141,7 @@ public class EncryptTests {
                     for (Field field : fields){
                         if (field.getName().equals("img")){
                             Assert.assertNotNull(field.get(encrypt));
+                            img = (Bitmap) field.get(encrypt);
                         } else if (field.getName().equals("fileName")){
                             Assert.assertNotNull(field.get(encrypt));
                             Assert.assertEquals("文件名获取失败！",field.get(encrypt),"jpg_medium.jpg");
@@ -151,6 +153,9 @@ public class EncryptTests {
                 }
                 break;
             }
+            Assert.assertNotNull(img);
+            Assert.assertEquals("图片获取失败！",4512,img.getWidth());
+            Assert.assertEquals("图片获取失败！",6016,img.getHeight());
         }
     }
 
@@ -214,8 +219,8 @@ public class EncryptTests {
             int row = (int) (Math.random() * img.getHeight());
             int col = (int) (Math.random() * img.getWidth());
             int pixel = img.getPixel(col, row);
-            int pixel1 = img1.getPixel(row, col);
-            int pixel2 = img2.getPixel(row, col);
+            int pixel1 = img1.getPixel(col, row);
+            int pixel2 = img2.getPixel(col, row);
             Assert.assertEquals("加密算法错误！", Color.red(pixel),
                     (Color.red(pixel2) + Color.red(pixel1) % 256));
             Assert.assertEquals("加密算法错误！", Color.green(pixel),
