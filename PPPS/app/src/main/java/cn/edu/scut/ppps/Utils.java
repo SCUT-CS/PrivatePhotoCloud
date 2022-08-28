@@ -22,8 +22,11 @@ public class Utils {
      * @author Cui Yuxin
      */
     public static Bitmap openImg(String imgPath) throws IOException {
-        ImageDecoder.Source source = ImageDecoder.createSource(new File(imgPath));
-        return ImageDecoder.decodeBitmap(source);
+        ImageDecoder.Source imgsource = ImageDecoder.createSource(new File(imgPath));
+        return ImageDecoder.decodeBitmap(imgsource, ( decoder, info, source)->{
+            decoder.setAllocator(ImageDecoder.ALLOCATOR_SOFTWARE);
+            decoder.setMutableRequired(true);
+        });
     }
 
     /**
