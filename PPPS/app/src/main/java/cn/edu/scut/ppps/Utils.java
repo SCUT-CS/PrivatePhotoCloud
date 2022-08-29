@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
+import java.io.*;
 
 /**
  * Utils class.
@@ -75,20 +76,49 @@ public class Utils {
      * Save bytes array.
      * @param bytesArray The bytes array.
      * @param filePath The path of the overflow array file.
-     * @author //TODO YOUR_NAME
+     * @author //Feng yucheng
      */
     public static void saveBytesArray(byte[][][] bytesArray, String filePath) throws IOException {
-        // TODO YOUR CODE HERE
+        try
+        {
+            FileOutputStream fileOut =
+                    new FileOutputStream(filePath);
+            ObjectOutputStream out = new ObjectOutputStream(fileOut);
+            out.writeObject(bytesArray);
+            out.close();
+            fileOut.close();
+        }catch(IOException i)
+        {
+            i.printStackTrace();
+        }
+
     }
 
     /**
      * Load bytes array and return.
      * @param filePath The path of the overflow array file.
-     * @author //TODO YOUR_NAME
+     * @author //Feng yucheng
      */
     public static byte[][][] loadBytesArray(String filePath) throws IOException {
-        // TODO YOUR CODE HERE
-        return null;
+        byte[][][] tempbytesArray = null;
+        try
+        {
+            FileInputStream fileIn = new FileInputStream(filePath);
+            ObjectInputStream in = new ObjectInputStream(fileIn);
+            tempbytesArray = (bytesArray) in.readObject();
+            in.close();
+            fileIn.close();
+        }catch(IOException i)
+        {
+            i.printStackTrace();
+
+        }catch(ClassNotFoundException c)
+        {
+            System.out.println("bytearray class not found");
+            c.printStackTrace();
+
+        }
+        return tempbytesArray;
     }
 
     /**
