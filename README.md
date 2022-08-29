@@ -52,6 +52,34 @@ UtilsTests.java
 
 Utils.java
 
+#### Task4：
+
+编写Utils里面saveBytesArray方法的测试。
+
+在UtilsTests.java找合适的位置按照CodeStyle编写。
+
+**Files you'll edit:**
+
+UtilsTests.java
+
+**Files you might want to look at:**
+
+Utils.java
+
+#### Task5：
+
+编写Utils里面loadBytesArray方法的测试。
+
+在UtilsTests.java找合适的位置按照CodeStyle编写。
+
+**Files you'll edit:**
+
+UtilsTests.java
+
+**Files you might want to look at:**
+
+Utils.java
+
 ### 2022.8.14-2022.8.28
 
 #### Task1：

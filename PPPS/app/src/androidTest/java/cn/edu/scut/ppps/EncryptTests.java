@@ -23,7 +23,6 @@ import java.lang.reflect.Method;
 
 /**
  * Encrypt Unit Tests
- *
  * @author Cui Yuxin
  */
 @RunWith(AndroidJUnit4.class)
