@@ -23,6 +23,7 @@ import java.lang.reflect.Method;
 
 /**
  * Encrypt Unit Tests
+ *
  * @author Cui Yuxin
  */
 @RunWith(AndroidJUnit4.class)
@@ -68,7 +69,7 @@ public class EncryptTests {
             Assert.fail();
         }
         try {
-            encrypt = (Encrypt) constructor.newInstance(imgPath,appContext);
+            encrypt = (Encrypt) constructor.newInstance(imgPath, appContext);
         } catch (Exception e) {
             e.printStackTrace();
             Assert.fail();
@@ -93,15 +94,15 @@ public class EncryptTests {
             Assert.fail();
         }
         // 测试构造函数
-        try{
-            for (Field field : fields){
-                if (field.getName().equals("filePath")){
+        try {
+            for (Field field : fields) {
+                if (field.getName().equals("filePath")) {
                     Assert.assertNotNull(field.get(encrypt));
-                } else if (field.getName().equals("context")){
+                } else if (field.getName().equals("context")) {
                     Assert.assertNotNull(field.get(encrypt));
                 }
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             Assert.fail();
         }
@@ -122,7 +123,7 @@ public class EncryptTests {
         for (Field field : fields) {
             Log.d("EncryptTests", field.getName());
         }
-        for (Method method : methods){
+        for (Method method : methods) {
             Log.d("EncryptTests", method.getName());
         }
     }
@@ -134,17 +135,17 @@ public class EncryptTests {
     @Test
     public void openFileTest() {
         Bitmap img = null;
-        for (Method method : methods){
-            if (method.getName().equals("openFile")){
+        for (Method method : methods) {
+            if (method.getName().equals("openFile")) {
                 try {
                     method.invoke(encrypt);
-                    for (Field field : fields){
-                        if (field.getName().equals("img")){
+                    for (Field field : fields) {
+                        if (field.getName().equals("img")) {
                             Assert.assertNotNull(field.get(encrypt));
                             img = (Bitmap) field.get(encrypt);
-                        } else if (field.getName().equals("fileName")){
+                        } else if (field.getName().equals("fileName")) {
                             Assert.assertNotNull(field.get(encrypt));
-                            Assert.assertEquals("文件名获取失败！",field.get(encrypt),"jpg_medium.jpg");
+                            Assert.assertEquals("文件名获取失败！", field.get(encrypt), "jpg_medium.jpg");
                         }
                     }
                 } catch (Exception e) {
@@ -154,8 +155,8 @@ public class EncryptTests {
                 break;
             }
             Assert.assertNotNull(img);
-            Assert.assertEquals("图片获取失败！",4512,img.getWidth());
-            Assert.assertEquals("图片获取失败！",6016,img.getHeight());
+            Assert.assertEquals("图片获取失败！", 4512, img.getWidth());
+            Assert.assertEquals("图片获取失败！", 6016, img.getHeight());
         }
     }
 
@@ -168,8 +169,8 @@ public class EncryptTests {
         Bitmap img1 = null;
         Bitmap img2 = null;
         Bitmap img = null;
-        for (Method method : methods){
-            if (method.getName().equals("openFile")){
+        for (Method method : methods) {
+            if (method.getName().equals("openFile")) {
                 try {
                     method.invoke(encrypt);
                 } catch (Exception e) {
@@ -179,26 +180,26 @@ public class EncryptTests {
                 break;
             }
         }
-        for (Method method : methods){
-            if (method.getName().equals("encrypt")){
+        for (Method method : methods) {
+            if (method.getName().equals("encrypt")) {
                 try {
                     method.invoke(encrypt);
-                    for (Field field : fields){
-                        if (field.getName().equals("width")){
+                    for (Field field : fields) {
+                        if (field.getName().equals("width")) {
                             Assert.assertNotNull(field.get(encrypt));
                             Assert.assertEquals("图片宽度不一致！", 4512, field.get(encrypt));
-                        } else if (field.getName().equals("height")){
+                        } else if (field.getName().equals("height")) {
                             Assert.assertNotNull(field.get(encrypt));
                             Assert.assertEquals("图片高度不一致！", 6016, field.get(encrypt));
-                        } else if (field.getName().equals("img1")){
+                        } else if (field.getName().equals("img1")) {
                             Assert.assertNotNull(field.get(encrypt));
                             img1 = (Bitmap) field.get(encrypt);
-                        } else if (field.getName().equals("img2")){
+                        } else if (field.getName().equals("img2")) {
                             Assert.assertNotNull(field.get(encrypt));
                             img2 = (Bitmap) field.get(encrypt);
-                        } else if (field.getName().equals("overflow")){
+                        } else if (field.getName().equals("overflow")) {
                             Assert.assertNotNull(field.get(encrypt));
-                        } else if (field.getName().equals("img")){
+                        } else if (field.getName().equals("img")) {
                             Assert.assertNotNull(field.get(encrypt));
                             img = (Bitmap) field.get(encrypt);
                         }
@@ -215,20 +216,26 @@ public class EncryptTests {
         Assert.assertNotNull(img1);
         Assert.assertNotNull(img2);
         // 加密算法正确性检查
-        for (int i = 0; i < 100; i++){
+        for (int i = 0; i < 1000; i++) {
             int row = (int) (Math.random() * img.getHeight());
             int col = (int) (Math.random() * img.getWidth());
             int pixel = img.getPixel(col, row);
             int pixel1 = img1.getPixel(col, row);
             int pixel2 = img2.getPixel(col, row);
-            Assert.assertEquals("加密算法错误！", Color.red(pixel),
-                    (Color.red(pixel2) + Color.red(pixel1) % 256));
-            Assert.assertEquals("加密算法错误！", Color.green(pixel),
-                    (Color.green(pixel2) + Color.green(pixel1) % 256));
-            Assert.assertEquals("加密算法错误！", Color.blue(pixel),
-                    (Color.blue(pixel2) + Color.blue(pixel1) % 256));
-            Assert.assertEquals("加密算法错误！", Color.alpha(pixel),
-                    (Color.alpha(pixel2) + Color.alpha(pixel1) % 256));
+            Assert.assertEquals("加密算法错误！(R)row：" + row + "col:" + col,
+                    Color.red(pixel),
+                    (Color.red(pixel2) + Color.red(pixel1)) % 256);
+            Assert.assertEquals("加密算法错误！(G)row：" + row + "col:" + col,
+                    Color.green(pixel),
+                    (Color.green(pixel2) + Color.green(pixel1)) % 256);
+            Assert.assertEquals("加密算法错误！(B)row：" + row + "col:" + col,
+                    Color.blue(pixel),
+                    (Color.blue(pixel2) + Color.blue(pixel1)) % 256);
+            if (img.hasAlpha()) {
+                Assert.assertEquals("加密算法错误！(A)row：" + row + "col:" + col,
+                        Color.alpha(pixel),
+                        (Color.alpha(pixel2) + Color.alpha(pixel1)) % 256);
+            }
         }
     }
 
@@ -238,11 +245,11 @@ public class EncryptTests {
      */
     @Test
     public void saveFileTest() {
-        for (Method method : methods){
-            if (method.getName().equals("saveFile")){
+        for (Method method : methods) {
+            if (method.getName().equals("saveFile")) {
                 try {
                     method.invoke(encrypt);
-                    for (Field field : fields){
+                    for (Field field : fields) {
                         // TODO
                         /*if (field.getName().equals("fileName")){
                             Assert.assertNotNull(field.get(encrypt));
