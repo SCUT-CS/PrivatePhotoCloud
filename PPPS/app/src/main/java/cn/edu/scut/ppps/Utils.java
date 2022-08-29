@@ -76,22 +76,12 @@ public class Utils {
      * Save bytes array.
      * @param bytesArray The bytes array.
      * @param filePath The path of the overflow array file.
-     * @author //Feng yucheng
+     * @author Feng Yucheng
      */
     public static void saveBytesArray(byte[][][] bytesArray, String filePath) throws IOException {
-        try
-        {
-            FileOutputStream fileOut =
-                    new FileOutputStream(filePath);
-            ObjectOutputStream out = new ObjectOutputStream(fileOut);
-            out.writeObject(bytesArray);
-            out.close();
-            fileOut.close();
-        }catch(IOException i)
-        {
-            i.printStackTrace();
-        }
-
+        FileOutputStream fileOut = new FileOutputStream(filePath);
+        ObjectOutputStream out = new ObjectOutputStream(fileOut);
+        out.writeObject(new Overflow(bytesArray));
     }
 
     /**
@@ -99,26 +89,10 @@ public class Utils {
      * @param filePath The path of the overflow array file.
      * @author //Feng yucheng
      */
-    public static byte[][][] loadBytesArray(String filePath) throws IOException {
-        byte[][][] tempbytesArray = null;
-        try
-        {
-            FileInputStream fileIn = new FileInputStream(filePath);
-            ObjectInputStream in = new ObjectInputStream(fileIn);
-            tempbytesArray = (bytesArray) in.readObject();
-            in.close();
-            fileIn.close();
-        }catch(IOException i)
-        {
-            i.printStackTrace();
-
-        }catch(ClassNotFoundException c)
-        {
-            System.out.println("bytearray class not found");
-            c.printStackTrace();
-
-        }
-        return tempbytesArray;
+    public static byte[][][] loadBytesArray(String filePath) throws Exception {
+        FileInputStream fileIn = new FileInputStream(filePath);
+        ObjectInputStream in = new ObjectInputStream(fileIn);
+        return ((Overflow) in.readObject()).getBytesArray();
     }
 
     /**
@@ -194,7 +168,7 @@ public class Utils {
      * Wrap the bytes array into a serializable object.
      * @author Cui Yuxin
      */
-    public class Overflow implements Serializable {
+    public static class Overflow implements Serializable {
 
         private byte[][][] bytesArray;
 

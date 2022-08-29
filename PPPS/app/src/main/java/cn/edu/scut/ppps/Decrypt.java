@@ -59,7 +59,7 @@ public class Decrypt implements Callable {
      * Open images.
      * @author Cui Yuxin
      */
-    private void openFile() throws IOException {
+    private void openFile() throws Exception {
         img1 = Utils.openImg(imgFilePath1);
         img2 = Utils.openImg(imgFilePath2);
         String imgName = Utils.getFileName(imgFilePath1);
@@ -146,7 +146,7 @@ public class Decrypt implements Callable {
      * @author Cui Yuxin
      */
     @Override
-    public Bitmap call() throws IOException {
+    public Bitmap call() throws Exception {
         openFile();
         initialize();
         if (isThumbnail) {
