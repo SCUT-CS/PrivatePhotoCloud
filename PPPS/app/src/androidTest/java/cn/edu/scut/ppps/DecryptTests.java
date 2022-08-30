@@ -20,6 +20,10 @@ import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.Future;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Decrypt Unit Tests
@@ -272,6 +276,56 @@ public class DecryptTests {
                     Assert.fail();
                 }
                 break;
+            }
+        }
+    }
+
+    /**
+     * Test decrypt call method.
+     * @author Cui Yuxin
+     */
+    @Test
+    public void callTest() {
+        // 构造函数参数
+        String imgPath1 = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
+                + File.separator + "WeiXin"
+                + File.separator + "encrypted1.png";
+        String imgPath2 = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
+                + File.separator + "WeiXin"
+                + File.separator + "encrypted2.png";
+        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        Decrypt decrypt = new Decrypt(imgPath1, imgPath2, appContext);
+        ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(5, 10, 1000, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(16));
+        Future<Bitmap> results = threadPoolExecutor.submit(decrypt);
+        Bitmap img = null;
+        Bitmap originalImg = null;
+        try {
+            img = results.get();
+            String imgPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
+                    + File.separator + "WeiXin"
+                    + File.separator + "ZHAO.jpg";
+            originalImg = Utils.openImg(imgPath);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail();
+        }
+        Assert.assertNotNull(img);
+        Assert.assertNotNull(originalImg);
+        // 解密算法正确性检查
+        for (int i = 0; i < 1000; i++) {
+            int row = (int) (Math.random() * img.getHeight());
+            int col = (int) (Math.random() * img.getWidth());
+            int originalPixel = originalImg.getPixel(col, row);
+            int pixel = img.getPixel(col, row);
+            Assert.assertEquals("加密算法错误！(R)row：" + row + "col:" + col,
+                    Color.red(originalPixel), Color.red(pixel));
+            Assert.assertEquals("加密算法错误！(G)row：" + row + "col:" + col,
+                    Color.green(originalPixel), Color.green(pixel));
+            Assert.assertEquals("加密算法错误！(B)row：" + row + "col:" + col,
+                    Color.blue(originalPixel), Color.blue(pixel));
+            if (img.hasAlpha()) {
+                Assert.assertEquals("加密算法错误！(A)row：" + row + "col:" + col,
+                        Color.alpha(originalPixel),  Color.alpha(pixel));
             }
         }
     }
