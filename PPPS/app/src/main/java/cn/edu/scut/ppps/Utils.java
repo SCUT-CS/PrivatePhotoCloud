@@ -73,7 +73,7 @@ public class Utils {
             heifWriter.start();
             heifWriter.addBitmap(img);
             if (exifData != null) {
-                heifWriter.addExifData(0, exifData,0, exifData.length);
+                heifWriter.addExifData(0, exifData, 0, exifData.length);
             }
             heifWriter.stop(0);
             heifWriter.close();

@@ -23,7 +23,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -349,7 +348,7 @@ public class EncryptTests {
                 + File.separator + "jpg_medium.jpg";
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         Encrypt encrypt = new Encrypt(imgPath, context);
-        ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(5,10,1000, TimeUnit.SECONDS,new ArrayBlockingQueue<Runnable>(16));
+        ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(5, 10, 1000, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(16));
         Future<Bitmap[]> results = threadPoolExecutor.submit(encrypt);
         Bitmap[] result = null;
         try {

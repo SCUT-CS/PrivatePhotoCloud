@@ -16,10 +16,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.util.Calendar;
 
 /**
  * Utils Unit Tests
@@ -56,14 +53,14 @@ public class UtilsTests {
      * @author Cui Yuxin
      */
     @Test
-    public void utilsOpenImgTest(){
+    public void utilsOpenImgTest() {
         // 获取设备上微信图片文件夹
         String imgFileDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + File.separator + "WeiXin";
         File weiXinPictureDir = new File(imgFileDir);
         Assert.assertTrue("微信图片文件夹不存在！请检查是否拥有读取外部存储权限或文件夹是否存在。",
                 weiXinPictureDir.exists());
         // 找到微信图片文件夹下的第一张图片
-        File[] files = weiXinPictureDir.listFiles((file)->{
+        File[] files = weiXinPictureDir.listFiles((file) -> {
             return file.getName().endsWith(".HEIC");
         });
         Assert.assertTrue("微信图片文件夹下不存在文件图片",
@@ -96,10 +93,10 @@ public class UtilsTests {
         // 获取设备上微信图片文件夹
         String imgFileDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + File.separator + "WeiXin";
         File weiXinPictureDir = new File(imgFileDir);
-        Assert.assertTrue("该文件夹不存在！，请检查是否外部权限不足或文件夹不存在",weiXinPictureDir.exists());
+        Assert.assertTrue("该文件夹不存在！，请检查是否外部权限不足或文件夹不存在", weiXinPictureDir.exists());
         // 找到微信图片文件夹下的文件
         File[] files = weiXinPictureDir.listFiles();
-        Assert.assertTrue("该文件夹不存在文件内容！",files.length > 0);
+        Assert.assertTrue("该文件夹不存在文件内容！", files.length > 0);
         // 初始化测试方法的参数
         String imgFilePath = files[0].getAbsolutePath();
         String imgName = null;
@@ -111,8 +108,8 @@ public class UtilsTests {
             Assert.fail("调用目标函数出错！");
         }
         // 断言测试方法的结果
-        Assert.assertNotNull("调用目标函数失败！",imgName);
-        Assert.assertEquals("目标函数结果返回不正确！",files[0].getName(), imgName);
+        Assert.assertNotNull("调用目标函数失败！", imgName);
+        Assert.assertEquals("目标函数结果返回不正确！", files[0].getName(), imgName);
     }
 
     /**
@@ -120,14 +117,14 @@ public class UtilsTests {
      * @author Feng Yucheng, Cui Yuxin
      */
     @Test
-    public void utilsSaveImgTest(){
+    public void utilsSaveImgTest() {
         String imgFileDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + File.separator + "WeiXin";
         File weiXinPictureDir = new File(imgFileDir);
-        Assert.assertTrue("该路径不存在！请检查路径是否正确。",weiXinPictureDir.exists());
-        File[] files = weiXinPictureDir.listFiles((file)->{
+        Assert.assertTrue("该路径不存在！请检查路径是否正确。", weiXinPictureDir.exists());
+        File[] files = weiXinPictureDir.listFiles((file) -> {
             return file.getName().endsWith(".jpg");
         });
-        Assert.assertTrue("该照片文件不存在！",files.length > 0);
+        Assert.assertTrue("该照片文件不存在！", files.length > 0);
         String imgFilePath = imgFileDir + File.separator + "test";
         try {
             Utils.saveImg(Utils.openImg(files[0].getAbsolutePath()), imgFilePath);
@@ -141,9 +138,9 @@ public class UtilsTests {
             imgFilePath += ".webp";
         }
         File imgFile = new File(imgFilePath);
-        Assert.assertTrue("保存失败！",imgFile.exists());
+        Assert.assertTrue("保存失败！", imgFile.exists());
         try {
-            Assert.assertNotNull("目标文件无法正确打开！保存失败！",Utils.openImg(imgFilePath));
+            Assert.assertNotNull("目标文件无法正确打开！保存失败！", Utils.openImg(imgFilePath));
         } catch (IOException e) {
             e.printStackTrace();
             Assert.fail("目标文件无法正确打开！保存失败！");
@@ -155,7 +152,7 @@ public class UtilsTests {
      * @author //TODO YOUR_NAME
      */
     @Test
-    public void utilsCollapseTest(){
+    public void utilsCollapseTest() {
         // TODO YOUR CODE HERE
     }
 
