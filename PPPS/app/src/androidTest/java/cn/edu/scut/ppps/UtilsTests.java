@@ -2,6 +2,7 @@ package cn.edu.scut.ppps;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Environment;
 import android.os.SystemClock;
 
@@ -107,6 +108,7 @@ public class UtilsTests {
             imgName = Utils.getFileName(imgFilePath);
         } catch (IOException e) {
             e.printStackTrace();
+            Assert.fail("调用目标函数出错！");
         }
         // 断言测试方法的结果
         Assert.assertNotNull("调用目标函数失败！",imgName);
@@ -115,7 +117,7 @@ public class UtilsTests {
 
     /**
      * Test Utils saveImg method.
-     * @author Feng Yucheng
+     * @author Feng Yucheng, Cui Yuxin
      */
     @Test
     public void utilsSaveImgTest(){
@@ -131,6 +133,12 @@ public class UtilsTests {
             Utils.saveImg(Utils.openImg(files[0].getAbsolutePath()), imgFilePath);
         } catch (Exception e) {
             e.printStackTrace();
+            Assert.fail("调用目标函数失败！");
+        }
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            imgFilePath += ".HEIC";
+        } else {
+            imgFilePath += ".webp";
         }
         File imgFile = new File(imgFilePath);
         Assert.assertTrue("保存失败！",imgFile.exists());
@@ -138,6 +146,7 @@ public class UtilsTests {
             Assert.assertNotNull("目标文件无法正确打开！保存失败！",Utils.openImg(imgFilePath));
         } catch (IOException e) {
             e.printStackTrace();
+            Assert.fail("目标文件无法正确打开！保存失败！");
         }
     }
 

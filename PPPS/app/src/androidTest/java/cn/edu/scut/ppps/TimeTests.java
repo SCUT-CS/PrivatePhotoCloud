@@ -1,6 +1,7 @@
 package cn.edu.scut.ppps;
 
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Environment;
 import android.util.Log;
 
@@ -159,7 +160,7 @@ public class TimeTests {
             e.printStackTrace();
         }
         // 调用测试方法并计时
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 5; i++) {
             long start = System.currentTimeMillis();
             try {
                 Utils.saveImg(img, imgFilePath);
@@ -168,6 +169,11 @@ public class TimeTests {
             }
             long end = System.currentTimeMillis();
             long time = end - start;
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                imgFilePath += ".HEIC";
+            } else {
+                imgFilePath += ".webp";
+            }
             File file = new File(imgFilePath);
             long fileSize = file.length();
             double fileSizeMB = fileSize / 1024.0 / 1024.0;
