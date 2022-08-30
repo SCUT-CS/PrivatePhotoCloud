@@ -151,7 +151,7 @@ public class TimeTests {
         });
         Assert.assertTrue("该文件夹不存在文件内容！", files.length > 0);
         // 初始化测试方法的参数
-        String imgFilePath = imgFileDir + File.separator + "test.webp";
+        String imgFilePath = imgFileDir + File.separator + "test";
         Bitmap img = null;
         try {
             img = Utils.openImg(files[0].getAbsolutePath());
@@ -163,7 +163,7 @@ public class TimeTests {
             long start = System.currentTimeMillis();
             try {
                 Utils.saveImg(img, imgFilePath);
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             long end = System.currentTimeMillis();

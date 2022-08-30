@@ -39,6 +39,7 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1'
     implementation 'androidx.navigation:navigation-fragment:2.5.0'
     implementation 'androidx.navigation:navigation-ui:2.5.0'
+    implementation "androidx.heifwriter:heifwriter:1.1.0-alpha01"
     implementation fileTree(dir: 'C:\\Users\\12695\\Videos\\Privacy-preserving-photos-sharing\\PPPS\\app\\libs\\aliyun_java_sdk_3.15.0', include: ['*.aar', '*.jar'], exclude: [])
     implementation 'androidx.test:rules:1.4.0'
     testImplementation 'junit:junit:4.13.2'

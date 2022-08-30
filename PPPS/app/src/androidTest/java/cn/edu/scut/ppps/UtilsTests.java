@@ -126,10 +126,10 @@ public class UtilsTests {
             return file.getName().endsWith(".jpg");
         });
         Assert.assertTrue("该照片文件不存在！",files.length > 0);
-        String imgFilePath = imgFileDir + File.separator + "test.webp";
+        String imgFilePath = imgFileDir + File.separator + "test";
         try {
             Utils.saveImg(Utils.openImg(files[0].getAbsolutePath()), imgFilePath);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         File imgFile = new File(imgFilePath);

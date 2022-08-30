@@ -4,6 +4,8 @@ import android.graphics.Bitmap;
 import android.graphics.ImageDecoder;
 import android.os.Build;
 
+import androidx.heifwriter.HeifWriter;
+
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -19,6 +21,7 @@ public class Utils {
 
     /**
      * Open an image and return.
+     * This method may take several seconds to complete, so it should only be called from a worker thread.
      * @param imgPath The path of the image.
      * @author Cui Yuxin
      */
@@ -50,27 +53,54 @@ public class Utils {
      * This method may take several seconds to complete, so it should only be called from a worker thread.
      * @param img The image.
      * @param imgPath The path of the image.
+     * @param exifData The exif data of the image.Add Exif data for the specified image. The data
+     *                 must be a valid Exif data block, starting with "Exif\0\0" followed
+     *                 by the TIFF header (See JEITA CP-3451C Section 4.5.2.)
      * @author Cui Yuxin
      */
-    public static void saveImg(Bitmap img, String imgPath) throws IOException {
-        File file = new File(imgPath);
-        String imgDir = file.getParent();
-        if (imgDir != null) {
-            File dir = new File(imgDir);
-            if (!dir.exists()) {
-                dir.mkdirs();
+    public static void saveImg(Bitmap img, String imgPath, byte[] exifData) throws Exception {
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            HeifWriter.Builder heifBuilder = new HeifWriter.Builder(imgPath + ".HEIC", img.getWidth(), img.getHeight(),  HeifWriter.INPUT_MODE_BITMAP);
+            HeifWriter heifWriter = heifBuilder.build();
+            heifWriter.start();
+            heifWriter.addBitmap(img);
+            if (exifData != null) {
+                heifWriter.addExifData(0, exifData,0, exifData.length);
             }
-        }
-        BufferedOutputStream outStream = new BufferedOutputStream(new FileOutputStream(file));
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            // lossless compression quality 100, resulting in a smaller file.
-            img.compress(Bitmap.CompressFormat.WEBP_LOSSLESS, 0, outStream);
+            heifWriter.stop(0);
+            heifWriter.close();
         } else {
-            // lossless compression quality 100
-            img.compress(Bitmap.CompressFormat.WEBP, 100, outStream);
+            File file = new File(imgPath + ".webp");
+            String imgDir = file.getParent();
+            if (imgDir != null) {
+                File dir = new File(imgDir);
+                if (!dir.exists()) {
+                    dir.mkdirs();
+                }
+            }
+            BufferedOutputStream outStream = new BufferedOutputStream(new FileOutputStream(file));
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                // lossless compression quality 100, resulting in a smaller file.
+                img.compress(Bitmap.CompressFormat.WEBP_LOSSLESS, 0, outStream);
+            } else {
+                // lossless compression quality 100
+                img.compress(Bitmap.CompressFormat.WEBP, 100, outStream);
+            }
+            outStream.flush();
         }
-        outStream.flush();
     }
+
+    /**
+     * Save an image.
+     * This method may take several seconds to complete, so it should only be called from a worker thread.
+     * @param img The image.
+     * @param imgPath The path of the image.
+     * @author Cui Yuxin
+     */
+    public static void saveImg(Bitmap img, String imgPath) throws Exception {
+        Utils.saveImg(img, imgPath, null);
+    }
+
 
     /**
      * Save bytes array.

@@ -96,10 +96,10 @@ public class Encrypt implements Callable {
      * This method may take several seconds to complete, so it should only be called from a worker thread.
      * @author Cui Yuxin
      */
-    private void saveFile() throws IOException {
+    private void saveFile() throws Exception {
         String cachePath = context.getCacheDir().getAbsolutePath();
-        String savePath1 = cachePath + File.separator + "Disk1" + File.separator + fileName + ".ori" + ".webp";
-        String savePath2 = cachePath + File.separator + "Disk2" + File.separator + fileName +  ".ori" + ".webp";
+        String savePath1 = cachePath + File.separator + "Disk1" + File.separator + fileName + ".ori";
+        String savePath2 = cachePath + File.separator + "Disk2" + File.separator + fileName +  ".ori";
         Utils.saveImg(img1, savePath1);
         Utils.saveImg(img2, savePath2);
         String savePath = context.getDataDir().getAbsolutePath() + File.separator + "overflow" + File.separator + fileName;
@@ -111,7 +111,7 @@ public class Encrypt implements Callable {
      * @author Cui Yuxin
      */
     @Override
-    public Bitmap[] call() throws IOException {
+    public Bitmap[] call() throws Exception {
         openFile();
         encrypt();
         saveFile();
