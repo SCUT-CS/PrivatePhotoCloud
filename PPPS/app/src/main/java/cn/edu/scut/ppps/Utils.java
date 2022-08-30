@@ -27,7 +27,7 @@ public class Utils {
      */
     public static Bitmap openImg(String imgPath) throws IOException {
         ImageDecoder.Source imgsource = ImageDecoder.createSource(new File(imgPath));
-        return ImageDecoder.decodeBitmap(imgsource, ( decoder, info, source)->{
+        return ImageDecoder.decodeBitmap(imgsource, (decoder, info, source) -> {
             decoder.setAllocator(ImageDecoder.ALLOCATOR_SOFTWARE);
             decoder.setMutableRequired(true);
         });
@@ -60,6 +60,14 @@ public class Utils {
      */
     public static void saveImg(Bitmap img, String imgPath, byte[] exifData) throws Exception {
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            File file = new File(imgPath + ".HEIC");
+            String imgDir = file.getParent();
+            if (imgDir != null) {
+                File dir = new File(imgDir);
+                if (!dir.exists()) {
+                    dir.mkdirs();
+                }
+            }
             HeifWriter.Builder heifBuilder = new HeifWriter.Builder(imgPath + ".HEIC", img.getWidth(), img.getHeight(),  HeifWriter.INPUT_MODE_BITMAP);
             HeifWriter heifWriter = heifBuilder.build();
             heifWriter.start();
@@ -109,6 +117,14 @@ public class Utils {
      * @author Feng Yucheng
      */
     public static void saveBytesArray(byte[][][] bytesArray, String filePath) throws IOException {
+        File file = new File(filePath);
+        String OverflowDir = file.getParent();
+        if (OverflowDir != null) {
+            File dir = new File(OverflowDir);
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+        }
         FileOutputStream fileOut = new FileOutputStream(filePath);
         ObjectOutputStream out = new ObjectOutputStream(fileOut);
         out.writeObject(new Overflow(bytesArray));
@@ -117,7 +133,7 @@ public class Utils {
     /**
      * Load bytes array and return.
      * @param filePath The path of the overflow array file.
-     * @author //Feng yucheng
+     * @author Feng Yucheng
      */
     public static byte[][][] loadBytesArray(String filePath) throws Exception {
         FileInputStream fileIn = new FileInputStream(filePath);

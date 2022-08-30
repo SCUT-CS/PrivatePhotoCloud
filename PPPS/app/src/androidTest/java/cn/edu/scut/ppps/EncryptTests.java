@@ -3,6 +3,7 @@ package cn.edu.scut.ppps;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Environment;
 import android.util.Log;
 
@@ -17,9 +18,15 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Encrypt Unit Tests
@@ -140,8 +147,10 @@ public class EncryptTests {
                     method.invoke(encrypt);
                     for (Field field : fields) {
                         if (field.getName().equals("img")) {
-                            Assert.assertNotNull(field.get(encrypt));
                             img = (Bitmap) field.get(encrypt);
+                            Assert.assertNotNull(img);
+                            Assert.assertEquals("图片获取失败！", 4512, img.getWidth());
+                            Assert.assertEquals("图片获取失败！", 6016, img.getHeight());
                         } else if (field.getName().equals("fileName")) {
                             Assert.assertNotNull(field.get(encrypt));
                             Assert.assertEquals("文件名获取失败！", field.get(encrypt), "jpg_medium.jpg");
@@ -153,9 +162,6 @@ public class EncryptTests {
                 }
                 break;
             }
-            Assert.assertNotNull(img);
-            Assert.assertEquals("图片获取失败！", 4512, img.getWidth());
-            Assert.assertEquals("图片获取失败！", 6016, img.getHeight());
         }
     }
 
@@ -244,22 +250,90 @@ public class EncryptTests {
      */
     @Test
     public void saveFileTest() {
+        Bitmap img1 = null;
+        Bitmap img2 = null;
+        Bitmap img = null;
+        Bitmap img11 = null;
+        Bitmap img22 = null;
         for (Method method : methods) {
-            if (method.getName().equals("saveFile")) {
+            if (method.getName().equals("openFile")) {
                 try {
                     method.invoke(encrypt);
-                    for (Field field : fields) {
-                        // TODO
-                        /*if (field.getName().equals("fileName")){
-                            Assert.assertNotNull(field.get(encrypt));
-                            Assert.assertEquals("文件名获取失败！",field.get(encrypt),"jpg_medium.jpg");
-                        }*/
-                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                     Assert.fail();
                 }
                 break;
+            }
+        }
+        for (Method method : methods) {
+            if (method.getName().equals("encrypt")) {
+                try {
+                    method.invoke(encrypt);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Assert.fail();
+                }
+                break;
+            }
+        }
+        for (Method method : methods) {
+            if (method.getName().equals("saveFile")) {
+                try {
+                    method.invoke(encrypt);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Assert.fail();
+                }
+                break;
+            }
+        }
+        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        String cachePath = context.getCacheDir().getAbsolutePath();
+        String savePath1 = cachePath + File.separator + "Disk1" + File.separator + "jpg_medium.jpg" + ".ori";
+        String savePath2 = cachePath + File.separator + "Disk2" + File.separator + "jpg_medium.jpg" +  ".ori";
+        String savePath = context.getDataDir().getAbsolutePath() + File.separator + "overflow" + File.separator + "jpg_medium.jpg";
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            savePath1 += ".HEIC";
+            savePath2 += ".HEIC";
+        } else {
+            savePath1 += ".webp";
+            savePath2 += ".webp";
+        }
+        File file1 = new File(savePath1);
+        File file2 = new File(savePath2);
+        File file = new File(savePath);
+        Assert.assertTrue("保存文件失败！", file.exists());
+        Assert.assertTrue("保存文件失败！", file1.exists());
+        Assert.assertTrue("保存文件失败！", file2.exists());
+        try {
+            img11 = Utils.openImg(savePath1);
+            img22 = Utils.openImg(savePath2);
+        } catch (IOException e) {
+            e.printStackTrace();
+            Assert.fail("保存文件的图片文件无法打开！");
+        }
+        Assert.assertNotNull(img11);
+        Assert.assertNotNull(img22);
+        for (int i = 0; i < 500; i++) {
+            int row = (int) (Math.random() * img.getHeight());
+            int col = (int) (Math.random() * img.getWidth());
+            int pixel = img.getPixel(col, row);
+            int pixel1 = img11.getPixel(col, row);
+            int pixel2 = img22.getPixel(col, row);
+            Assert.assertEquals("加密算法错误！(R)row：" + row + "col:" + col,
+                    Color.red(pixel),
+                    (Color.red(pixel2) + Color.red(pixel1)) % 256);
+            Assert.assertEquals("加密算法错误！(G)row：" + row + "col:" + col,
+                    Color.green(pixel),
+                    (Color.green(pixel2) + Color.green(pixel1)) % 256);
+            Assert.assertEquals("加密算法错误！(B)row：" + row + "col:" + col,
+                    Color.blue(pixel),
+                    (Color.blue(pixel2) + Color.blue(pixel1)) % 256);
+            if (img.hasAlpha()) {
+                Assert.assertEquals("加密算法错误！(A)row：" + row + "col:" + col,
+                        Color.alpha(pixel),
+                        (Color.alpha(pixel2) + Color.alpha(pixel1)) % 256);
             }
         }
     }
@@ -270,6 +344,37 @@ public class EncryptTests {
      */
     @Test
     public void callTest() {
-        // TODO
+        String imgPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
+                + File.separator + "WeiXin"
+                + File.separator + "jpg_medium.jpg";
+        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        Encrypt encrypt = new Encrypt(imgPath, context);
+        ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(5,10,1000, TimeUnit.SECONDS,new ArrayBlockingQueue<Runnable>(16));
+        Future<Bitmap[]> results = threadPoolExecutor.submit(encrypt);
+        Bitmap[] result = null;
+        try {
+            result = results.get();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail();
+        }
+        Assert.assertNotNull(result);
+        String cachePath = context.getCacheDir().getAbsolutePath();
+        String savePath1 = cachePath + File.separator + "Disk1" + File.separator + "jpg_medium.jpg" + ".ori";
+        String savePath2 = cachePath + File.separator + "Disk2" + File.separator + "jpg_medium.jpg" +  ".ori";
+        String savePath = context.getDataDir().getAbsolutePath() + File.separator + "overflow" + File.separator + "jpg_medium.jpg";
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            savePath1 += ".HEIC";
+            savePath2 += ".HEIC";
+        } else {
+            savePath1 += ".webp";
+            savePath2 += ".webp";
+        }
+        File file1 = new File(savePath1);
+        File file2 = new File(savePath2);
+        File file = new File(savePath);
+        Assert.assertTrue("保存文件失败！", file.exists());
+        Assert.assertTrue("保存文件失败！", file1.exists());
+        Assert.assertTrue("保存文件失败！", file2.exists());
     }
 }

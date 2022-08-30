@@ -64,7 +64,7 @@ public class UtilsTests {
                 weiXinPictureDir.exists());
         // 找到微信图片文件夹下的第一张图片
         File[] files = weiXinPictureDir.listFiles((file)->{
-            return file.getName().endsWith(".jpg");
+            return file.getName().endsWith(".HEIC");
         });
         Assert.assertTrue("微信图片文件夹下不存在文件图片",
                 files.length > 0);
