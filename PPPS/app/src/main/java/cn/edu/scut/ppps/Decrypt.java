@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.ColorSpace;
+import android.util.Log;
 
 import java.io.File;
 import java.io.IOException;
@@ -62,9 +63,9 @@ public class Decrypt implements Callable {
     private void openFile() throws Exception {
         img1 = Utils.openImg(imgFilePath1);
         img2 = Utils.openImg(imgFilePath2);
-        String imgName = Utils.getFileName(imgFilePath1);
-        String originalImgName = imgName.substring(0, imgName.lastIndexOf(".ori"));
         if (isThumbnail) {
+            String imgName = Utils.getFileName(imgFilePath1);
+            String originalImgName = imgName.substring(0, imgName.lastIndexOf(".ori"));
             String filePath = context.getDataDir().getAbsolutePath() + File.separator + "overflow" + File.separator;
             overflow = Utils.loadBytesArray(filePath + originalImgName);
         }
@@ -93,6 +94,7 @@ public class Decrypt implements Callable {
         if (threadNum == 0) {
             threadNum = 1;
         }
+        Log.d("Decrypt", "threadNum: " + threadNum);
         Thread[] threads = new Decrypt.DecryptThread[threadNum];
         for (int i = 0; i < threadNum; i++) {
             threads[i] = new Decrypt.DecryptThread(i, threadNum);
@@ -193,25 +195,27 @@ public class Decrypt implements Callable {
         @Override
         public void run() {
             if (img.hasAlpha()) {
+                Log.d("Decrypt", "图片有透明度通道");
                 for (int row = rowStart; row < rowEnd; row++) {
                     for (int col = colStart; col < colEnd; col++) {
                         int pixel1 = img1.getPixel(row, col);
                         int pixel2 = img2.getPixel(row, col);
-                        int pixel = Color.argb((pixel1 >>> 24 + pixel2 >>> 24) & 0xff,
-                                ((pixel1 >> 16) & 0xFF + (pixel2 >> 16) & 0xFF) & 0xff,
-                                ((pixel1 >> 8) & 0xFF + (pixel2 >> 8) & 0xFF) & 0xff,
-                                (pixel1 & 0xFF + pixel2 & 0xFF) & 0xff);
+                        int pixel = Color.argb(((pixel1 >>> 24) + (pixel2 >>> 24)) & 0xff,
+                                (((pixel1 >> 16) & 0xFF) + ((pixel2 >> 16) & 0xFF)) & 0xff,
+                                (((pixel1 >> 8) & 0xFF) + ((pixel2 >> 8) & 0xFF)) & 0xff,
+                                ((pixel1 & 0xFF) + (pixel2 & 0xFF)) & 0xff);
                         img.setPixel(row, col, pixel);
                     }
                 }
             } else {
+                Log.d("Decrypt", "图片没有透明度通道");
                 for (int row = rowStart; row < rowEnd; row++) {
                     for (int col = colStart; col < colEnd; col++) {
                         int pixel1 = img1.getPixel(row, col);
                         int pixel2 = img2.getPixel(row, col);
-                        int pixel = Color.rgb(((pixel1 >> 16) & 0xFF + (pixel2 >> 16) & 0xFF) & 0xff,
-                                ((pixel1 >> 8) & 0xFF + (pixel2 >> 8) & 0xFF) & 0xff,
-                                (pixel1 & 0xFF + pixel2 & 0xFF) & 0xff);
+                        int pixel = Color.rgb((((pixel1 >> 16) & 0xFF) + ((pixel2 >> 16) & 0xFF)) & 0xff,
+                                (((pixel1 >> 8) & 0xFF) + ((pixel2 >> 8) & 0xFF)) & 0xff,
+                                ((pixel1 & 0xFF) + (pixel2 & 0xFF)) & 0xff);
                         img.setPixel(row, col, pixel);
                     }
                 }
