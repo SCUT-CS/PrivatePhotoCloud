@@ -63,18 +63,8 @@ public class DecryptTests {
         Class decryptClass = null;
         try {
             decryptClass = Class.forName("cn.edu.scut.ppps.Decrypt");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            Assert.fail();
-        }
-        Constructor constructor = null;
-        try {
+            Constructor constructor = null;
             constructor = decryptClass.getConstructor(String.class, String.class, Context.class, boolean.class);
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-            Assert.fail();
-        }
-        try {
             decrypt = (Decrypt) constructor.newInstance(imgPath1, imgPath2, appContext, false);
         } catch (Exception e) {
             e.printStackTrace();
@@ -86,11 +76,6 @@ public class DecryptTests {
             for (Field field : fields) {
                 field.setAccessible(true);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            Assert.fail();
-        }
-        try {
             methods = decryptClass.getDeclaredMethods();
             for (Method method : methods) {
                 method.setAccessible(true);

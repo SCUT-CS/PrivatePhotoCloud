@@ -62,18 +62,8 @@ public class EncryptTests {
         Class encryptClass = null;
         try {
             encryptClass = Class.forName("cn.edu.scut.ppps.Encrypt");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            Assert.fail();
-        }
-        Constructor constructor = null;
-        try {
+            Constructor constructor = null;
             constructor = encryptClass.getConstructor(String.class, Context.class);
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-            Assert.fail();
-        }
-        try {
             encrypt = (Encrypt) constructor.newInstance(imgPath, appContext);
         } catch (Exception e) {
             e.printStackTrace();
@@ -85,11 +75,6 @@ public class EncryptTests {
             for (Field field : fields) {
                 field.setAccessible(true);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            Assert.fail();
-        }
-        try {
             methods = encryptClass.getDeclaredMethods();
             for (Method method : methods) {
                 method.setAccessible(true);

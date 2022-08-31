@@ -172,12 +172,9 @@ public class UtilsTests {
      */
     @Test
     public void utilsSaveBytesArrayTest() {
-        // 获取设备上微信图片文件夹
-        String fileDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + File.separator + "WeiXin";
-        File weiXinPictureDir = new File(fileDir);
-        Assert.assertTrue("微信图片文件夹不存在！请检查是否拥有读取外部存储权限或文件夹是否存在。",
-                weiXinPictureDir.exists());
-        String savePath = fileDir + File.separator + "test.overflow";
+        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        String cachePath = context.getCacheDir().getAbsolutePath();
+        String savePath = cachePath + File.separator + "overflow" + File.separator + "test.overflow";
         byte[][][] overflow = new byte[][][]{{{1, 2}, {3, 4}},
                 {{5, 6}, {7, 8}},
                 {{5, 6}, {7, 8}}};
@@ -192,7 +189,7 @@ public class UtilsTests {
     }
 
     /**
-     * Test Utils saveBytesArray method.
+     * Test Utils loadBytesArray method.
      * @author Feng Yucheng
      */
     @Test
@@ -202,17 +199,15 @@ public class UtilsTests {
                 {{1,1},{2,2}}
         };
         byte[][][] array = null;
-                //寻找一个文件夹
-        String fileDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + File.separator + "WeiXin";
-        File weiXinPictureDir = new File(fileDir);
-        Assert.assertTrue("微信图片文件夹不存在！请检查是否拥有读取外部存储权限或文件夹是否存在。",
-                weiXinPictureDir.exists());
-        String savePath = fileDir + File.separator + "test.testArray";
+        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        String cachePath = context.getCacheDir().getAbsolutePath();
+        String savePath = cachePath + File.separator + "overflow" + File.separator + "test.overflow";
         //保存多维数组
         try {
             Utils.saveBytesArray(testArray, savePath);
         } catch (IOException e) {
             e.printStackTrace();
+            Assert.fail("调用目标函数失败");
         }
         File overflowFile = new File(savePath);
         Assert.assertTrue(overflowFile.exists());
@@ -221,8 +216,9 @@ public class UtilsTests {
             array = Utils.loadBytesArray(savePath);
         } catch (Exception e) {
             e.printStackTrace();
+            Assert.fail("调用目标函数失败");
         }
-        Assert.assertArrayEquals(array,testArray);
+        Assert.assertArrayEquals(array, testArray);
 
     }
     /*

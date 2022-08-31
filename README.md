@@ -80,6 +80,18 @@ UtilsTests.java
 
 Utils.java
 
+#### Task6：
+
+参考其他测试，完成Tokens的若干测试。
+
+**Files you'll edit or creat:**
+
+TokensTests.java
+
+**Files you might want to look at:**
+
+*Tests.java
+
 ### 2022.8.14-2022.8.28
 
 #### Task1：
