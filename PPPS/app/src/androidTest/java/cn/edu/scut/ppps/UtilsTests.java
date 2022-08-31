@@ -149,7 +149,7 @@ public class UtilsTests {
 
     /**
      * Test Utils collapse method.
-     * @author //TODO YOUR_NAME
+     * @author Feng Yucheng
      */
     @Test
     public void utilsCollapseTest() {
@@ -182,7 +182,40 @@ public class UtilsTests {
         Assert.assertTrue(overflowFile.exists());
     }
 
+    /**
+     * Test Utils saveBytesArray method.
+     * @author Feng Yucheng
+     */
+    @Test
+    public void utilsLoadBytesArrayTest() {
+        byte[][][] testArray={{{1,1},{2,2}},
+                {{1,1},{2,2}},
+                {{1,1},{2,2}}
+        };
+        byte[][][] array = null;
+                //寻找一个文件夹
+        String fileDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + File.separator + "WeiXin";
+        File weiXinPictureDir = new File(fileDir);
+        Assert.assertTrue("微信图片文件夹不存在！请检查是否拥有读取外部存储权限或文件夹是否存在。",
+                weiXinPictureDir.exists());
+        String savePath = fileDir + File.separator + "test.testArray";
+        //保存多维数组
+        try {
+            Utils.saveBytesArray(testArray, savePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        File overflowFile = new File(savePath);
+        Assert.assertTrue(overflowFile.exists());
+        //获取多维数组
+        try {
+            array = Utils.loadBytesArray(savePath);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Assert.assertArrayEquals(array,testArray);
 
+    }
     /*
     public static void getFileSize(File file){
         //通过输出流获取长度
