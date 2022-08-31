@@ -114,9 +114,8 @@ public class Decrypt implements Callable {
      * Decrypt a image`s thumbnail.
      * @author Cui Yuxin, Zhao Bowen
      */
-    private void decryptThumbnail() throws IOException {
+    private void decryptThumbnail() {
         int[][][] overflow = Utils.collapse(this.overflow, height, width);
-        assert overflow != null;
         if (img.hasAlpha()) {
             for (int row = 0; row < height; row++) {
                 for (int col = 0; col < width; col++) {
