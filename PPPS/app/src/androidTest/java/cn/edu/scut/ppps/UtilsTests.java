@@ -153,7 +153,16 @@ public class UtilsTests {
      */
     @Test
     public void utilsCollapseTest() {
-        // TODO YOUR CODE HERE
+        //整除，压缩率为整数的测试
+        byte[][][] testArray1 = {{{-37,0b00111101},{-81,-123},{0b01010001,-49},{-81,-1}},
+                {{-37,0b00111101},{-81,-123},{0b01010001,-49},{-81,-1}},
+                {{-37,0b00111101},{-81,-123},{0b01010001,-49},{-81,-1}}
+        };
+        double ratio1 = (16*4)/(2*8);
+        double[][][] resultArray1;
+        for
+        Utils.collapse(testArray1,2,8);
+        Assert.assertArrayEquals(testArray1,resultArray1);
 
     }
 
