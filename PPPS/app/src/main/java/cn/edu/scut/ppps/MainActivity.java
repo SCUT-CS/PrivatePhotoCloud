@@ -39,12 +39,10 @@ public class MainActivity extends AppCompatActivity {
         binding.appBarMain.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               /* Snackbar.make(view, "TODO：拍照", Snackbar.LENGTH_LONG)
+               /* Snackbar.make(view, "拍照", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();*/
-                Activity cameraActivity = new CameraActivity();
                 Intent intent = new Intent();
                 intent.setClass(MainActivity.this, CameraActivity.class);
-                //startActivityForResult(intent,1);
                 startActivity(intent);
             }
         });
