@@ -19,16 +19,18 @@ public class Tokens {
 
     private Map<String, Map<String, String>> tokens;
     private Context context;
+    private File tokensFile;
 
     /**
      * Constructor.
      * @param context Context of the application.
      * @author Cui Yuxin
      */
-    public Tokens(Context context) throws IOException, ClassNotFoundException {
+    public Tokens(Context context) throws Exception {
         this.context = context;
         this.tokens = new java.util.HashMap<>();
-        File tokensFile = this.loadTokenFile();
+        String tokensPath = context.getDataDir().getAbsolutePath() + File.separator + tokens;
+        tokensFile = new File(tokensPath);
         if (tokensFile.exists()) {
             ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(tokensFile));
             this.tokens = (HashMap<String, Map<String, String>>) objectInputStream.readObject();
@@ -40,20 +42,11 @@ public class Tokens {
     }
 
     /**
-     * Load the tokens file and return.
-     * @author Cui Yuxin
-     */
-    private File loadTokenFile() {
-        String tokensPath = context.getDataDir().getAbsolutePath() + File.separator + tokens;
-        return new File(tokensPath);
-    }
-
-    /**
      * Save the tokens to the file.
      * @author Cui Yuxin
      */
     private void saveTokens() throws IOException {
-        FileOutputStream outStream = new FileOutputStream(this.loadTokenFile());
+        FileOutputStream outStream = new FileOutputStream(tokensFile);
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(outStream);
         objectOutputStream.writeObject(this.tokens);
         objectOutputStream.close();
