@@ -4,7 +4,14 @@
     package="cn.edu.scut.ppps">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- 摄像头权限 -->
+    <uses-permission android:name="android.permission.CAMERA" /> <!-- 具备摄像头 -->
+    <uses-feature android:name="android.hardware.camera.any" /> <!-- 存储图像或者视频权限 -->
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- 录制音频权限 -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <application
         android:allowBackup="true"
@@ -16,6 +23,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PPPS"
         tools:targetApi="31">
+        <activity
+            android:name=".CameraActivity"
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true"

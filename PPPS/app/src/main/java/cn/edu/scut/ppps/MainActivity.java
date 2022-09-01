@@ -1,12 +1,15 @@
 package cn.edu.scut.ppps;
 
+import android.Manifest;
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Menu;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
+import androidx.core.app.ActivityCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -16,6 +19,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import cn.edu.scut.ppps.databinding.ActivityMainBinding;
 
+/**
+ * Main Activity
+ * @author Cui Yuxin
+ */
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
@@ -32,8 +39,13 @@ public class MainActivity extends AppCompatActivity {
         binding.appBarMain.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "TODO：拍照", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+               /* Snackbar.make(view, "TODO：拍照", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();*/
+                Activity cameraActivity = new CameraActivity();
+                Intent intent = new Intent();
+                intent.setClass(MainActivity.this, CameraActivity.class);
+                //startActivityForResult(intent,1);
+                startActivity(intent);
             }
         });
         DrawerLayout drawer = binding.drawerLayout;
@@ -47,6 +59,15 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+        ActivityCompat.requestPermissions(
+                this, new String[]{
+                        Manifest.permission.CAMERA,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.RECORD_AUDIO
+                }, 123);
+
     }
 
     @Override
