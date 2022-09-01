@@ -204,9 +204,17 @@ public class Utils {
         int originalHeight = bytesArray.length;
         int mappingSize = (int) Math.ceil(originalHeight * 1.0 / height);
         int[][] result = new int[height][originalWidth];
+        double[] temp = null;
         for (int i = 0; i < originalHeight; i++) {
+            if (i % mappingSize == 0) {
+                temp = new double[originalWidth];
+            }
             for (int j = 0; j < originalWidth; j++) {
-                result[i / mappingSize][j] += (bytesArray[i][j] * ratio);
+                if (i % mappingSize == mappingSize - 1) {
+                    result[i / mappingSize][j] = (int) (temp[j] + bytesArray[i][j] * ratio);
+                } else {
+                    temp[j] += bytesArray[i][j] * ratio;
+                }
             }
         }
         return result;

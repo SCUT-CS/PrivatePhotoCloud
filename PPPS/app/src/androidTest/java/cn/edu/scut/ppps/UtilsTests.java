@@ -172,7 +172,7 @@ public class UtilsTests {
                         {-81, -1}
                 }};
         double ratio = (2 * 8.0) / (16 * 4);
-        double[][][] expected = {
+        double[][][] temp = {
                 {
                         {4, 3, 2, 3, 2, 3, 2, 1},
                         {3, 2, 2, 2, 4, 4, 2, 4}
@@ -185,10 +185,11 @@ public class UtilsTests {
                         {4, 3, 2, 3, 2, 3, 2, 1},
                         {3, 2, 2, 2, 4, 4, 2, 4}
                 }};
-        for (int i = 0; i < expected.length; i++) {
-            for (int j = 0; j < expected[i].length; j++) {
-                for (int k = 0; k < expected[i][j].length; k++) {
-                    expected[i][j][k] = (int) (expected[i][j][k] * 255 * ratio);
+        int[][][] expected = new int[temp.length][temp[0].length][temp[0][0].length];
+        for (int i = 0; i < temp.length; i++) {
+            for (int j = 0; j < temp[i].length; j++) {
+                for (int k = 0; k < temp[i][j].length; k++) {
+                    expected[i][j][k] = (int) (temp[i][j][k] * 255 * ratio);
                 }
             }
         }
