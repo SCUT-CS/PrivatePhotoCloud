@@ -152,18 +152,48 @@ public class UtilsTests {
      * @author Feng Yucheng
      */
     @Test
-    public void utilsCollapseTest() {
+    public void utilsCollapseTestCase1() {
         //整除，压缩率为整数的测试
-        byte[][][] testArray1 = {{{-37,0b00111101},{-81,-123},{0b01010001,-49},{-81,-1}},
-                {{-37,0b00111101},{-81,-123},{0b01010001,-49},{-81,-1}},
-                {{-37,0b00111101},{-81,-123},{0b01010001,-49},{-81,-1}}
-        };
-        double ratio1 = (16*4)/(2*8);
-        double[][][] resultArray1;
-        for
-        Utils.collapse(testArray1,2,8);
-        Assert.assertArrayEquals(testArray1,resultArray1);
-
+        byte[][][] testArray = {
+                {
+                        {-37, 0b00111101},
+                        {-81, -123},
+                        {0b01010001, -49},
+                        {-81, -1}},
+                {
+                        {-37, 0b00111101},
+                        {-81, -123},
+                        {0b01010001, -49},
+                        {-81, -1}},
+                {
+                        {-37, 0b00111101},
+                        {-81, -123},
+                        {0b01010001, -49},
+                        {-81, -1}
+                }};
+        double ratio = (2 * 8.0) / (16 * 4);
+        double[][][] expected = {
+                {
+                        {4, 3, 2, 3, 2, 3, 2, 1},
+                        {3, 2, 2, 2, 4, 4, 2, 4}
+                },
+                {
+                        {4, 3, 2, 3, 2, 3, 2, 1},
+                        {3, 2, 2, 2, 4, 4, 2, 4}
+                },
+                {
+                        {4, 3, 2, 3, 2, 3, 2, 1},
+                        {3, 2, 2, 2, 4, 4, 2, 4}
+                }};
+        for (int i = 0; i < expected.length; i++) {
+            for (int j = 0; j < expected[i].length; j++) {
+                for (int k = 0; k < expected[i][j].length; k++) {
+                    expected[i][j][k] = (int) (expected[i][j][k] * 255 * ratio);
+                }
+            }
+        }
+        int[][][] result = Utils.collapse(testArray, 2, 8);
+        Assert.assertArrayEquals("结果错误!", expected, result);
     }
 
     /**

@@ -150,15 +150,17 @@ public class Utils {
      */
     public static int[][][] collapse(byte[][][] bytesArray, int height, int width) {
         int originalHeight = bytesArray[0].length;
-        int originalWidth = bytesArray[0][0].length;
         int originalChannel = bytesArray.length;
+        int originalWidth = bytesArray[0][0].length * 8;
         double averageRatio = ((double) (height * width)) / (originalHeight * originalWidth);
-        int[][][] collapsed = new int[4][][]; // 4 channels (R, G, B, A)
+        int[][][] collapsed = null;
         if (originalChannel == 3) {
+            collapsed = new int[3][][];
             for (int i = 0; i < 3; i++) {
                 collapsed[i] = collapseHeight(collapseWidth(bytesArray[i], width), height, averageRatio);
             }
         } else if (originalChannel == 4) {
+            collapsed = new int[4][][]; // 4 channels (R, G, B, A)
             for (int i = 0; i < 4; i++) {
                 collapsed[i] = collapseHeight(collapseWidth(bytesArray[i], width), height, averageRatio);
             }
