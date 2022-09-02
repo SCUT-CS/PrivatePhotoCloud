@@ -68,7 +68,9 @@ public class Utils {
                     dir.mkdirs();
                 }
             }
-            HeifWriter.Builder heifBuilder = new HeifWriter.Builder(imgPath + ".HEIC", img.getWidth(), img.getHeight(),  HeifWriter.INPUT_MODE_BITMAP);
+            HeifWriter.Builder heifBuilder = new HeifWriter.Builder(imgPath + ".HEIC", img.getWidth(),
+                    img.getHeight(),
+                    HeifWriter.INPUT_MODE_BITMAP);
             HeifWriter heifWriter = heifBuilder.build();
             heifWriter.start();
             heifWriter.addBitmap(img);

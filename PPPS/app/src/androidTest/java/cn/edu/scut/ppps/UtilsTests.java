@@ -85,6 +85,27 @@ public class UtilsTests {
     }
 
     /**
+     * Test Utils openImg method.
+     * Case: Medium HEIC encrypted image.
+     * @author Cui Yuxin
+     */
+    @Test
+    public void utilsOpenImgTestCaseMediumHEIC() {
+        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        String cachePath = context.getCacheDir().getAbsolutePath();
+        String savePath1 = cachePath + File.separator + "Disk1" + File.separator + "jpg_small.jpg" + ".ori";
+        savePath1 += ".HEIC";
+        File file1 = new File(savePath1);
+        Assert.assertTrue("文件不存在！", file1.exists());
+        try {
+            Bitmap img = Utils.openImg(savePath1);
+        } catch (IOException e) {
+            e.printStackTrace();
+            Assert.fail("打开中等大小HEIC加密图片失败！");
+        }
+    }
+
+    /**
      * Test Utils getFileName method.
      * @author Feng Yucheng
      */
