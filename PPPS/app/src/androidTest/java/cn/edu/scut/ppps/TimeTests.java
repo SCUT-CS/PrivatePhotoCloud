@@ -45,7 +45,7 @@ public class TimeTests {
                 weiXinPictureDir.exists());
         // 找到微信图片文件夹下的第一张图片
         File[] files = weiXinPictureDir.listFiles((file) -> {
-            return file.getName().endsWith("medium.HEIC");
+            return file.getName().endsWith("test.HEIC");
         });
         Assert.assertTrue("微信图片文件夹下不存在文件图片",
                 files.length > 0);
@@ -80,7 +80,7 @@ public class TimeTests {
                 weiXinPictureDir.exists());
         // 找到微信图片文件夹下的第一张图片
         File[] files = weiXinPictureDir.listFiles((file) -> {
-            return file.getName().endsWith("high.jpg");
+            return file.getName().endsWith("small.jpg");
         });
         Assert.assertTrue("微信图片文件夹下不存在文件图片",
                 files.length > 0);
@@ -148,7 +148,7 @@ public class TimeTests {
         File weiXinPictureDir = new File(imgFileDir);
         Assert.assertTrue("该文件不存在！请检查路径是否正确。", weiXinPictureDir.exists());
         File[] files = weiXinPictureDir.listFiles((file) -> {
-            return file.getName().endsWith("medium.jpg");
+            return file.getName().endsWith("small.jpg");
         });
         Assert.assertTrue("该文件夹不存在文件内容！", files.length > 0);
         // 初始化测试方法的参数
