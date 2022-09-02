@@ -216,58 +216,14 @@ public class UtilsTests {
         }
         int[][][] result = Utils.collapse(testArray, 2, 8);
         Assert.assertArrayEquals("结果错误!", expected, result);
+    }
 
-        //列数不能整除的测试
-        byte[][][] testArray2 = {
-                {
-                        {-25,0b0111011},
-                        {-27,0b0000100},
-                        {0b01000111,112},
-                        {-86,67}
-                },
-                {
-                        {-25,0b0111011},
-                        {-27,0b0000100},
-                        {0b01000111,112},
-                        {-86,67}
-                },
-                {
-                        {-25,0b0111011},
-                        {-27,0b0000100},
-                        {0b01000111,112},
-                        {-86,67}
-                },
-                {
-                        {-25,0b0111011},
-                        {-27,0b0000100},
-                        {0b01000111,112},
-                        {-86,67}
-                }
-        };
-        double ratio2 = ( 2 * 8 ) / ( 15.0 * 4 );
-        double[][][] temp2 = {
-                {
-                    {4,2,2,3,1,2,2,1},
-                    {2,1,2,3,2,1,1,1}
-                },
-                {
-                    {4,2,2,3,1,2,2,1},
-                    {2,1,2,3,2,1,1,1}
-                },
-                {
-                    {4,2,2,3,1,2,2,1},
-                    {2,1,2,3,2,1,1,1}
-                }};
-        for (int i = 0; i < temp.length; i++) {
-            for (int j = 0; j < temp2[i].length; j++) {
-                for (int k = 0; k < temp2[i][j].length; k++) {
-                    expected[i][j][k] = (int) (temp2[i][j][k] * 255 * ratio2);
-                }
-            }
-        }
-        int[][][] result2 = Utils.collapse(testArray2, 2, 8);
-        Assert.assertArrayEquals("结果错误!", expected, result2);
-
+    /**
+     * Test Utils collapse method.
+     * @author Feng Yucheng
+     */
+    @Test
+    public void utilsCollapseTestCase2() {
         //行数不能整除的情况
         byte[][][] testArray3 = {
                 {
@@ -286,8 +242,8 @@ public class UtilsTests {
                         {-37,0b00111101}
                 }
         };
-        double ratio3 = (2.0*8)/(16*3);
-        double[][][] temp3 = {
+        double ratio = (2.0*8)/(16*3);
+        double[][][] temp = {
                 {
                         {2,1,3,4,4,3,0,3},
                         {2,1,1,2,0,2,2,1}
@@ -300,16 +256,76 @@ public class UtilsTests {
                         {2,1,3,4,4,3,0,3},
                         {2,1,1,2,0,2,2,1}
                 }};
+        int[][][] expected = new int[temp.length][temp[0].length][temp[0][0].length];
         for (int i = 0; i < temp.length; i++) {
-            for (int j = 0; j < temp3[i].length; j++) {
-                for (int k = 0; k < temp3[i][j].length; k++) {
-                    expected[i][j][k] = (int) (temp2[i][j][k] * 255 * ratio2);
+            for (int j = 0; j < temp[i].length; j++) {
+                for (int k = 0; k < temp[i][j].length; k++) {
+                    expected[i][j][k] = (int) (temp[i][j][k] * 255 * ratio);
                 }
             }
         }
-        int[][][] result3 = Utils.collapse(testArray3, 2, 8);
-        Assert.assertArrayEquals("结果错误!", expected, result3);
+        int[][][] result = Utils.collapse(testArray3, 2, 8);
+        Assert.assertArrayEquals("结果错误!", expected, result);
 
+    }
+
+    /**
+     * Test Utils collapse method.
+     * @author Feng Yucheng
+     */
+    @Test
+    public void utilsCollapseTestCase3() {
+        //列数不能整除的测试
+        byte[][][] testArray = {
+                {
+                        {-25,0b0111011},
+                        {-27,0b0000100},
+                        {0b01000111,112},
+                        {-86,67}
+                },
+                {
+                        {-25,0b0111011},
+                        {-27,0b0000100},
+                        {0b01000111,112},
+                        {-86,67}
+                },
+                {
+                        {-25,0b0111011},
+                        {-27,0b0000100},
+                        {0b01000111,112},
+                        {-86,67}
+                },
+                {
+                        {-25,0b0111011},
+                        {-27,0b0000100},
+                        {0b01000111,112},
+                        {-86,67}
+                }
+        };
+        double ratio = ( 2 * 8 ) / ( 15.0 * 4 );
+        double[][][] temp = {
+                {
+                        {4,2,2,3,1,2,2,1},
+                        {2,1,2,3,2,1,1,1}
+                },
+                {
+                        {4,2,2,3,1,2,2,1},
+                        {2,1,2,3,2,1,1,1}
+                },
+                {
+                        {4,2,2,3,1,2,2,1},
+                        {2,1,2,3,2,1,1,1}
+                }};
+        int[][][] expected = new int[temp.length][temp[0].length][temp[0][0].length];
+        for (int i = 0; i < temp.length; i++) {
+            for (int j = 0; j < temp[i].length; j++) {
+                for (int k = 0; k < temp[i][j].length; k++) {
+                    expected[i][j][k] = (int) (temp[i][j][k] * 255 * ratio);
+                }
+            }
+        }
+        int[][][] result2 = Utils.collapse(testArray, 2, 8);
+        Assert.assertArrayEquals("结果错误!", expected, result2);
     }
 
     /**
