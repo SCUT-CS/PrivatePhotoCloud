@@ -40,7 +40,7 @@ public class TokensTest {
 
     /**
      * Prepare the environment for the test.
-     * @author //TODO YOUR_NAME
+     * @author Feng Yucheng
      */
     @Before
     public void setUp() {
