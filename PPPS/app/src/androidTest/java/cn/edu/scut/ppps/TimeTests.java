@@ -26,7 +26,6 @@ public class TimeTests {
     /**
      * Grant permissions.
      * AndroidManifest.xml中需要声明该权限，手机需要允许USB调试修改权限。
-     * @author Cui Yuxin
      */
     @Rule
     public GrantPermissionRule mRuntimePermissionRule = GrantPermissionRule.grant(
