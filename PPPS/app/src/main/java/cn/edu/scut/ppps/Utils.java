@@ -210,7 +210,7 @@ public class Utils {
                 temp = new double[originalWidth];
             }
             for (int j = 0; j < originalWidth; j++) {
-                if (i % mappingSize == mappingSize - 1) {
+                if (i % mappingSize == mappingSize - 1 || i == originalHeight - 1) {
                     result[i / mappingSize][j] = (int) (temp[j] + bytesArray[i][j] * ratio);
                 } else {
                     temp[j] += bytesArray[i][j] * ratio;

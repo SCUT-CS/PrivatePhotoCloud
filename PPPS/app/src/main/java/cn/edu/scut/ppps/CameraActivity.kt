@@ -9,6 +9,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
+import android.util.Size
+import android.view.Surface
 import android.widget.Toast
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
@@ -116,7 +118,18 @@ class CameraActivity : AppCompatActivity() {
                     .also {
                         it.setSurfaceProvider(viewBinding.viewFinder.surfaceProvider)
                     }
-            imageCapture = ImageCapture.Builder().build()
+            // TODO 探究合适的照片大小，这里使用了1200万像素的标准大小
+            if (viewBinding.viewFinder.display.rotation == Surface.ROTATION_0 || viewBinding.viewFinder.display.rotation == Surface.ROTATION_180) {
+                imageCapture = ImageCapture.Builder()
+                    .setTargetRotation(viewBinding.viewFinder.display.rotation)
+                    .setTargetResolution(Size(3000, 4000))
+                    .build()
+            } else {
+                imageCapture = ImageCapture.Builder()
+                    .setTargetRotation(viewBinding.viewFinder.display.rotation)
+                    .setTargetResolution(Size(4000, 3000))
+                    .build()
+            }
             // Select back camera as a default
             val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
             try {
