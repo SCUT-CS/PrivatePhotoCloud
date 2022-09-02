@@ -8,6 +8,32 @@ Part A是项目代码的相关规范，Part B是项目架构。
 
 ## Updates
 
+#### 2022.9.5-2022.9.11
+
+#### Task1：
+
+参考其他测试，完成Tokens的若干测试。
+
+**Files you'll edit or creat:**
+
+TokensTests.java
+
+**Files you might want to look at:**
+
+*Tests.java
+
+#### Task6：
+
+参考其他测试，完成AliOSS的若干测试。
+
+**Files you'll edit or creat:**
+
+AliOSSTests.java
+
+**Files you might want to look at:**
+
+*Tests.java
+
 ### 2022.8.29-2022.9.4
 
 #### Task1：
@@ -79,18 +105,6 @@ UtilsTests.java
 **Files you might want to look at:**
 
 Utils.java
-
-#### Task6：
-
-参考其他测试，完成Tokens的若干测试。
-
-**Files you'll edit or creat:**
-
-TokensTests.java
-
-**Files you might want to look at:**
-
-*Tests.java
 
 ### 2022.8.14-2022.8.28
 
