@@ -1,6 +1,8 @@
 package cn.edu.scut.ppps;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.os.Environment;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -12,7 +14,9 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -25,7 +29,7 @@ import java.util.Map;
 @RunWith(AndroidJUnit4.class)
 public class TokensTest {
 
-    Tokens tokens = null;
+    Tokens tokensTest = null;
     Field[] fields = null;
     Method[] methods = null;
 
@@ -39,33 +43,96 @@ public class TokensTest {
 
     /**
      * Prepare the environment for the test.
-     * @author Feng Yucheng
+     * @author Huang zixi
      */
     @Before
-    public void setUp() {
-        //TODO Your Code Here.
-        // 完成反射和构造函数的测试
-    }
+        public void setUp() {
+        // 构造函数参数
+        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+            // 通过反射创造Tokens类
+            Class tokensClass = null;
+            try {
+                tokensClass = Class.forName("cn.edu.scut.ppps.Tokens");
+                Constructor constructor = null;
+                constructor = tokensClass.getConstructor(Context.class);
+               Tokens tokensTest = (Tokens) constructor.newInstance(appContext);
+            } catch (Exception e) {
+                e.printStackTrace();
+                Assert.fail();
+            }
+            // 获取类内部变量和方法
+            try {
+                Field [] fields = tokensClass.getDeclaredFields();
+                for (Field field : fields) {
+                    field.setAccessible(true);
+                }
+                Method [] methods = tokensClass.getDeclaredMethods();
+                for (Method method : methods) {
+                    method.setAccessible(true);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                Assert.fail();
+            }
+            // 测试构造函数
+            try {
+                for (Field field : fields) {
+                    if (field.getName().equals("context")) {
+                        Assert.assertNotNull(field.get(tokensTest));
+                    }else if(field.getName().equals("tokens")){
+                        Assert.assertNotNull(field.get(tokensTest));
+                    }else if(field.getName().equals("tokensFile")){
+                        Assert.assertNotNull(field.get(tokensTest));
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                Assert.fail();
+            }
+        }
 
     /**
-     * Test saveTokenFile method.
-     * @author //TODO YOUR_NAME
+     * Test saveTokens method.
+     * @author Huang Zixi//
      */
     @Test
-    public void saveTokenFileTest() {
+    public void saveTokensTest() {
+        //参数准备
+        Map<String, String> token = new HashMap<>();
+        token.put("access_token", "123456");
+        token.put("refresh_token", "654321");
+        Map<String, Map<String, String>> tokensMap=new HashMap<>();
+        //测试saveTokens
+        for(Field field : fields){
+            if(field.getName().equals("tokens")){
+                try {
+                    Object tokensTemp=field.get(tokensTest);
+                    tokensMap=(Map<String, Map<String, String>>)tokensTemp;
+                    tokensMap.put("test",token);
+                    field.set(tokensTest,tokensMap);
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                    Assert.fail();
+                }
+                for(Method method : methods){
+                    if(method.getName().equals("saveTokens")){
+                        try {
+                            method.invoke(tokensTest);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            Assert.fail();
+                        }
+                        Assert.assertEquals("测试saveTokens方法失败！", token, tokensTest.getToken("test"));
+                        Assert.assertEquals("测试saveTokens方法失败！", "123456",
+                                tokensTest.getToken("test").get("access_token"));
+                        Assert.assertEquals("测试updateTokens方法失败！", "654321",
+                                tokensTest.getToken("test").get("refresh_token"));
+                    }
+                }
+            }
+        }
         //TODO Your Code Here.
         // 使用反射完成saveTokenFile方法的测试
-    }
-
-    /**
-     * Test loadTokenFile method.
-     * @author //TODO YOUR_NAME
-     */
-    @Test
-    public void loadTokenFileTest() {
-        //TODO Your Code Here.
-        setUp();
-
     }
 
     /**

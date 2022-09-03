@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Environment;
-import android.os.SystemClock;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -351,9 +350,9 @@ public class UtilsTests {
      */
     @Test
     public void utilsLoadBytesArrayTest() {
-        byte[][][] testArray={{{1,1},{2,2}},
-                {{1,1},{2,2}},
-                {{1,1},{2,2}}
+        byte[][][] testArray = {{{1, 1}, {2, 2}},
+                {{1, 1}, {2, 2}},
+                {{1, 1}, {2, 2}}
         };
         byte[][][] array = null;
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
@@ -376,7 +375,6 @@ public class UtilsTests {
             Assert.fail("调用目标函数失败");
         }
         Assert.assertArrayEquals(array, testArray);
-
     }
     /*
     public static void getFileSize(File file){
