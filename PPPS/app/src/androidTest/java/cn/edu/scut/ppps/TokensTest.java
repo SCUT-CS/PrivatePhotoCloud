@@ -20,11 +20,13 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Tokens Unit Tests
- * @author //TODO YOUR_NAME
+ * @author Huang zixi, Feng Yucheng
  */
 @RunWith(AndroidJUnit4.class)
 public class TokensTest {
@@ -46,68 +48,81 @@ public class TokensTest {
      * @author Huang zixi
      */
     @Before
-        public void setUp() {
+    public void setUp() {
         // 构造函数参数
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-            // 通过反射创造Tokens类
-            Class tokensClass = null;
-            try {
-                tokensClass = Class.forName("cn.edu.scut.ppps.Tokens");
-                Constructor constructor = null;
-                constructor = tokensClass.getConstructor(Context.class);
-               Tokens tokensTest = (Tokens) constructor.newInstance(appContext);
-            } catch (Exception e) {
-                e.printStackTrace();
-                Assert.fail();
-            }
-            // 获取类内部变量和方法
-            try {
-                Field [] fields = tokensClass.getDeclaredFields();
-                for (Field field : fields) {
-                    field.setAccessible(true);
-                }
-                Method [] methods = tokensClass.getDeclaredMethods();
-                for (Method method : methods) {
-                    method.setAccessible(true);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                Assert.fail();
-            }
-            // 测试构造函数
-            try {
-                for (Field field : fields) {
-                    if (field.getName().equals("context")) {
-                        Assert.assertNotNull(field.get(tokensTest));
-                    }else if(field.getName().equals("tokens")){
-                        Assert.assertNotNull(field.get(tokensTest));
-                    }else if(field.getName().equals("tokensFile")){
-                        Assert.assertNotNull(field.get(tokensTest));
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                Assert.fail();
-            }
+        // 通过反射创造Tokens类
+        Class tokensClass = null;
+        try {
+            tokensClass = Class.forName("cn.edu.scut.ppps.Tokens");
+            Constructor constructor = null;
+            constructor = tokensClass.getConstructor(Context.class);
+            tokensTest = (Tokens) constructor.newInstance(appContext);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail();
         }
+        // 获取类内部变量和方法
+        try {
+            fields = tokensClass.getDeclaredFields();
+            for (Field field : fields) {
+                field.setAccessible(true);
+            }
+            methods = tokensClass.getDeclaredMethods();
+            for (Method method : methods) {
+                method.setAccessible(true);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail();
+        }
+        // 测试构造函数
+        try {
+            for (Field field : fields) {
+                if (field.getName().equals("context")) {
+                    Assert.assertNotNull(field.get(tokensTest));
+                }else if(field.getName().equals("tokens")){
+                    Assert.assertNotNull(field.get(tokensTest));
+                }else if(field.getName().equals("tokensFile")){
+                    Assert.assertNotNull(field.get(tokensTest));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail();
+        }
+    }
+
+    /**
+     * Test android environment.
+     * @author Cui Yuxin
+     */
+    @Test
+    public void environmentTest() {
+        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        String a = Environment.getDataDirectory().getAbsolutePath();
+        String b = Environment.getExternalStorageDirectory().getAbsolutePath();
+        String c = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath();
+        String d = appContext.getFilesDir().getAbsolutePath();
+        String e = appContext.getCacheDir().getAbsolutePath();
+    }
 
     /**
      * Test saveTokens method.
-     * @author Huang Zixi//
+     * @author Huang Zixi
      */
     @Test
     public void saveTokensTest() {
-        //参数准备
+        // 参数准备
         Map<String, String> token = new HashMap<>();
         token.put("access_token", "123456");
         token.put("refresh_token", "654321");
         Map<String, Map<String, String>> tokensMap=new HashMap<>();
-        //测试saveTokens
+        // 测试saveTokens
         for(Field field : fields){
             if(field.getName().equals("tokens")){
                 try {
-                    Object tokensTemp=field.get(tokensTest);
-                    tokensMap=(Map<String, Map<String, String>>)tokensTemp;
+                    Map<String, Map<String, String>> tokensTemp = (Map<String, Map<String, String>>) field.get(tokensTest);
                     tokensMap.put("test",token);
                     field.set(tokensTest,tokensMap);
                 } catch (IllegalAccessException e) {
@@ -131,8 +146,6 @@ public class TokensTest {
                 }
             }
         }
-        //TODO Your Code Here.
-        // 使用反射完成saveTokenFile方法的测试
     }
 
     /**
@@ -142,7 +155,6 @@ public class TokensTest {
     @Test
     public void getTokenTest() {
         // 准备测试环境
-        setUp();
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         Tokens tokens = null;
         try {
@@ -151,7 +163,7 @@ public class TokensTest {
             e.printStackTrace();
             Assert.fail();
         }
-        Assert.assertEquals(this.tokens,tokens.getToken("temp"));
+        Assert.assertEquals("123456",tokens.getToken("test").get("access_token"));
     }
 
     /**
@@ -161,7 +173,6 @@ public class TokensTest {
     @Test
     public void getNamesTest() throws Exception {
         //准备测试环境
-        setUp();
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         Tokens tokens = null;
         try {
@@ -171,7 +182,9 @@ public class TokensTest {
             Assert.fail();
         }
         //名字为“temp”
-        Assert.assertEquals("temp",tokens.getNames());
+        Set<String> expected = new HashSet<>();
+        expected.add("test");
+        Assert.assertEquals(expected, tokens.getNames());
     }
 
     /**
@@ -206,5 +219,4 @@ public class TokensTest {
         Assert.assertEquals("测试updateToken方法失败！", "654321",
                 tokens.getToken("test").get("refresh_token"));
     }
-
 }
