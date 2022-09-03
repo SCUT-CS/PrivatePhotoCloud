@@ -1,9 +1,7 @@
 package cn.edu.scut.ppps;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.os.Environment;
-import android.util.Log;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
