@@ -64,27 +64,47 @@ public class TokensTest {
     @Test
     public void loadTokenFileTest() {
         //TODO Your Code Here.
-        // 使用反射完成loadTokenFile方法的测试
+        setUp();
+
     }
 
     /**
      * Test getToken method.
-     * @author //TODO YOUR_NAME
+     * @author Feng Yucheng
      */
     @Test
     public void getTokenTest() {
-        //TODO Your Code Here.
-        // 完成getToken方法的测试
+        // 准备测试环境
+        setUp();
+        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        Tokens tokens = null;
+        try {
+            tokens = new Tokens(appContext);
+        } catch (Exception e){
+            e.printStackTrace();
+            Assert.fail();
+        }
+        Assert.assertEquals(this.tokens,tokens.getToken("temp"));
     }
 
     /**
      * Test getNames method.
-     * @author //TODO YOUR_NAME
+     * @author Feng Yucheng
      */
     @Test
-    public void getNamesTest() {
-        //TODO Your Code Here.
-        // 完成getNames方法的测试
+    public void getNamesTest() throws Exception {
+        //准备测试环境
+        setUp();
+        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        Tokens tokens = null;
+        try {
+            tokens = new Tokens(appContext);
+        } catch (Exception e){
+            e.printStackTrace();
+            Assert.fail();
+        }
+        //名字为“temp”
+        Assert.assertEquals("temp",tokens.getNames());
     }
 
     /**
