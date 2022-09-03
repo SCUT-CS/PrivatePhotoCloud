@@ -29,7 +29,7 @@ public class Tokens {
     public Tokens(Context context) throws Exception {
         this.context = context;
         this.tokens = new java.util.HashMap<>();
-        String tokensPath = context.getDataDir().getAbsolutePath() + File.separator + tokens;
+        String tokensPath = context.getDataDir().getAbsolutePath() + File.separator + "tokens";
         tokensFile = new File(tokensPath);
         if (tokensFile.exists()) {
             ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(tokensFile));
