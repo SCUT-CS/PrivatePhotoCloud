@@ -79,8 +79,8 @@ public class Decrypt implements Callable {
         width = img1.getWidth();
         height = img1.getHeight();
         img = Bitmap.createBitmap(width, height,
-                Bitmap.Config.RGBA_F16,
-                img1.hasAlpha(),
+                Bitmap.Config.ARGB_8888,
+                true,
                 ColorSpace.get(ColorSpace.Named.SRGB));
     }
 
