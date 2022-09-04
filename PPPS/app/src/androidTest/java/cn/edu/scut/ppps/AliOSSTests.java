@@ -33,8 +33,6 @@ import java.util.concurrent.TimeUnit;
 public class AliOSSTests {
 
     AliOSS AliOSSTests = null;
-    Field[] fields = null;
-    Method[] methods = null;
 
     /**
      * Grant permissions.
