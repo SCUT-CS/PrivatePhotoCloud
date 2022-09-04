@@ -25,6 +25,37 @@ import java.util.concurrent.Future;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * AliOSS Unit Tests
+ * @author Feng Yucheng , Huang Zixi , Zuo Xiaole
+ */
+@RunWith(AndroidJUnit4.class)
 public class AliOSSTests {
 
+    AliOSS AliOSSTests = null;
+    Field[] fields = null;
+    Method[] methods = null;
+
+    /**
+     * Grant permissions.
+     * AndroidManifest.xml中需要声明该权限，手机需要允许USB调试修改权限。
+     */
+    @Rule
+    public GrantPermissionRule mRuntimePermissionRule = GrantPermissionRule.grant(
+            android.Manifest.permission.READ_EXTERNAL_STORAGE);
+
+    /**
+     * Test AliOSS upload method.
+     * @author Feng Yucheng
+     */
+    @Test
+    public void uploadTest() {
+        //找到一个文件夹
+        String imgFileDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + File.separator + "WeiXin";
+        File weiXinPictureDir = new File(imgFileDir);
+        Assert.assertTrue("微信图片文件夹不存在！请检查是否拥有读取外部存储权限或文件夹是否存在。",
+                weiXinPictureDir.exists());
+
+
+    }
 }
