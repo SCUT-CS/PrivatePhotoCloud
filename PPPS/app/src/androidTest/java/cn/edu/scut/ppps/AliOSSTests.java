@@ -53,7 +53,15 @@ public class AliOSSTests {
         File weiXinPictureDir = new File(imgFileDir);
         Assert.assertTrue("微信图片文件夹不存在！请检查是否拥有读取外部存储权限或文件夹是否存在。",
                 weiXinPictureDir.exists());
+    }
 
+
+    /**
+     * Test AliOSS download method.
+     * @author Huang Zixi
+     */
+    @Test
+    public void downloadTest() {
 
     }
 }
