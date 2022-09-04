@@ -1,0 +1,7 @@
+C:\Users\12695\Videos\Privacy-preserving-photos-sharing\PPPS\heif-miaf\srcs\api-cpp\CMakeLists.txt
+C:\Users\12695\Videos\Privacy-preserving-photos-sharing\PPPS\heif-miaf\srcs\api-java\cpp\CMakeLists.txt
+C:\Users\12695\Videos\Privacy-preserving-photos-sharing\PPPS\heif-miaf\srcs\CMakeLists.txt
+C:\Users\12695\Videos\Privacy-preserving-photos-sharing\PPPS\heif-miaf\srcs\common\CMakeLists.txt
+C:\Users\12695\Videos\Privacy-preserving-photos-sharing\PPPS\heif-miaf\srcs\examples\CMakeLists.txt
+C:\Users\12695\Videos\Privacy-preserving-photos-sharing\PPPS\heif-miaf\srcs\reader\CMakeLists.txt
+C:\Users\12695\Videos\Privacy-preserving-photos-sharing\PPPS\heif-miaf\srcs\writer\CMakeLists.txt

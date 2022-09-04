@@ -1,0 +1,3 @@
+Allocator test passed
+fatal: No names found, cannot describe anything.
+Could not get version information from git
