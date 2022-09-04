@@ -14,6 +14,3 @@ dependencyResolutionManagement {
 }
 rootProject.name = "PPPS"
 include ':app'
-include ':api-java'
-project(':api-java').projectDir = file('./heif-miaf/build/android/api-java/')
-

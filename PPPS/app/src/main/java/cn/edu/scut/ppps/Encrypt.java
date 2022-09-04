@@ -55,12 +55,12 @@ public class Encrypt implements Callable {
         width = img.getWidth();
         height = img.getHeight();
         img1 = Bitmap.createBitmap(width, height,
-                Bitmap.Config.ARGB_8888,
-                true,
+                Bitmap.Config.RGBA_F16,
+                img.hasAlpha(),
                 ColorSpace.get(ColorSpace.Named.SRGB));
         img2 = Bitmap.createBitmap(width, height,
-                Bitmap.Config.ARGB_8888,
-                true,
+                Bitmap.Config.RGBA_F16,
+                img.hasAlpha(),
                 ColorSpace.get(ColorSpace.Named.SRGB));
         if (img.hasAlpha()) {
             Log.d("Encrypt", "hasAlpha");
@@ -217,13 +217,11 @@ public class Encrypt implements Callable {
                         int g1 = rnd.nextInt(256);
                         int b1 = rnd.nextInt(256);
                         pixel = b1 | g1 << 8 | r1 << 16;
-                        pixel = pixel & 0x00FFFFFF; // TODO determain whether this line is necessary
                         img1.setPixel(col, row, pixel);
                         int r2 = (rgb[0] - r1) & 0xff;
                         int g2 = (rgb[1] - g1) & 0xff;
                         int b2 = (rgb[2] - b1) & 0xff;
                         pixel = b2 | g2 << 8 | r2 << 16;
-                        pixel = pixel & 0x00FFFFFF; // TODO determain whether this line is necessary
                         img2.setPixel(col, row, pixel);
                         // encrypt the overflow information
                         if (rgb[0] < r1) {

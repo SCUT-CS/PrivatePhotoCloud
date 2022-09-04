@@ -79,8 +79,8 @@ public class Decrypt implements Callable {
         width = img1.getWidth();
         height = img1.getHeight();
         img = Bitmap.createBitmap(width, height,
-                Bitmap.Config.ARGB_8888,
-                true,
+                Bitmap.Config.RGBA_F16,
+                img1.hasAlpha(),
                 ColorSpace.get(ColorSpace.Named.SRGB));
     }
 
@@ -116,7 +116,7 @@ public class Decrypt implements Callable {
      */
     private void decryptThumbnail() {
         int[][][] overflow = Utils.collapse(this.overflow, height, width);
-        if (img1.hasAlpha() && overflow.length == 4) {
+        if (img.hasAlpha()) {
             for (int row = 0; row < height; row++) {
                 for (int col = 0; col < width; col++) {
                     int pixel1 = img1.getPixel(row, col);
@@ -193,7 +193,7 @@ public class Decrypt implements Callable {
          */
         @Override
         public void run() {
-            if (img1.hasAlpha()) { // TODO 这个分支目前必然命中，尝试禁用此分支（即不考虑透明度）以提高性能
+            if (img.hasAlpha()) {
                 Log.d("Decrypt", "图片有透明度通道");
                 for (int row = rowStart; row < rowEnd; row++) {
                     for (int col = colStart; col < colEnd; col++) {
