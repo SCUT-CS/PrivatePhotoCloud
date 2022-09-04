@@ -42,17 +42,16 @@ public class AliOSSTests {
     public GrantPermissionRule mRuntimePermissionRule = GrantPermissionRule.grant(
             android.Manifest.permission.READ_EXTERNAL_STORAGE);
 
+    public String imgFileDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + File.separator + "WeiXin";
+    public final File weiXinPictureDir = new File(imgFileDir);
+
     /**
      * Test AliOSS upload method.
      * @author Feng Yucheng
      */
     @Test
     public void uploadTest() {
-        //找到一个文件夹
-        String imgFileDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + File.separator + "WeiXin";
-        File weiXinPictureDir = new File(imgFileDir);
-        Assert.assertTrue("微信图片文件夹不存在！请检查是否拥有读取外部存储权限或文件夹是否存在。",
-                weiXinPictureDir.exists());
+
     }
 
 
