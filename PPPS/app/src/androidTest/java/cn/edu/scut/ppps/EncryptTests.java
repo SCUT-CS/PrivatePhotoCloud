@@ -299,17 +299,6 @@ public class EncryptTests {
         }
         Assert.assertNotNull(img11);
         Assert.assertNotNull(img22);
-        for (Field field : fields) {
-            if (field.getName().equals("img")) {
-                try {
-                    img = (Bitmap) field.get(encrypt);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    Assert.fail();
-                }
-                break;
-            }
-        }
         for (int i = 0; i < 500; i++) {
             int row = (int) (Math.random() * img.getHeight());
             int col = (int) (Math.random() * img.getWidth());

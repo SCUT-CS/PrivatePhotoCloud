@@ -91,7 +91,7 @@ public class UtilsTests {
     public void utilsOpenImgTestCaseEncryptedHEIC() {
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         String cachePath = context.getCacheDir().getAbsolutePath();
-        String savePath1 = cachePath + File.separator + "Disk1" + File.separator + "jpg_medium.jpg.ori.HEIC";
+        String savePath1 = cachePath + File.separator + "Disk1" + File.separator + "jpg_small.jpg.ori.HEIC";
         //String savePath1 = cachePath + File.separator + "Disk1" + File.separator + "test.HEIC";
         File file1 = new File(savePath1);
         Assert.assertTrue("文件不存在！", file1.exists());
