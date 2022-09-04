@@ -62,6 +62,10 @@ public class AliOSSTests {
      */
     @Test
     public void downloadTest() {
+        //参数准备
+        String imgFileDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
+                + File.separator + "WeiXin";
+
 
     }
 }
