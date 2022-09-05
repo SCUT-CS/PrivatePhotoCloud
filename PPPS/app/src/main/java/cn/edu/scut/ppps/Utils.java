@@ -56,10 +56,11 @@ public class Utils {
      * @param exifData The exif data of the image.Add Exif data for the specified image. The data
      *                 must be a valid Exif data block, starting with "Exif\0\0" followed
      *                 by the TIFF header (See JEITA CP-3451C Section 4.5.2.)
+     * @param ifHEIF Whether to save as HEIF format.
      * @author Cui Yuxin
      */
-    public static void saveImg(Bitmap img, String imgPath, byte[] exifData) throws Exception {
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+    public static void saveImg(Bitmap img, String imgPath, byte[] exifData, boolean ifHEIF) throws Exception {
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && ifHEIF) {
             File file = new File(imgPath + ".HEIC");
             String imgDir = file.getParent();
             if (imgDir != null) {
@@ -108,7 +109,7 @@ public class Utils {
      * @author Cui Yuxin
      */
     public static void saveImg(Bitmap img, String imgPath) throws Exception {
-        Utils.saveImg(img, imgPath, null);
+        Utils.saveImg(img, imgPath, null, false);
     }
 
 
