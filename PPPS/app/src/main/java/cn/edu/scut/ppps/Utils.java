@@ -7,6 +7,8 @@ import android.os.Build;
 
 import androidx.heifwriter.HeifWriter;
 
+import org.junit.Ignore;
+
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -233,6 +235,7 @@ public class Utils {
      * @param size The compress size.
      * @author Cui Yuxin, Zhao Bowen
      */
+    @Ignore("只适用于450*450的图片")
     public static void genThumbnail(Bitmap origin, String newfile, int size) throws Exception {
         Bitmap bitmap = origin;
         int width = bitmap.getWidth();
