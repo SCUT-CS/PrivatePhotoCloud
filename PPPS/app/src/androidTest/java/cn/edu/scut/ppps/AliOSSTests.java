@@ -7,6 +7,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.GrantPermissionRule;
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -46,7 +47,7 @@ public class AliOSSTests {
      * @author Feng Yucheng
      */
     @Test
-    public void uploadTest() {
+    public void uploadTest() throws FileNotFoundException {
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         Tokens tokens = null;
         try {
@@ -59,13 +60,8 @@ public class AliOSSTests {
         token.put("refresh_token", "654321");
         Map<String, Map<String, String>> tokensMap = new HashMap<>();
         tokensMap.put("test", token);
-
         AliOSS aliOSS = new AliOSS("test", appContext, tokens);
-        try {
-            aliOSS.upload(imgFileDir);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+        aliOSS.upload(imgFileDir);
     }
 
     public byte[] picture_to_byteArray(String picturePath) {
@@ -106,14 +102,23 @@ public class AliOSSTests {
      * Test AliOSS upload method.
      * @author Feng Yucheng
      */
-        public void uploadTest2() {
-            picture_to_byteArray(imgFileDir);
-            
-
+     public void uploadTest2() {
+         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+         Tokens tokens = null;
+         try {
+             tokens = new Tokens(appContext);
+         } catch (Exception e) {
+             e.printStackTrace();
+         }
+         Map<String, String> token = new HashMap<>();
+         token.put("access_token", "123456");
+         token.put("refresh_token", "654321");
+         Map<String, Map<String, String>> tokensMap = new HashMap<>();
+         tokensMap.put("test", token);
+         AliOSS aliOSS = new AliOSS("test", appContext, tokens);
+         byte[] file = picture_to_byteArray(imgFileDir);
+         aliOSS.upload(file,imgFileDir);
  }
-
-
-
 
     /**
      * Test AliOSS download method.
