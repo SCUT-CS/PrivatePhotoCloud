@@ -2,6 +2,7 @@ package cn.edu.scut.ppps;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.ColorSpace;
 import android.util.Log;
 
@@ -103,7 +104,7 @@ public class Encrypt implements Callable {
         Utils.saveImg(img1, savePath1);
         Utils.saveImg(img2, savePath2);
         String savePath = context.getDataDir().getAbsolutePath() + File.separator + "overflow" + File.separator + fileName;
-        Utils.saveBytesArray(overflow, savePath);
+        Utils.saveBytesArray(overflow, savePath, width);
     }
 
     /**
@@ -216,12 +217,12 @@ public class Encrypt implements Callable {
                         int r1 = rnd.nextInt(256);
                         int g1 = rnd.nextInt(256);
                         int b1 = rnd.nextInt(256);
-                        pixel = b1 | g1 << 8 | r1 << 16;
+                        pixel = b1 | g1 << 8 | r1 << 16 | 0xff000000;
                         img1.setPixel(col, row, pixel);
                         int r2 = (rgb[0] - r1) & 0xff;
                         int g2 = (rgb[1] - g1) & 0xff;
                         int b2 = (rgb[2] - b1) & 0xff;
-                        pixel = b2 | g2 << 8 | r2 << 16;
+                        pixel = b2 | g2 << 8 | r2 << 16 | 0xff000000;
                         img2.setPixel(col, row, pixel);
                         // encrypt the overflow information
                         if (rgb[0] < r1) {

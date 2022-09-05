@@ -1,7 +1,6 @@
 package cn.edu.scut.ppps;
 
 import android.graphics.Bitmap;
-import android.os.Build;
 import android.os.Environment;
 import android.util.Log;
 
@@ -14,7 +13,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.File;
-import java.io.IOException;
 
 /**
  * Android Time Tests
@@ -36,7 +34,7 @@ public class UtilsTimeTests {
      * @author Feng Yucheng
      */
     @Test
-    public void utilsOpenImgHEICTimeTest() {
+    public void utilsOpenImgHEICTimeTest() throws Exception {
         // 获取设备上微信图片文件夹
         String imgFileDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + File.separator + "WeiXin";
         File weiXinPictureDir = new File(imgFileDir);
@@ -54,12 +52,7 @@ public class UtilsTimeTests {
         // 调用测试方法并计时
         for (int i = 0; i < 5; i++) {
             long start = System.currentTimeMillis();
-            try {
-                img = Utils.openImg(imgFilePath);
-            } catch (IOException e) {
-                Assert.fail("调用目标函数失败！");
-                e.printStackTrace();
-            }
+            img = Utils.openImg(imgFilePath);
             long end = System.currentTimeMillis();
             long time = end - start;
             Log.d("打开HEIF图片计时", "打开时间: " + time + "ms");
@@ -71,7 +64,7 @@ public class UtilsTimeTests {
      * @author Cui Yuxin
      */
     @Test
-    public void utilsOpenImgJPGTimeTest() {
+    public void utilsOpenImgJPGTimeTest() throws Exception {
         // 获取设备上微信图片文件夹
         String imgFileDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + File.separator + "WeiXin";
         File weiXinPictureDir = new File(imgFileDir);
@@ -89,12 +82,7 @@ public class UtilsTimeTests {
         // 调用测试方法并计时
         for (int i = 0; i < 5; i++) {
             long start = System.currentTimeMillis();
-            try {
-                img = Utils.openImg(imgFilePath);
-            } catch (IOException e) {
-                Assert.fail("调用目标函数失败！");
-                e.printStackTrace();
-            }
+            img = Utils.openImg(imgFilePath);
             long end = System.currentTimeMillis();
             long time = end - start;
             Log.d("打开JPG图片计时", "打开时间: " + time + "ms");
@@ -106,7 +94,7 @@ public class UtilsTimeTests {
      * @author Feng Yucheng
      */
     @Test
-    public void utilsOpenImgWebpTimeTest() {
+    public void utilsOpenImgWebpTimeTest() throws Exception {
         // 获取设备上微信图片文件夹
         String imgFileDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + File.separator + "WeiXin";
         File weiXinPictureDir = new File(imgFileDir);
@@ -114,7 +102,7 @@ public class UtilsTimeTests {
                 weiXinPictureDir.exists());
         // 找到微信图片文件夹下的第一张图片
         File[] files = weiXinPictureDir.listFiles((file) -> {
-            return file.getName().endsWith("medium.webp");
+            return file.getName().endsWith("test.webp");
         });
         Assert.assertTrue("微信图片文件夹下不存在文件图片",
                 files.length > 0);
@@ -124,12 +112,7 @@ public class UtilsTimeTests {
         // 调用测试方法并计时
         for (int i = 0; i < 5; i++) {
             long start = System.currentTimeMillis();
-            try {
-                img = Utils.openImg(imgFilePath);
-            } catch (IOException e) {
-                Assert.fail("调用目标函数失败！");
-                e.printStackTrace();
-            }
+            img = Utils.openImg(imgFilePath);
             long end = System.currentTimeMillis();
             long time = end - start;
             Log.d("打开webp图片计时", "打开时间: " + time + "ms");
@@ -141,7 +124,7 @@ public class UtilsTimeTests {
      * @author Feng Yucheng
      */
     @Test
-    public void utilsSaveImgTimeTest() {
+    public void utilsSaveImgTimeTest() throws Exception {
         // 获取设备上微信图片文件夹
         String imgFileDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + File.separator + "WeiXin";
         File weiXinPictureDir = new File(imgFileDir);
@@ -153,26 +136,14 @@ public class UtilsTimeTests {
         // 初始化测试方法的参数
         String imgFilePath = imgFileDir + File.separator + "test";
         Bitmap img = null;
-        try {
-            img = Utils.openImg(files[0].getAbsolutePath());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        img = Utils.openImg(files[0].getAbsolutePath());
         // 调用测试方法并计时
         for (int i = 0; i < 5; i++) {
             long start = System.currentTimeMillis();
-            try {
-                Utils.saveImg(img, imgFilePath);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            Utils.saveImg(img, imgFilePath);
             long end = System.currentTimeMillis();
             long time = end - start;
-            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                imgFilePath += ".HEIC";
-            } else {
-                imgFilePath += ".webp";
-            }
+            imgFilePath += ".webp";
             File file = new File(imgFilePath);
             long fileSize = file.length();
             double fileSizeMB = fileSize / 1024.0 / 1024.0;

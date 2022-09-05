@@ -24,7 +24,7 @@ public class Decrypt implements Callable {
     private int width;
     private int height;
     private boolean isThumbnail;
-    private byte[][][] overflow = null;
+    private int[][][] overflow = null;
     private Context context;
 
     /**
@@ -63,25 +63,25 @@ public class Decrypt implements Callable {
     private void openFile() throws Exception {
         img1 = Utils.openImg(imgFilePath1);
         img2 = Utils.openImg(imgFilePath2);
-        if (isThumbnail) {
-            String imgName = Utils.getFileName(imgFilePath1);
-            String originalImgName = imgName.substring(0, imgName.lastIndexOf(".ori"));
-            String filePath = context.getDataDir().getAbsolutePath() + File.separator + "overflow" + File.separator;
-            overflow = Utils.loadBytesArray(filePath + originalImgName);
-        }
     }
 
     /**
      * Initialize the images.
      * @author Cui Yuxin
      */
-    private void initialize() {
+    private void initialize() throws Exception {
         width = img1.getWidth();
         height = img1.getHeight();
         img = Bitmap.createBitmap(width, height,
                 Bitmap.Config.ARGB_8888,
                 img1.hasAlpha(),
                 ColorSpace.get(ColorSpace.Named.SRGB));
+        if (isThumbnail) {
+            String imgName = Utils.getFileName(imgFilePath1);
+            String originalImgName = imgName.substring(0, imgName.lastIndexOf(".ori"));
+            String filePath = context.getDataDir().getAbsolutePath() + File.separator + "overflow" + File.separator;
+            overflow = Utils.collapse(filePath + originalImgName, height, width);
+        }
     }
 
     /**
@@ -115,28 +115,27 @@ public class Decrypt implements Callable {
      * @author Cui Yuxin, Zhao Bowen
      */
     private void decryptThumbnail() {
-        int[][][] overflow = Utils.collapse(this.overflow, height, width);
         if (img1.hasAlpha() && overflow.length == 4 ) {
             for (int row = 0; row < height; row++) {
                 for (int col = 0; col < width; col++) {
-                    int pixel1 = img1.getPixel(row, col);
-                    int pixel2 = img2.getPixel(row, col);
+                    int pixel1 = img1.getPixel(col, row);
+                    int pixel2 = img2.getPixel(col, row);
                     int alpha = (pixel1 >>> 24 + pixel2 >>> 24 - overflow[3][row][col]) & 0xff;
                     int red = ((pixel1 >> 16) & 0xFF + (pixel2 >> 16) & 0xFF - overflow[0][row][col]) & 0xff;
                     int green =((pixel1 >> 8) & 0xFF + (pixel2 >> 8) & 0xFF - overflow[1][row][col]) & 0xff;
                     int blue = (pixel1 & 0xFF + pixel2 & 0xFF - overflow[2][row][col]) & 0xff;
-                    img.setPixel(row, col, blue | green << 8 | red << 16 | alpha << 24);
+                    img.setPixel(col, row, blue | green << 8 | red << 16 | alpha << 24);
                 }
             }
         } else {
             for (int row = 0; row < height; row++) {
                 for (int col = 0; col < width; col++) {
-                    int pixel1 = img1.getPixel(row, col);
-                    int pixel2 = img2.getPixel(row, col);
+                    int pixel1 = img1.getPixel(col, row);
+                    int pixel2 = img2.getPixel(col, row);
                     int red = (((pixel1 >> 16) & 0xFF) + ((pixel2 >> 16) & 0xFF) - (overflow[0][row][col]) & 0xff);
                     int green =(((pixel1 >> 8) & 0xFF) + ((pixel2 >> 8) & 0xFF) - (overflow[1][row][col]) & 0xff);
                     int blue = ((pixel1 & 0xFF) + (pixel2 & 0xFF) - (overflow[2][row][col]) & 0xff);
-                    img.setPixel(row, col, blue | green << 8 | red << 16);
+                    img.setPixel(col, row, blue | green << 8 | red << 16 | 0xff000000);
                 }
             }
         }
@@ -197,25 +196,25 @@ public class Decrypt implements Callable {
                 Log.d("Decrypt", "图片有透明度通道");
                 for (int row = rowStart; row < rowEnd; row++) {
                     for (int col = colStart; col < colEnd; col++) {
-                        int pixel1 = img1.getPixel(row, col);
-                        int pixel2 = img2.getPixel(row, col);
+                        int pixel1 = img1.getPixel(col, row);
+                        int pixel2 = img2.getPixel(col, row);
                         int pixel = Color.argb(((pixel1 >>> 24) + (pixel2 >>> 24)) & 0xff,
                                 (((pixel1 >> 16) & 0xFF) + ((pixel2 >> 16) & 0xFF)) & 0xff,
                                 (((pixel1 >> 8) & 0xFF) + ((pixel2 >> 8) & 0xFF)) & 0xff,
                                 ((pixel1 & 0xFF) + (pixel2 & 0xFF)) & 0xff);
-                        img.setPixel(row, col, pixel);
+                        img.setPixel(col, row, pixel);
                     }
                 }
             } else {
                 Log.d("Decrypt", "图片没有透明度通道");
                 for (int row = rowStart; row < rowEnd; row++) {
                     for (int col = colStart; col < colEnd; col++) {
-                        int pixel1 = img1.getPixel(row, col);
-                        int pixel2 = img2.getPixel(row, col);
+                        int pixel1 = img1.getPixel(col, row);
+                        int pixel2 = img2.getPixel(col, row);
                         int pixel = Color.rgb((((pixel1 >> 16) & 0xFF) + ((pixel2 >> 16) & 0xFF)) & 0xff,
                                 (((pixel1 >> 8) & 0xFF) + ((pixel2 >> 8) & 0xFF)) & 0xff,
                                 ((pixel1 & 0xFF) + (pixel2 & 0xFF)) & 0xff);
-                        img.setPixel(row, col, pixel);
+                        img.setPixel(col, row, pixel);
                     }
                 }
             }

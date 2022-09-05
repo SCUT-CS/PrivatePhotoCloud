@@ -1,10 +1,13 @@
 package cn.edu.scut.ppps;
 
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.ImageDecoder;
 import android.os.Build;
 
 import androidx.heifwriter.HeifWriter;
+
+import org.junit.Ignore;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -12,6 +15,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.*;
+import java.util.concurrent.Callable;
 
 /**
  * Utils class.
@@ -56,19 +60,19 @@ public class Utils {
      * @param exifData The exif data of the image.Add Exif data for the specified image. The data
      *                 must be a valid Exif data block, starting with "Exif\0\0" followed
      *                 by the TIFF header (See JEITA CP-3451C Section 4.5.2.)
-     * @param ifHEIF Whether to save as HEIF format.
+     * @param format The format of the image.
      * @author Cui Yuxin
      */
-    public static void saveImg(Bitmap img, String imgPath, byte[] exifData, boolean ifHEIF) throws Exception {
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && ifHEIF) {
-            File file = new File(imgPath + ".HEIC");
-            String imgDir = file.getParent();
-            if (imgDir != null) {
-                File dir = new File(imgDir);
-                if (!dir.exists()) {
-                    dir.mkdirs();
-                }
+    public static void saveImg(Bitmap img, String imgPath, byte[] exifData, String format) throws Exception {
+        File file = new File(imgPath);
+        String imgDir = file.getParent();
+        if (imgDir != null) {
+            File dir = new File(imgDir);
+            if (!dir.exists()) {
+                dir.mkdirs();
             }
+        }
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && format.equals("heif")) {
             HeifWriter.Builder heifBuilder = new HeifWriter.Builder(imgPath + ".HEIC", img.getWidth(),
                     img.getHeight(),
                     HeifWriter.INPUT_MODE_BITMAP);
@@ -80,15 +84,13 @@ public class Utils {
             }
             heifWriter.stop(0);
             heifWriter.close();
+        } else if (format.equals("jpeg")) {
+            file = new File(imgPath + ".jpg");
+            BufferedOutputStream outStream = new BufferedOutputStream(new FileOutputStream(file));
+            img.compress(Bitmap.CompressFormat.JPEG, 100, outStream);
+            outStream.flush();
         } else {
-            File file = new File(imgPath + ".webp");
-            String imgDir = file.getParent();
-            if (imgDir != null) {
-                File dir = new File(imgDir);
-                if (!dir.exists()) {
-                    dir.mkdirs();
-                }
-            }
+            file = new File(imgPath + ".webp");
             BufferedOutputStream outStream = new BufferedOutputStream(new FileOutputStream(file));
             if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                 // lossless compression quality 100, resulting in a smaller file.
@@ -109,9 +111,19 @@ public class Utils {
      * @author Cui Yuxin
      */
     public static void saveImg(Bitmap img, String imgPath) throws Exception {
-        Utils.saveImg(img, imgPath, null, false);
+        Utils.saveImg(img, imgPath, null, "webp");
     }
 
+    /**
+     * Save an image.
+     * This method may take several seconds to complete, so it should only be called from a worker thread.
+     * @param img The image.
+     * @param imgPath The path of the image.
+     * @author Cui Yuxin
+     */
+    public static void saveJpgImg(Bitmap img, String imgPath) throws Exception {
+        Utils.saveImg(img, imgPath, null, "jpeg");
+    }
 
     /**
      * Save bytes array.
@@ -119,7 +131,7 @@ public class Utils {
      * @param filePath The path of the overflow array file.
      * @author Feng Yucheng
      */
-    public static void saveBytesArray(byte[][][] bytesArray, String filePath) throws IOException {
+    public static void saveBytesArray(byte[][][] bytesArray, String filePath, int width) throws IOException {
         File file = new File(filePath);
         String OverflowDir = file.getParent();
         if (OverflowDir != null) {
@@ -130,42 +142,35 @@ public class Utils {
         }
         FileOutputStream fileOut = new FileOutputStream(filePath);
         ObjectOutputStream out = new ObjectOutputStream(fileOut);
-        out.writeObject(new Overflow(bytesArray));
-    }
-
-    /**
-     * Load bytes array and return.
-     * @param filePath The path of the overflow array file.
-     * @author Feng Yucheng
-     */
-    public static byte[][][] loadBytesArray(String filePath) throws Exception {
-        FileInputStream fileIn = new FileInputStream(filePath);
-        ObjectInputStream in = new ObjectInputStream(fileIn);
-        return ((Overflow) in.readObject()).getBytesArray();
+        out.writeObject(new Overflow(bytesArray, width));
     }
 
     /**
      * Compress and overflow matrix into thumbnail size and return results.
-     * @param bytesArray The bytes array.
+     * @param filePath The path of the overflow file.
      * @param height The height of the thumbnail.
      * @param width The width of the thumbnail.
-     * @author Zuo Xiaole, Cui Yuxin
+     * @author Feng Yucheng, Zuo Xiaole, Cui Yuxin
      */
-    public static int[][][] collapse(byte[][][] bytesArray, int height, int width) {
+    public static int[][][] collapse(String filePath, int height, int width) throws Exception {
+        FileInputStream fileIn = new FileInputStream(filePath);
+        ObjectInputStream in = new ObjectInputStream(fileIn);
+        Overflow overflow = (Overflow) in.readObject();
+        byte[][][] bytesArray = overflow.getBytesArray();
         int originalHeight = bytesArray[0].length;
         int originalChannel = bytesArray.length;
-        int originalWidth = bytesArray[0][0].length * 8;
+        int originalWidth = overflow.getWidth();
         double averageRatio = ((double) (height * width)) / (originalHeight * originalWidth);
         int[][][] collapsed = null;
         if (originalChannel == 3) {
             collapsed = new int[3][][];
             for (int i = 0; i < 3; i++) {
-                collapsed[i] = collapseHeight(collapseWidth(bytesArray[i], width), height, averageRatio);
+                collapsed[i] = collapseHeight(collapseWidth(bytesArray[i], width, originalWidth), height, averageRatio);
             }
         } else if (originalChannel == 4) {
             collapsed = new int[4][][]; // 4 channels (R, G, B, A)
             for (int i = 0; i < 4; i++) {
-                collapsed[i] = collapseHeight(collapseWidth(bytesArray[i], width), height, averageRatio);
+                collapsed[i] = collapseHeight(collapseWidth(bytesArray[i], width, originalWidth), height, averageRatio);
             }
         }
         return collapsed;
@@ -177,13 +182,13 @@ public class Utils {
      * @param width The width of the thumbnail.
      * @author Zuo Xiaole, Cui Yuxin
      */
-    private static int[][] collapseWidth(byte[][] bytesArray, int width) {
-        int originalWidth = bytesArray[0].length;
+    private static int[][] collapseWidth(byte[][] bytesArray, int width, int originalWidth) {
+        int arrayWidth = bytesArray[0].length;
         int originalHeight = bytesArray.length;
-        int mappingSize = (int) Math.ceil(originalWidth * 8.0 / width);
+        int mappingSize = (int) Math.ceil(originalWidth * 1.0 / width);
         int[][] result = new int[originalHeight][width];
         for (int i = 0; i < originalHeight; i++) {
-            for (int j = 0; j < originalWidth; j++) {
+            for (int j = 0; j < arrayWidth; j++) {
                 byte currentByte = bytesArray[i][j];
                 for (int index = 0; index < 8; index++) {
                     if ((currentByte & (1 << index)) != 0) {
@@ -224,20 +229,57 @@ public class Utils {
     }
 
     /**
+     * Generate a thumbnail from the image.
+     * @param origin The original image.
+     * @param newfile The path of the thumbnail.
+     * @param size The compress size.
+     * @author Cui Yuxin, Zhao Bowen
+     */
+    @Ignore("只适用于450*450的图片")
+    public static void genThumbnail(Bitmap origin, String newfile, int size) throws Exception {
+        Bitmap bitmap = origin;
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
+        Bitmap thumbnail = Bitmap.createBitmap(width/size, height/size, Bitmap.Config.ARGB_8888);
+        for(int y = 0; y < height; y += size) {
+            for(int x = 0; x < width; x += size) {
+                int sumr = 0, sumg = 0, sumb = 0;
+                for(int j = y; j < y + size; j++) {
+                    for(int i = x; i < x + size; i++) {
+                        int pixel = bitmap.getPixel(i, j);
+                        sumr += (pixel & 0xff0000) >> 16; //r
+                        sumg += (pixel & 0xff00) >> 8; //g
+                        sumb += (pixel & 0xff); //b
+                    }
+                }
+                sumr /= (size * size);
+                sumg /= (size * size);
+                sumb /= (size * size);
+                int pixel1 = Color.rgb(sumr, sumg, sumb);
+                thumbnail.setPixel(x / size, y /size, pixel1);
+            }
+        }
+        Utils.saveImg(thumbnail, newfile);
+    }
+
+    /**
      * Wrap the bytes array into a serializable object.
      * @author Cui Yuxin
      */
     public static class Overflow implements Serializable {
 
         private byte[][][] bytesArray;
+        private int width;
 
         /**
          * Constructor.
          * @param bytesArray The bytes array.
+         * @param width The width of the original image.
          * @author Cui Yuxin
          */
-        public Overflow(byte[][][] bytesArray) {
+        public Overflow(byte[][][] bytesArray, int width) {
             this.bytesArray = bytesArray;
+            this.width = width;
         }
 
         /**
@@ -247,17 +289,13 @@ public class Utils {
         public byte[][][] getBytesArray() {
             return bytesArray;
         }
-    }
 
-    /*// 请求权限
-        ActivityCompat.requestPermissions(, new String[]{
-        Manifest.permission.READ_PHONE_STATE
-    }, 1);
-    // 检查权限是否已经授予
-    int PermissionState = ContextCompat.checkSelfPermission(appContext, Manifest.permission.READ_PHONE_STATE);
-        if(PermissionState == PackageManager.PERMISSION_GRANTED){
-        Toast.makeText(this, "已授权！", Toast.LENGTH_LONG).show();
-    }else if(PermissionState == PackageManager.PERMISSION_DENIED){
-        Toast.makeText(this, "未授权！", Toast.LENGTH_LONG).show();
-    }*/
+        /**
+         * Get the width and return.
+         * @author Cui Yuxin
+         */
+        public int getWidth() {
+            return width;
+        }
+    }
 }
