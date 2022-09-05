@@ -50,8 +50,8 @@ public class DecryptThumbnailTest {
     public void setUp() throws Exception {
         // 构造函数参数
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        String imgPath1 = context.getCacheDir().getAbsolutePath() + File.separator + "Disk1" + File.separator + fileName + ".ori.png";
-        String imgPath2 = context.getCacheDir().getAbsolutePath() + File.separator + "Disk2" + File.separator + fileName + ".ori.png";
+        String imgPath1 = context.getCacheDir().getAbsolutePath() + File.separator + "Disk1" + File.separator + fileName + ".ori.webp";
+        String imgPath2 = context.getCacheDir().getAbsolutePath() + File.separator + "Disk2" + File.separator + fileName + ".ori.webp";
         // 通过反射创造Encrypt类
         Class decryptClass = null;
         decryptClass = Class.forName("cn.edu.scut.ppps.Decrypt");
@@ -127,10 +127,10 @@ public class DecryptThumbnailTest {
         Bitmap expectedImg = Utils.openImg(imgPath1);
         Assert.assertEquals(expectedImg.getWidth(), img.getWidth());
         Assert.assertEquals(expectedImg.getHeight(), img.getHeight());
-        //Utils.saveImg(img, context.getCacheDir().getAbsolutePath() + File.separator + "Disk1" + File.separator + "111.png");
+        Utils.saveImg(img, context.getCacheDir().getAbsolutePath() + File.separator + "Disk1" + File.separator + "111.png");
         for (int i = 0; i < img.getWidth(); i++) {
             for (int j = 0; j < img.getHeight(); j++) {
-                Assert.assertEquals(expectedImg.getPixel(i, j), img.getPixel(i, j));
+                Assert.assertEquals("H:W"+j+i,expectedImg.getPixel(i, j), img.getPixel(i, j));
             }
         }
     }

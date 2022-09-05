@@ -1,6 +1,7 @@
 package cn.edu.scut.ppps;
 
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.ImageDecoder;
 import android.os.Build;
 
@@ -12,6 +13,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.*;
+import java.util.concurrent.Callable;
 
 /**
  * Utils class.
@@ -232,6 +234,39 @@ public class Utils {
     }
 
     /**
+     * Generate a thumbnail from the image.
+     * @param origin The original image.
+     * @param newfile The path of the thumbnail.
+     * @param size The compress size.
+     * @author Cui Yuxin, Zhao Bowen
+     */
+    public static void genThumbnail(Bitmap origin, String newfile, int size) throws Exception {
+        Bitmap bitmap = origin;
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
+        Bitmap thumbnail = Bitmap.createBitmap(width/size, height/size, Bitmap.Config.ARGB_8888);
+        for(int y = 0; y < height; y += size) {
+            for(int x = 0; x < width; x += size) {
+                int sumr = 0, sumg = 0, sumb = 0;
+                for(int j = y; j < y + size; j++) {
+                    for(int i = x; i < x + size; i++) {
+                        int pixel = bitmap.getPixel(i, j);
+                        sumr += (pixel & 0xff0000) >> 16; //r
+                        sumg += (pixel & 0xff00) >> 8; //g
+                        sumb += (pixel & 0xff); //b
+                    }
+                }
+                sumr /= (size * size);
+                sumg /= (size * size);
+                sumb /= (size * size);
+                int pixel1 = Color.rgb(sumr, sumg, sumb);
+                thumbnail.setPixel(x / size, y /size, pixel1);
+            }
+        }
+        Utils.saveImg(thumbnail, newfile);
+    }
+
+    /**
      * Wrap the bytes array into a serializable object.
      * @author Cui Yuxin
      */
@@ -256,16 +291,4 @@ public class Utils {
             return bytesArray;
         }
     }
-
-    /*// 请求权限
-        ActivityCompat.requestPermissions(, new String[]{
-        Manifest.permission.READ_PHONE_STATE
-    }, 1);
-    // 检查权限是否已经授予
-    int PermissionState = ContextCompat.checkSelfPermission(appContext, Manifest.permission.READ_PHONE_STATE);
-        if(PermissionState == PackageManager.PERMISSION_GRANTED){
-        Toast.makeText(this, "已授权！", Toast.LENGTH_LONG).show();
-    }else if(PermissionState == PackageManager.PERMISSION_DENIED){
-        Toast.makeText(this, "未授权！", Toast.LENGTH_LONG).show();
-    }*/
 }

@@ -193,6 +193,9 @@ public class DecryptTests {
                                 + File.separator + "ZHAO.jpg";
                         Bitmap originalImg = Utils.openImg(imgPath);
                         Bitmap img = (Bitmap) field.get(decrypt);
+                        /*Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+                        String imgPath1 = context.getCacheDir().getAbsolutePath() + File.separator + "Disk1" + File.separator + ".ori.webp";
+                        Utils.saveImg(img, imgPath1);*/
                         Assert.assertNotNull(img);
                         // 解密算法正确性检查
                         for (int i = 0; i < 1000; i++) {

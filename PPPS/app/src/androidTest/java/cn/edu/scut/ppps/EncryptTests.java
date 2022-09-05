@@ -20,6 +20,7 @@ import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.Random;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.Future;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -298,5 +299,34 @@ public class EncryptTests {
         Assert.assertTrue("保存文件失败！", file.exists());
         Assert.assertTrue("保存文件失败！", file1.exists());
         Assert.assertTrue("保存文件失败！", file2.exists());
+    }
+
+    /**
+     * Test encrypt call method.
+     * Specific random seed.
+     * @author Cui Yuxin
+     */
+    @Test
+    public void randomTest() throws Exception {
+        String imgPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
+                + File.separator + "WeiXin"
+                + File.separator + "ZHAO.jpg";
+        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        Encrypt encrypt = new Encrypt(imgPath, context);
+        for (Field field : fields) {
+            if (field.getName().equals("rnd")) {
+                field.set(encrypt, new Random(0));
+                break;
+            }
+        }
+        ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(5, 10, 1000, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(16));
+        Future<Bitmap[]> results = threadPoolExecutor.submit(encrypt);
+        Bitmap[] result = results.get();
+        String imgPath1 = context.getCacheDir().getAbsolutePath() + File.separator + "Disk1" + File.separator + "ZHAO.jpg.ori";
+        String imgPath2 = context.getCacheDir().getAbsolutePath() + File.separator + "Disk2" + File.separator + "ZHAO.jpg.ori";
+        Utils.genThumbnail(result[0], imgPath1, 15);
+        Utils.genThumbnail(result[1], imgPath2, 15);
+        //String imgPath0 = context.getCacheDir().getAbsolutePath() + File.separator + "Disk2" + File.separator + "thumb";
+        //Utils.genThumbnail(Utils.openImg(imgPath), imgPath0, 15);
     }
 }

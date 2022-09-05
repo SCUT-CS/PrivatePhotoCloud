@@ -2,6 +2,7 @@ package cn.edu.scut.ppps;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.ColorSpace;
 import android.util.Log;
 
