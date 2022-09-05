@@ -20,6 +20,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -172,7 +173,23 @@ public class DecryptThumbnailTest {
      * @author Cui Yuxin
      */
     @Test
-    public void callTest() {
-
+    public void callTest() throws Exception {
+        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        String imgPath1 = context.getCacheDir().getAbsolutePath() + File.separator + "Disk1" + File.separator + fileName + ".ori.png";
+        String imgPath2 = context.getCacheDir().getAbsolutePath() + File.separator + "Disk2" + File.separator + fileName + ".ori.png";
+        Decrypt decrypt = new Decrypt(imgPath1, imgPath2, context, true);
+        ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(5, 10, 1000, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(16));
+        Future<Bitmap> results = threadPoolExecutor.submit(decrypt);
+        Bitmap result = null;
+        result = results.get();
+        String imgPath = context.getCacheDir().getAbsolutePath() + File.separator + "Disk1" + File.separator + "ZHAO_thumbnail.png";
+        Bitmap expectedImg = Utils.openImg(imgPath);
+        Assert.assertEquals(expectedImg.getWidth(), result.getWidth());
+        Assert.assertEquals(expectedImg.getHeight(), result.getHeight());
+        for (int i = 0; i < result.getWidth(); i++) {
+            for (int j = 0; j < result.getHeight(); j++) {
+                Assert.assertEquals(expectedImg.getPixel(i, j), result.getPixel(i, j));
+            }
+        }
     }
 }
