@@ -104,7 +104,7 @@ public class Encrypt implements Callable {
         Utils.saveImg(img1, savePath1);
         Utils.saveImg(img2, savePath2);
         String savePath = context.getDataDir().getAbsolutePath() + File.separator + "overflow" + File.separator + fileName;
-        Utils.saveBytesArray(overflow, savePath);
+        Utils.saveBytesArray(overflow, savePath, width);
     }
 
     /**

@@ -24,7 +24,7 @@ public class Decrypt implements Callable {
     private int width;
     private int height;
     private boolean isThumbnail;
-    private byte[][][] overflow = null;
+    private int[][][] overflow = null;
     private Context context;
 
     /**
@@ -63,25 +63,25 @@ public class Decrypt implements Callable {
     private void openFile() throws Exception {
         img1 = Utils.openImg(imgFilePath1);
         img2 = Utils.openImg(imgFilePath2);
-        if (isThumbnail) {
-            String imgName = Utils.getFileName(imgFilePath1);
-            String originalImgName = imgName.substring(0, imgName.lastIndexOf(".ori"));
-            String filePath = context.getDataDir().getAbsolutePath() + File.separator + "overflow" + File.separator;
-            overflow = Utils.loadBytesArray(filePath + originalImgName);
-        }
     }
 
     /**
      * Initialize the images.
      * @author Cui Yuxin
      */
-    private void initialize() {
+    private void initialize() throws Exception {
         width = img1.getWidth();
         height = img1.getHeight();
         img = Bitmap.createBitmap(width, height,
                 Bitmap.Config.ARGB_8888,
                 img1.hasAlpha(),
                 ColorSpace.get(ColorSpace.Named.SRGB));
+        if (isThumbnail) {
+            String imgName = Utils.getFileName(imgFilePath1);
+            String originalImgName = imgName.substring(0, imgName.lastIndexOf(".ori"));
+            String filePath = context.getDataDir().getAbsolutePath() + File.separator + "overflow" + File.separator;
+            overflow = Utils.collapse(filePath + originalImgName, height, width);
+        }
     }
 
     /**
@@ -115,7 +115,6 @@ public class Decrypt implements Callable {
      * @author Cui Yuxin, Zhao Bowen
      */
     private void decryptThumbnail() {
-        int[][][] overflow = Utils.collapse(this.overflow, height, width);
         if (img1.hasAlpha() && overflow.length == 4 ) {
             for (int row = 0; row < height; row++) {
                 for (int col = 0; col < width; col++) {

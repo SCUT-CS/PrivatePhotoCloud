@@ -129,7 +129,7 @@ public class Utils {
      * @param filePath The path of the overflow array file.
      * @author Feng Yucheng
      */
-    public static void saveBytesArray(byte[][][] bytesArray, String filePath) throws IOException {
+    public static void saveBytesArray(byte[][][] bytesArray, String filePath, int width) throws IOException {
         File file = new File(filePath);
         String OverflowDir = file.getParent();
         if (OverflowDir != null) {
@@ -140,42 +140,35 @@ public class Utils {
         }
         FileOutputStream fileOut = new FileOutputStream(filePath);
         ObjectOutputStream out = new ObjectOutputStream(fileOut);
-        out.writeObject(new Overflow(bytesArray));
-    }
-
-    /**
-     * Load bytes array and return.
-     * @param filePath The path of the overflow array file.
-     * @author Feng Yucheng
-     */
-    public static byte[][][] loadBytesArray(String filePath) throws Exception {
-        FileInputStream fileIn = new FileInputStream(filePath);
-        ObjectInputStream in = new ObjectInputStream(fileIn);
-        return ((Overflow) in.readObject()).getBytesArray();
+        out.writeObject(new Overflow(bytesArray, width));
     }
 
     /**
      * Compress and overflow matrix into thumbnail size and return results.
-     * @param bytesArray The bytes array.
+     * @param filePath The path of the overflow file.
      * @param height The height of the thumbnail.
      * @param width The width of the thumbnail.
-     * @author Zuo Xiaole, Cui Yuxin
+     * @author Feng Yucheng, Zuo Xiaole, Cui Yuxin
      */
-    public static int[][][] collapse(byte[][][] bytesArray, int height, int width) {
+    public static int[][][] collapse(String filePath, int height, int width) throws Exception {
+        FileInputStream fileIn = new FileInputStream(filePath);
+        ObjectInputStream in = new ObjectInputStream(fileIn);
+        Overflow overflow = (Overflow) in.readObject();
+        byte[][][] bytesArray = overflow.getBytesArray();
         int originalHeight = bytesArray[0].length;
         int originalChannel = bytesArray.length;
-        int originalWidth = bytesArray[0][0].length * 8;
+        int originalWidth = overflow.getWidth();
         double averageRatio = ((double) (height * width)) / (originalHeight * originalWidth);
         int[][][] collapsed = null;
         if (originalChannel == 3) {
             collapsed = new int[3][][];
             for (int i = 0; i < 3; i++) {
-                collapsed[i] = collapseHeight(collapseWidth(bytesArray[i], width), height, averageRatio);
+                collapsed[i] = collapseHeight(collapseWidth(bytesArray[i], width, originalWidth), height, averageRatio);
             }
         } else if (originalChannel == 4) {
             collapsed = new int[4][][]; // 4 channels (R, G, B, A)
             for (int i = 0; i < 4; i++) {
-                collapsed[i] = collapseHeight(collapseWidth(bytesArray[i], width), height, averageRatio);
+                collapsed[i] = collapseHeight(collapseWidth(bytesArray[i], width, originalWidth), height, averageRatio);
             }
         }
         return collapsed;
@@ -187,13 +180,13 @@ public class Utils {
      * @param width The width of the thumbnail.
      * @author Zuo Xiaole, Cui Yuxin
      */
-    private static int[][] collapseWidth(byte[][] bytesArray, int width) {
-        int originalWidth = bytesArray[0].length;
+    private static int[][] collapseWidth(byte[][] bytesArray, int width, int originalWidth) {
+        int arrayWidth = bytesArray[0].length;
         int originalHeight = bytesArray.length;
-        int mappingSize = (int) Math.ceil(originalWidth * 8.0 / width);
+        int mappingSize = (int) Math.ceil(originalWidth * 1.0 / width);
         int[][] result = new int[originalHeight][width];
         for (int i = 0; i < originalHeight; i++) {
-            for (int j = 0; j < originalWidth; j++) {
+            for (int j = 0; j < arrayWidth; j++) {
                 byte currentByte = bytesArray[i][j];
                 for (int index = 0; index < 8; index++) {
                     if ((currentByte & (1 << index)) != 0) {
@@ -273,14 +266,17 @@ public class Utils {
     public static class Overflow implements Serializable {
 
         private byte[][][] bytesArray;
+        private int width;
 
         /**
          * Constructor.
          * @param bytesArray The bytes array.
+         * @param width The width of the original image.
          * @author Cui Yuxin
          */
-        public Overflow(byte[][][] bytesArray) {
+        public Overflow(byte[][][] bytesArray, int width) {
             this.bytesArray = bytesArray;
+            this.width = width;
         }
 
         /**
@@ -289,6 +285,14 @@ public class Utils {
          */
         public byte[][][] getBytesArray() {
             return bytesArray;
+        }
+
+        /**
+         * Get the width and return.
+         * @author Cui Yuxin
+         */
+        public int getWidth() {
+            return width;
         }
     }
 }
