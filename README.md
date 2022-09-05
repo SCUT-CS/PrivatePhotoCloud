@@ -8,7 +8,7 @@ Part A是项目代码的相关规范，Part B是项目架构。
 
 ## Updates
 
-#### 2022.9.5-2022.9.11
+#### 2022.9.1-2022.9.11
 
 #### Task1：
 
@@ -34,7 +34,19 @@ AliOSSTests.java
 
 *Tests.java
 
-### 2022.8.29-2022.9.4
+#### Task3：
+
+参考Utils时间测试，完成加密算法和解密算法的时间测试。
+
+**Files you'll edit or creat:**
+
+AlogorithmTimeTests.java
+
+**Files you might want to look at:**
+
+UtilsTimeTests.java
+
+### 2022.8.29-2022.9.1
 
 #### Task1：
 
