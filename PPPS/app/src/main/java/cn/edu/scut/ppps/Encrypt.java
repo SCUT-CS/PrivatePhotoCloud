@@ -55,11 +55,11 @@ public class Encrypt implements Callable {
         width = img.getWidth();
         height = img.getHeight();
         img1 = Bitmap.createBitmap(width, height,
-                Bitmap.Config.RGBA_F16,
+                Bitmap.Config.ARGB_8888,
                 img.hasAlpha(),
                 ColorSpace.get(ColorSpace.Named.SRGB));
         img2 = Bitmap.createBitmap(width, height,
-                Bitmap.Config.RGBA_F16,
+                Bitmap.Config.ARGB_8888,
                 img.hasAlpha(),
                 ColorSpace.get(ColorSpace.Named.SRGB));
         if (img.hasAlpha()) {
