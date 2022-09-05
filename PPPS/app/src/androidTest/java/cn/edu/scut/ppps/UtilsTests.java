@@ -59,7 +59,7 @@ public class UtilsTests {
                 weiXinPictureDir.exists());
         // 找到微信图片文件夹下的第一张图片
         File[] files = weiXinPictureDir.listFiles((file) -> {
-            return file.getName().endsWith(".HEIC");
+            return file.getName().endsWith(".webp");
         });
         Assert.assertTrue("微信图片文件夹下不存在文件图片",
                 files.length > 0);
@@ -80,27 +80,6 @@ public class UtilsTests {
         Assert.assertNotNull("目标函数返回结果为空！", imgName);
         Assert.assertEquals("目标函数返回结果不正确！", files[0].getName(), imgName);
         Assert.assertTrue("目标函数结果返回不正确！", img.getWidth() > 0);
-    }
-
-    /**
-     * Test Utils openImg method.
-     * Case: HEIC encrypted image.
-     * @author Cui Yuxin
-     */
-    @Test
-    public void utilsOpenImgTestCaseEncryptedHEIC() {
-        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        String cachePath = context.getCacheDir().getAbsolutePath();
-        String savePath1 = cachePath + File.separator + "Disk1" + File.separator + "jpg_small.jpg.ori.HEIC";
-        //String savePath1 = cachePath + File.separator + "Disk1" + File.separator + "test.HEIC";
-        File file1 = new File(savePath1);
-        Assert.assertTrue("文件不存在！", file1.exists());
-        try {
-            Bitmap img = Utils.openImg(savePath1);
-        } catch (IOException e) {
-            e.printStackTrace();
-            Assert.fail("打开HEIC加密图片失败！");
-        }
     }
 
     /**
@@ -151,11 +130,7 @@ public class UtilsTests {
             e.printStackTrace();
             Assert.fail("调用目标函数失败！");
         }
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            imgFilePath += ".HEIC";
-        } else {
-            imgFilePath += ".webp";
-        }
+        imgFilePath += ".webp";
         File imgFile = new File(imgFilePath);
         Assert.assertTrue("保存失败！", imgFile.exists());
         try {

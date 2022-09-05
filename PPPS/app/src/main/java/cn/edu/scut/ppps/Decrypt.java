@@ -136,7 +136,7 @@ public class Decrypt implements Callable {
                     int red = (((pixel1 >> 16) & 0xFF) + ((pixel2 >> 16) & 0xFF) - (overflow[0][row][col]) & 0xff);
                     int green =(((pixel1 >> 8) & 0xFF) + ((pixel2 >> 8) & 0xFF) - (overflow[1][row][col]) & 0xff);
                     int blue = ((pixel1 & 0xFF) + (pixel2 & 0xFF) - (overflow[2][row][col]) & 0xff);
-                    img.setPixel(row, col, blue | green << 8 | red << 16);
+                    img.setPixel(row, col, blue | green << 8 | red << 16 | 0xff000000);
                 }
             }
         }

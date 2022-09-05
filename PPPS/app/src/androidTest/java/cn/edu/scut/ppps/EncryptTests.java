@@ -277,13 +277,8 @@ public class EncryptTests {
         String savePath1 = cachePath + File.separator + "Disk1" + File.separator + "jpg_medium.jpg" + ".ori";
         String savePath2 = cachePath + File.separator + "Disk2" + File.separator + "jpg_medium.jpg" +  ".ori";
         String savePath = context.getDataDir().getAbsolutePath() + File.separator + "overflow" + File.separator + "jpg_medium.jpg";
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            savePath1 += ".HEIC";
-            savePath2 += ".HEIC";
-        } else {
-            savePath1 += ".webp";
-            savePath2 += ".webp";
-        }
+        savePath1 += ".webp";
+        savePath2 += ".webp";
         File file1 = new File(savePath1);
         File file2 = new File(savePath2);
         File file = new File(savePath);
@@ -358,13 +353,8 @@ public class EncryptTests {
         String savePath1 = cachePath + File.separator + "Disk1" + File.separator + "jpg_medium.jpg" + ".ori";
         String savePath2 = cachePath + File.separator + "Disk2" + File.separator + "jpg_medium.jpg" +  ".ori";
         String savePath = context.getDataDir().getAbsolutePath() + File.separator + "overflow" + File.separator + "jpg_medium.jpg";
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            savePath1 += ".HEIC";
-            savePath2 += ".HEIC";
-        } else {
-            savePath1 += ".webp";
-            savePath2 += ".webp";
-        }
+        savePath1 += ".webp";
+        savePath2 += ".webp";
         File file1 = new File(savePath1);
         File file2 = new File(savePath2);
         File file = new File(savePath);
