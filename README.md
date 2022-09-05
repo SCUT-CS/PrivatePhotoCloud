@@ -38,13 +38,21 @@ AliOSSTests.java
 
 参考Utils时间测试，完成加密算法和解密算法的时间测试。
 
-**Files you'll edit or creat:**
+**Files you'll edit:**
 
 AlogorithmTimeTests.java
 
 **Files you might want to look at:**
 
 UtilsTimeTests.java
+
+#### Task4：
+
+完成以下文件的Check Code Style
+
+**Files you'll edit:**
+
+*Tests.java（\*代表任意字符串）
 
 ### 2022.8.29-2022.9.1
 
