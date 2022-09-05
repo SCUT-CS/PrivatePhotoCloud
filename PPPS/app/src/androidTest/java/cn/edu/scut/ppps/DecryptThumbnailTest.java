@@ -2,7 +2,6 @@ package cn.edu.scut.ppps;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.os.Environment;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -17,10 +16,8 @@ import org.junit.runner.RunWith;
 import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -50,89 +47,59 @@ public class DecryptThumbnailTest {
      * @author Cui Yuxin
      */
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
         // 构造函数参数
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         String imgPath1 = context.getCacheDir().getAbsolutePath() + File.separator + "Disk1" + File.separator + fileName + ".ori.png";
         String imgPath2 = context.getCacheDir().getAbsolutePath() + File.separator + "Disk2" + File.separator + fileName + ".ori.png";
         // 通过反射创造Encrypt类
         Class decryptClass = null;
-        try {
-            decryptClass = Class.forName("cn.edu.scut.ppps.Decrypt");
-            Constructor constructor = null;
-            constructor = decryptClass.getConstructor(String.class, String.class, Context.class, boolean.class);
-            decrypt = (Decrypt) constructor.newInstance(imgPath1, imgPath2, context, true);
-        } catch (Exception e) {
-            e.printStackTrace();
-            Assert.fail();
-        }
+        decryptClass = Class.forName("cn.edu.scut.ppps.Decrypt");
+        Constructor constructor = null;
+        constructor = decryptClass.getConstructor(String.class, String.class, Context.class, boolean.class);
+        decrypt = (Decrypt) constructor.newInstance(imgPath1, imgPath2, context, true);
         // 获取类内部变量和方法
-        try {
-            fields = decryptClass.getDeclaredFields();
-            for (Field field : fields) {
-                field.setAccessible(true);
-            }
-            methods = decryptClass.getDeclaredMethods();
-            for (Method method : methods) {
-                method.setAccessible(true);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            Assert.fail();
+        fields = decryptClass.getDeclaredFields();
+        for (Field field : fields) {
+            field.setAccessible(true);
+        }
+        methods = decryptClass.getDeclaredMethods();
+        for (Method method : methods) {
+            method.setAccessible(true);
         }
         // 测试构造函数
-        try {
-            for (Field field : fields) {
-                if (field.getName().equals("imgFilePath1")) {
-                    Assert.assertEquals(imgPath1, field.get(decrypt));
-                } else if (field.getName().equals("imgFilePath2")) {
-                    Assert.assertEquals(imgPath2, field.get(decrypt));
-                } else if (field.getName().equals("appContext")) {
-                    Assert.assertEquals(context, field.get(decrypt));
-                } else if (field.getName().equals("isThumbnail")) {
-                    Assert.assertEquals(true, field.get(decrypt));
-                }
+        for (Field field : fields) {
+            if (field.getName().equals("imgFilePath1")) {
+                Assert.assertEquals(imgPath1, field.get(decrypt));
+            } else if (field.getName().equals("imgFilePath2")) {
+                Assert.assertEquals(imgPath2, field.get(decrypt));
+            } else if (field.getName().equals("appContext")) {
+                Assert.assertEquals(context, field.get(decrypt));
+            } else if (field.getName().equals("isThumbnail")) {
+                Assert.assertEquals(true, field.get(decrypt));
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            Assert.fail();
         }
         // 准备测试前期工作
         for (Method method : methods) {
             if (method.getName().equals("openFile")) {
-                try {
-                    method.invoke(decrypt);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    Assert.fail();
-                }
-                break;
+                method.invoke(decrypt);
             }
         }
         for (Method method : methods) {
             if (method.getName().equals("initialize")) {
-                try {
-                    method.invoke(decrypt);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    Assert.fail();
-                }
+                method.invoke(decrypt);
                 break;
             }
         }
-        try {
-            for (Field field : fields) {
-                if (field.getName().equals("img1")
-                        || field.getName().equals("img2")
-                        || field.getName().equals("img")
-                        || field.getName().equals("width")
-                        || field.getName().equals("height")
-                        || field.getName().equals("overflow")) {
-                    Assert.assertNotNull(field.get(decrypt));
-                }
+        for (Field field : fields) {
+            if (field.getName().equals("img1")
+                    || field.getName().equals("img2")
+                    || field.getName().equals("img")
+                    || field.getName().equals("width")
+                    || field.getName().equals("height")
+                    || field.getName().equals("overflow")) {
+                Assert.assertNotNull(field.get(decrypt));
             }
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
         }
     }
 
@@ -141,7 +108,7 @@ public class DecryptThumbnailTest {
      * @author Cui Yuxin
      */
     @Test
-    public void decryptThumbnailTest() throws Exception{
+    public void decryptThumbnailTest() throws Exception {
         Bitmap img = null;
         for (Method method : methods) {
             if (method.getName().equals("decryptThumbnail")) {

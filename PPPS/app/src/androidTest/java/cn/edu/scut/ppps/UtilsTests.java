@@ -2,7 +2,6 @@ package cn.edu.scut.ppps;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.os.Build;
 import android.os.Environment;
 
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -15,7 +14,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.File;
-import java.io.IOException;
 
 /**
  * Utils Unit Tests
@@ -51,7 +49,7 @@ public class UtilsTests {
      * @author Cui Yuxin
      */
     @Test
-    public void utilsOpenImgTest() {
+    public void utilsOpenImgTest() throws Exception {
         // 获取设备上微信图片文件夹
         String imgFileDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + File.separator + "WeiXin";
         File weiXinPictureDir = new File(imgFileDir);
@@ -68,13 +66,8 @@ public class UtilsTests {
         String imgName = null;
         Bitmap img = null;
         // 调用测试方法
-        try {
-            imgName = Utils.getFileName(imgFilePath);
-            img = Utils.openImg(imgFilePath);
-        } catch (IOException e) {
-            Assert.fail("调用目标函数失败！");
-            e.printStackTrace();
-        }
+        imgName = Utils.getFileName(imgFilePath);
+        img = Utils.openImg(imgFilePath);
         // 断言测试方法的结果
         Assert.assertNotNull("目标函数返回结果为空！", img);
         Assert.assertNotNull("目标函数返回结果为空！", imgName);
@@ -87,7 +80,7 @@ public class UtilsTests {
      * @author Feng Yucheng
      */
     @Test
-    public void utilsGetFileNameTest() {
+    public void utilsGetFileNameTest() throws Exception {
         // 获取设备上微信图片文件夹
         String imgFileDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + File.separator + "WeiXin";
         File weiXinPictureDir = new File(imgFileDir);
@@ -99,12 +92,7 @@ public class UtilsTests {
         String imgFilePath = files[0].getAbsolutePath();
         String imgName = null;
         // 调用测试方法
-        try {
-            imgName = Utils.getFileName(imgFilePath);
-        } catch (IOException e) {
-            e.printStackTrace();
-            Assert.fail("调用目标函数出错！");
-        }
+        imgName = Utils.getFileName(imgFilePath);
         // 断言测试方法的结果
         Assert.assertNotNull("调用目标函数失败！", imgName);
         Assert.assertEquals("目标函数结果返回不正确！", files[0].getName(), imgName);
@@ -115,7 +103,7 @@ public class UtilsTests {
      * @author Feng Yucheng, Cui Yuxin
      */
     @Test
-    public void utilsSaveImgTest() {
+    public void utilsSaveImgTest() throws Exception {
         String imgFileDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + File.separator + "WeiXin";
         File weiXinPictureDir = new File(imgFileDir);
         Assert.assertTrue("该路径不存在！请检查路径是否正确。", weiXinPictureDir.exists());
@@ -124,21 +112,12 @@ public class UtilsTests {
         });
         Assert.assertTrue("该照片文件不存在！", files.length > 0);
         String imgFilePath = imgFileDir + File.separator + "test";
-        try {
-            Utils.saveImg(Utils.openImg(files[0].getAbsolutePath()), imgFilePath);
-        } catch (Exception e) {
-            e.printStackTrace();
-            Assert.fail("调用目标函数失败！");
-        }
+        Utils.saveImg(Utils.openImg(files[0].getAbsolutePath()), imgFilePath);
         imgFilePath += ".webp";
         File imgFile = new File(imgFilePath);
         Assert.assertTrue("保存失败！", imgFile.exists());
-        try {
-            Assert.assertNotNull("目标文件无法正确打开！保存失败！", Utils.openImg(imgFilePath));
-        } catch (IOException e) {
-            e.printStackTrace();
-            Assert.fail("目标文件无法正确打开！保存失败！");
-        }
+        Assert.assertNotNull("目标文件无法正确打开！保存失败！", Utils.openImg(imgFilePath));
+
     }
 
     /**
@@ -302,19 +281,14 @@ public class UtilsTests {
      * @author Cui Yuxin
      */
     @Test
-    public void utilsSaveBytesArrayTest() {
+    public void utilsSaveBytesArrayTest() throws Exception {
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         String cachePath = context.getCacheDir().getAbsolutePath();
         String savePath = cachePath + File.separator + "overflow" + File.separator + "test.overflow";
         byte[][][] overflow = new byte[][][]{{{1, 2}, {3, 4}},
                 {{5, 6}, {7, 8}},
                 {{5, 6}, {7, 8}}};
-        try {
-            Utils.saveBytesArray(overflow, savePath);
-        } catch (IOException e) {
-            e.printStackTrace();
-            Assert.fail("调用目标函数失败");
-        }
+        Utils.saveBytesArray(overflow, savePath);
         File overflowFile = new File(savePath);
         Assert.assertTrue(overflowFile.exists());
     }
@@ -324,7 +298,7 @@ public class UtilsTests {
      * @author Feng Yucheng
      */
     @Test
-    public void utilsLoadBytesArrayTest() {
+    public void utilsLoadBytesArrayTest() throws Exception {
         byte[][][] testArray = {{{1, 1}, {2, 2}},
                 {{1, 1}, {2, 2}},
                 {{1, 1}, {2, 2}}
@@ -334,46 +308,12 @@ public class UtilsTests {
         String cachePath = context.getCacheDir().getAbsolutePath();
         String savePath = cachePath + File.separator + "overflow" + File.separator + "test.overflow";
         //保存多维数组
-        try {
-            Utils.saveBytesArray(testArray, savePath);
-        } catch (IOException e) {
-            e.printStackTrace();
-            Assert.fail("调用目标函数失败");
-        }
+        Utils.saveBytesArray(testArray, savePath);
         File overflowFile = new File(savePath);
         Assert.assertTrue(overflowFile.exists());
         //获取多维数组
-        try {
-            array = Utils.loadBytesArray(savePath);
-        } catch (Exception e) {
-            e.printStackTrace();
-            Assert.fail("调用目标函数失败");
-        }
+        array = Utils.loadBytesArray(savePath);
         Assert.assertArrayEquals(array, testArray);
     }
-    /*
-    public static void getFileSize(File file){
-        //通过输出流获取长度
-        FileInputStream fis = null;
-        try {
-            if(file.exists() && file.isFile()){
-                String fileName = file.getName();
-                fis = new FileInputStream(file);
-                System.out.println("文件"+fileName+"的大小是："+fis.available()+"\n");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }finally{
-            if(null!=fis){
-                try {
-                    fis.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-    */
-
 }
 

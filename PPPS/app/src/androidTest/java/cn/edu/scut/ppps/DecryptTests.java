@@ -49,7 +49,7 @@ public class DecryptTests {
      * @author Cui Yuxin
      */
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
         // 构造函数参数
         String imgPath1 = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
                 + File.separator + "WeiXin"
@@ -60,45 +60,30 @@ public class DecryptTests {
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         // 通过反射创造Encrypt类
         Class decryptClass = null;
-        try {
-            decryptClass = Class.forName("cn.edu.scut.ppps.Decrypt");
-            Constructor constructor = null;
-            constructor = decryptClass.getConstructor(String.class, String.class, Context.class, boolean.class);
-            decrypt = (Decrypt) constructor.newInstance(imgPath1, imgPath2, appContext, false);
-        } catch (Exception e) {
-            e.printStackTrace();
-            Assert.fail();
-        }
+        decryptClass = Class.forName("cn.edu.scut.ppps.Decrypt");
+        Constructor constructor = null;
+        constructor = decryptClass.getConstructor(String.class, String.class, Context.class, boolean.class);
+        decrypt = (Decrypt) constructor.newInstance(imgPath1, imgPath2, appContext, false);
         // 获取类内部变量和方法
-        try {
-            fields = decryptClass.getDeclaredFields();
-            for (Field field : fields) {
-                field.setAccessible(true);
-            }
-            methods = decryptClass.getDeclaredMethods();
-            for (Method method : methods) {
-                method.setAccessible(true);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            Assert.fail();
+        fields = decryptClass.getDeclaredFields();
+        for (Field field : fields) {
+            field.setAccessible(true);
+        }
+        methods = decryptClass.getDeclaredMethods();
+        for (Method method : methods) {
+            method.setAccessible(true);
         }
         // 测试构造函数
-        try {
-            for (Field field : fields) {
-                if (field.getName().equals("imgFilePath1")) {
-                    Assert.assertEquals(imgPath1, field.get(decrypt));
-                } else if (field.getName().equals("imgFilePath2")) {
-                    Assert.assertEquals(imgPath2, field.get(decrypt));
-                } else if (field.getName().equals("appContext")) {
-                    Assert.assertEquals(appContext, field.get(decrypt));
-                } else if (field.getName().equals("isThumbnail")) {
-                    Assert.assertEquals(false, field.get(decrypt));
-                }
+        for (Field field : fields) {
+            if (field.getName().equals("imgFilePath1")) {
+                Assert.assertEquals(imgPath1, field.get(decrypt));
+            } else if (field.getName().equals("imgFilePath2")) {
+                Assert.assertEquals(imgPath2, field.get(decrypt));
+            } else if (field.getName().equals("appContext")) {
+                Assert.assertEquals(appContext, field.get(decrypt));
+            } else if (field.getName().equals("isThumbnail")) {
+                Assert.assertEquals(false, field.get(decrypt));
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            Assert.fail();
         }
     }
 
@@ -127,27 +112,22 @@ public class DecryptTests {
      * @author Cui Yuxin
      */
     @Test
-    public void openFileTest() {
+    public void openFileTest() throws Exception {
         for (Method method : methods) {
             if (method.getName().equals("openFile")) {
-                try {
-                    method.invoke(decrypt);
-                    for (Field field : fields) {
-                        if (field.getName().equals("img1")) {
-                            Bitmap img = (Bitmap) field.get(decrypt);
-                            Assert.assertNotNull(img);
-                            Assert.assertEquals("图片获取失败！", 450, img.getWidth());
-                            Assert.assertEquals("图片获取失败！", 450, img.getHeight());
-                        } else if (field.getName().equals("img2")) {
-                            Bitmap img = (Bitmap) field.get(decrypt);
-                            Assert.assertNotNull(img);
-                            Assert.assertEquals("图片获取失败！", 450, img.getWidth());
-                            Assert.assertEquals("图片获取失败！", 450, img.getHeight());
-                        }
+                method.invoke(decrypt);
+                for (Field field : fields) {
+                    if (field.getName().equals("img1")) {
+                        Bitmap img = (Bitmap) field.get(decrypt);
+                        Assert.assertNotNull(img);
+                        Assert.assertEquals("图片获取失败！", 450, img.getWidth());
+                        Assert.assertEquals("图片获取失败！", 450, img.getHeight());
+                    } else if (field.getName().equals("img2")) {
+                        Bitmap img = (Bitmap) field.get(decrypt);
+                        Assert.assertNotNull(img);
+                        Assert.assertEquals("图片获取失败！", 450, img.getWidth());
+                        Assert.assertEquals("图片获取失败！", 450, img.getHeight());
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    Assert.fail();
                 }
                 break;
             }
@@ -159,37 +139,26 @@ public class DecryptTests {
      * @author Cui Yuxin
      */
     @Test
-    public void initializeTest() {
+    public void initializeTest() throws Exception {
         for (Method method : methods) {
             if (method.getName().equals("openFile")) {
-                try {
-                    method.invoke(decrypt);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    Assert.fail();
-                }
-                break;
+                method.invoke(decrypt);
             }
         }
         for (Method method : methods) {
             if (method.getName().equals("initialize")) {
-                try {
-                    method.invoke(decrypt);
-                    for (Field field : fields) {
-                        if (field.getName().equals("width")) {
-                            Assert.assertEquals("初始化失败！", 450, (int) field.get(decrypt));
-                        } else if (field.getName().equals("height")) {
-                            Assert.assertEquals("初始化失败！", 450, (int) field.get(decrypt));
-                        } else if (field.getName().equals("img")) {
-                            Bitmap img = (Bitmap) field.get(decrypt);
-                            Assert.assertNotNull(img);
-                            Assert.assertEquals("初始化失败！", 450, img.getWidth());
-                            Assert.assertEquals("初始化失败！", 450, img.getHeight());
-                        }
+                method.invoke(decrypt);
+                for (Field field : fields) {
+                    if (field.getName().equals("width")) {
+                        Assert.assertEquals("初始化失败！", 450, (int) field.get(decrypt));
+                    } else if (field.getName().equals("height")) {
+                        Assert.assertEquals("初始化失败！", 450, (int) field.get(decrypt));
+                    } else if (field.getName().equals("img")) {
+                        Bitmap img = (Bitmap) field.get(decrypt);
+                        Assert.assertNotNull(img);
+                        Assert.assertEquals("初始化失败！", 450, img.getWidth());
+                        Assert.assertEquals("初始化失败！", 450, img.getHeight());
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    Assert.fail();
                 }
                 break;
             }
@@ -201,63 +170,48 @@ public class DecryptTests {
      * @author Cui Yuxin
      */
     @Test
-    public void decryptTest() {
+    public void decryptTest() throws Exception {
         for (Method method : methods) {
             if (method.getName().equals("openFile")) {
-                try {
-                    method.invoke(decrypt);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    Assert.fail();
-                }
+                method.invoke(decrypt);
                 break;
             }
         }
         for (Method method : methods) {
             if (method.getName().equals("initialize")) {
-                try {
-                    method.invoke(decrypt);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    Assert.fail();
-                }
+                method.invoke(decrypt);
                 break;
             }
         }
         for (Method method : methods) {
             if (method.getName().equals("decrypt")) {
-                try {
-                    method.invoke(decrypt);
-                    for (Field field : fields) {
-                        if (field.getName().equals("img")) {
-                            String imgPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
-                                    + File.separator + "WeiXin"
-                                    + File.separator + "ZHAO.jpg";
-                            Bitmap originalImg = Utils.openImg(imgPath);
-                            Bitmap img = (Bitmap) field.get(decrypt);
-                            Assert.assertNotNull(img);
-                            // 解密算法正确性检查
-                            for (int i = 0; i < 1000; i++) {
-                                int row = (int) (Math.random() * img.getHeight());
-                                int col = (int) (Math.random() * img.getWidth());
-                                int originalPixel = originalImg.getPixel(col, row);
-                                int pixel = img.getPixel(col, row);
-                                Assert.assertEquals("加密算法错误！(R)row：" + row + "col:" + col,
-                                        Color.red(originalPixel), Color.red(pixel));
-                                Assert.assertEquals("加密算法错误！(G)row：" + row + "col:" + col,
-                                        Color.green(originalPixel), Color.green(pixel));
-                                Assert.assertEquals("加密算法错误！(B)row：" + row + "col:" + col,
-                                        Color.blue(originalPixel), Color.blue(pixel));
-                                if (img.hasAlpha()) {
-                                    Assert.assertEquals("加密算法错误！(A)row：" + row + "col:" + col,
-                                            Color.alpha(originalPixel),  Color.alpha(pixel));
-                                }
+                method.invoke(decrypt);
+                for (Field field : fields) {
+                    if (field.getName().equals("img")) {
+                        String imgPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
+                                + File.separator + "WeiXin"
+                                + File.separator + "ZHAO.jpg";
+                        Bitmap originalImg = Utils.openImg(imgPath);
+                        Bitmap img = (Bitmap) field.get(decrypt);
+                        Assert.assertNotNull(img);
+                        // 解密算法正确性检查
+                        for (int i = 0; i < 1000; i++) {
+                            int row = (int) (Math.random() * img.getHeight());
+                            int col = (int) (Math.random() * img.getWidth());
+                            int originalPixel = originalImg.getPixel(col, row);
+                            int pixel = img.getPixel(col, row);
+                            Assert.assertEquals("加密算法错误！(R)row：" + row + "col:" + col,
+                                    Color.red(originalPixel), Color.red(pixel));
+                            Assert.assertEquals("加密算法错误！(G)row：" + row + "col:" + col,
+                                    Color.green(originalPixel), Color.green(pixel));
+                            Assert.assertEquals("加密算法错误！(B)row：" + row + "col:" + col,
+                                    Color.blue(originalPixel), Color.blue(pixel));
+                            if (img.hasAlpha()) {
+                                Assert.assertEquals("加密算法错误！(A)row：" + row + "col:" + col,
+                                        Color.alpha(originalPixel), Color.alpha(pixel));
                             }
                         }
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    Assert.fail();
                 }
                 break;
             }
@@ -269,7 +223,7 @@ public class DecryptTests {
      * @author Cui Yuxin
      */
     @Test
-    public void callTest() {
+    public void callTest() throws Exception {
         // 构造函数参数
         String imgPath1 = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
                 + File.separator + "WeiXin"
@@ -283,16 +237,11 @@ public class DecryptTests {
         Future<Bitmap> results = threadPoolExecutor.submit(decrypt);
         Bitmap img = null;
         Bitmap originalImg = null;
-        try {
-            img = results.get();
-            String imgPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
-                    + File.separator + "WeiXin"
-                    + File.separator + "ZHAO.jpg";
-            originalImg = Utils.openImg(imgPath);
-        } catch (Exception e) {
-            e.printStackTrace();
-            Assert.fail();
-        }
+        img = results.get();
+        String imgPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
+                + File.separator + "WeiXin"
+                + File.separator + "ZHAO.jpg";
+        originalImg = Utils.openImg(imgPath);
         Assert.assertNotNull(img);
         Assert.assertNotNull(originalImg);
         // 解密算法正确性检查
@@ -309,7 +258,7 @@ public class DecryptTests {
                     Color.blue(originalPixel), Color.blue(pixel));
             if (img.hasAlpha()) {
                 Assert.assertEquals("加密算法错误！(A)row：" + row + "col:" + col,
-                        Color.alpha(originalPixel),  Color.alpha(pixel));
+                        Color.alpha(originalPixel), Color.alpha(pixel));
             }
         }
     }

@@ -48,49 +48,35 @@ public class TokensTest {
      * @author Huang zixi
      */
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
         // 构造函数参数
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         // 通过反射创造Tokens类
         Class tokensClass = null;
-        try {
-            tokensClass = Class.forName("cn.edu.scut.ppps.Tokens");
-            Constructor constructor = null;
-            constructor = tokensClass.getConstructor(Context.class);
-            tokensTest = (Tokens) constructor.newInstance(appContext);
-        } catch (Exception e) {
-            e.printStackTrace();
-            Assert.fail();
-        }
+        tokensClass = Class.forName("cn.edu.scut.ppps.Tokens");
+        Constructor constructor = null;
+        constructor = tokensClass.getConstructor(Context.class);
+        tokensTest = (Tokens) constructor.newInstance(appContext);
         // 获取类内部变量和方法
-        try {
-            fields = tokensClass.getDeclaredFields();
-            for (Field field : fields) {
-                field.setAccessible(true);
-            }
-            methods = tokensClass.getDeclaredMethods();
-            for (Method method : methods) {
-                method.setAccessible(true);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            Assert.fail();
+        fields = tokensClass.getDeclaredFields();
+        for (Field field : fields) {
+            field.setAccessible(true);
+        }
+        methods = tokensClass.getDeclaredMethods();
+        for (Method method : methods) {
+            method.setAccessible(true);
         }
         // 测试构造函数
-        try {
-            for (Field field : fields) {
-                if (field.getName().equals("context")) {
-                    Assert.assertNotNull(field.get(tokensTest));
-                }else if(field.getName().equals("tokens")){
-                    Assert.assertNotNull(field.get(tokensTest));
-                }else if(field.getName().equals("tokensFile")){
-                    Assert.assertNotNull(field.get(tokensTest));
-                }
+        for (Field field : fields) {
+            if (field.getName().equals("context")) {
+                Assert.assertNotNull(field.get(tokensTest));
+            } else if (field.getName().equals("tokens")) {
+                Assert.assertNotNull(field.get(tokensTest));
+            } else if (field.getName().equals("tokensFile")) {
+                Assert.assertNotNull(field.get(tokensTest));
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            Assert.fail();
         }
+
     }
 
     /**
@@ -112,31 +98,21 @@ public class TokensTest {
      * @author Huang Zixi
      */
     @Test
-    public void saveTokensTest() {
+    public void saveTokensTest() throws Exception {
         // 参数准备
         Map<String, String> token = new HashMap<>();
         token.put("access_token", "123456");
         token.put("refresh_token", "654321");
-        Map<String, Map<String, String>> tokensMap=new HashMap<>();
+        Map<String, Map<String, String>> tokensMap = new HashMap<>();
         // 测试saveTokens
-        for(Field field : fields){
-            if(field.getName().equals("tokens")){
-                try {
-                    Map<String, Map<String, String>> tokensTemp = (Map<String, Map<String, String>>) field.get(tokensTest);
-                    tokensMap.put("test",token);
-                    field.set(tokensTest,tokensMap);
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                    Assert.fail();
-                }
-                for(Method method : methods){
-                    if(method.getName().equals("saveTokens")){
-                        try {
-                            method.invoke(tokensTest);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            Assert.fail();
-                        }
+        for (Field field : fields) {
+            if (field.getName().equals("tokens")) {
+                Map<String, Map<String, String>> tokensTemp = (Map<String, Map<String, String>>) field.get(tokensTest);
+                tokensMap.put("test", token);
+                field.set(tokensTest, tokensMap);
+                for (Method method : methods) {
+                    if (method.getName().equals("saveTokens")) {
+                        method.invoke(tokensTest);
                         Assert.assertEquals("测试saveTokens方法失败！", token, tokensTest.getToken("test"));
                         Assert.assertEquals("测试saveTokens方法失败！", "123456",
                                 tokensTest.getToken("test").get("access_token"));
@@ -153,17 +129,14 @@ public class TokensTest {
      * @author Feng Yucheng
      */
     @Test
-    public void getTokenTest() {
+    public void getTokenTest() throws Exception {
         // 准备测试环境
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         Tokens tokens = null;
-        try {
-            tokens = new Tokens(appContext);
-        } catch (Exception e){
-            e.printStackTrace();
-            Assert.fail();
-        }
-        Assert.assertEquals("123456",tokens.getToken("test").get("access_token"));
+
+        tokens = new Tokens(appContext);
+
+        Assert.assertEquals("123456", tokens.getToken("test").get("access_token"));
     }
 
     /**
@@ -175,12 +148,7 @@ public class TokensTest {
         //准备测试环境
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         Tokens tokens = null;
-        try {
-            tokens = new Tokens(appContext);
-        } catch (Exception e){
-            e.printStackTrace();
-            Assert.fail();
-        }
+        tokens = new Tokens(appContext);
         //名字为“temp”
         Set<String> expected = new HashSet<>();
         expected.add("test");
@@ -192,26 +160,16 @@ public class TokensTest {
      * @author Cui Yuxin
      */
     @Test
-    public void updateTokenTest() {
+    public void updateTokenTest() throws Exception {
         // 准备测试环境
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         Tokens tokens = null;
-        try {
-            tokens = new Tokens(appContext);
-        } catch (Exception e){
-            e.printStackTrace();
-            Assert.fail();
-        }
+        tokens = new Tokens(appContext);
         Map<String, String> token = new HashMap<>();
         token.put("access_token", "123456");
         token.put("refresh_token", "654321");
         // 调用updateToken方法
-        try {
-            tokens.updateToken("test", token);
-        } catch (IOException e) {
-            e.printStackTrace();
-            Assert.fail();
-        }
+        tokens.updateToken("test", token);
         // 测试结果
         Assert.assertEquals("测试updateToken方法失败！", token, tokens.getToken("test"));
         Assert.assertEquals("测试updateToken方法失败！", "123456",
