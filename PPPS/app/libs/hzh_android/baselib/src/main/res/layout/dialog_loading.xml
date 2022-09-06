@@ -14,14 +14,6 @@
             android:orientation="vertical"
             android:layout_centerInParent="true">
 
-            <com.wang.avi.AVLoadingIndicatorView
-                android:id="@+id/avLoading"
-                app:indicatorColor="#999"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:indicatorName="BallClipRotatePulseIndicator"
-                android:layout_gravity="center_horizontal" />
-
             <TextView
                 android:id="@+id/tv_content"
                 android:layout_width="wrap_content"

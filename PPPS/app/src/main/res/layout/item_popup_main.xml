@@ -13,7 +13,7 @@
         android:paddingLeft="12dp"
         android:paddingRight="12dp"
         android:scaleType="fitXY"
-        android:src="@mipmap/no_image"
+        android:src="@drawable/no_image"
         android:layout_centerVertical="true"/>
 
     <LinearLayout
@@ -46,5 +46,5 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginRight="20sp"
-        android:src="@mipmap/ic_choose"/>
+        android:src="@drawable/ic_choose"/>
 </RelativeLayout>

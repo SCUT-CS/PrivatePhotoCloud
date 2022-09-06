@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
                /* Snackbar.make(view, "拍照", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();*/
                 Intent intent = new Intent();
-                intent.setClass(MainActivity.this, CameraActivity.class);
+                intent.setClass(MainActivity.this, AlbumActivity.class);
                 startActivity(intent);
             }
         });

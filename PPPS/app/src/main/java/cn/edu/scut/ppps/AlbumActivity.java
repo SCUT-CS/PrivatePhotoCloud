@@ -26,8 +26,9 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * 相册
+ * AlbumActivity
  * @author WaterWood
+ * @source https://blog.csdn.net/weixin_38322371/article/details/106312474
  */
 public class AlbumActivity extends WaterPermissionActivity<AlbumModel> implements AlbumCallback,View.OnClickListener {
 
@@ -74,7 +75,6 @@ public class AlbumActivity extends WaterPermissionActivity<AlbumModel> implement
      * 已经选择图片的集合
      */
     private ArrayList<String> listChoosePics = new ArrayList<>();
-
     /**
      * 该参数负责子线程查询图片后通知主线程更新UI
      */
@@ -118,7 +118,6 @@ public class AlbumActivity extends WaterPermissionActivity<AlbumModel> implement
             //隐藏完成
             tv_complete.setVisibility(View.GONE);
             //隐藏多选对勾
-
         }
     }
 
