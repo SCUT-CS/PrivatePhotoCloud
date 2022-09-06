@@ -113,7 +113,7 @@ public class AlbumActivity extends WaterPermissionActivity<AlbumModel> implement
         tv_complete = findViewById(R.id.tv_complete);
         tv_complete.setOnClickListener(this);
         Intent intent = getIntent();
-        isMutil = intent.getBooleanExtra(IS_MUTIL,false);
+        isMutil = intent.getBooleanExtra(IS_MUTIL, true);
         if (!isMutil){
             //隐藏完成
             tv_complete.setVisibility(View.GONE);

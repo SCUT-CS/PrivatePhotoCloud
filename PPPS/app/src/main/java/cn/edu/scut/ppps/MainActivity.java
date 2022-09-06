@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();*/
                 Intent intent = new Intent();
                 intent.setClass(MainActivity.this, AlbumActivity.class);
+                //intent.putExtra("")
                 startActivity(intent);
             }
         });

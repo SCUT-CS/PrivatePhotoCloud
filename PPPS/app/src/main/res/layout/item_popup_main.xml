@@ -39,12 +39,4 @@
             android:textSize="10sp"
             android:textColor="#444"/>
     </LinearLayout>
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="20sp"
-        android:src="@drawable/ic_choose"/>
 </RelativeLayout>

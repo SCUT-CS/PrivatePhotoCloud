@@ -15,4 +15,5 @@
     <string name="stop_capture">停止录制</string>
 
     <string name="home_button">Take a photo</string>
+    <string name="next">下一步</string>
 </resources>

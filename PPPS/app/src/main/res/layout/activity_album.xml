@@ -8,21 +8,14 @@
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:background="@color/white">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="相册"
-            android:textColor="#333"
-            android:textSize="14sp"
-            android:layout_centerInParent="true"/>
 
         <TextView
             android:id="@+id/tv_complete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="完成"
+            android:text="@string/next"
             android:textColor="#999"
-            android:textSize="12sp"
+            android:textSize="14sp"
             android:layout_alignParentRight="true"
             android:layout_marginRight="20dp"
             android:layout_centerVertical="true"/>
