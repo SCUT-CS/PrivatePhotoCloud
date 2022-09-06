@@ -5,11 +5,11 @@
     <string name="nav_header_title">安全且高效的图像云存储系统</string>
     <string name="nav_header_subtitle">SCUT 华南小小萌新</string>
     <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">设置</string>
+    <string name="action_settings">选择其他图片</string>
 
-    <string name="menu_home">Home</string>
-    <string name="menu_gallery">相册</string>
-    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_home">本地相册</string>
+    <string name="menu_gallery">云相册</string>
+    <string name="menu_slideshow">设置</string>
     <string name="take_photo">拍照</string>
     <string name="start_capture">开始录制</string>
     <string name="stop_capture">停止录制</string>

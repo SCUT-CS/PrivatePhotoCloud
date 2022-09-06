@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/12695/Videos/Privacy-preserving-photos-sharing/PPPS/app/src/main/res/drawable/ic_launcher_background.xml" value="0.423" />
+        <entry key="..\:/Users/12695/Videos/Privacy-preserving-photos-sharing/PPPS/app/src/main/res/drawable/ic_menu_slideshow.xml" value="0.423" />
         <entry key="..\:/Users/12695/Videos/Privacy-preserving-photos-sharing/PPPS/app/src/main/res/drawable/roundbutton.xml" value="0.423" />
         <entry key="..\:/Users/12695/Videos/Privacy-preserving-photos-sharing/PPPS/app/src/main/res/drawable/side_nav_bar.xml" value="0.423" />
         <entry key="..\:/Users/12695/Videos/Privacy-preserving-photos-sharing/PPPS/app/src/main/res/layout/activity_camera.xml" value="0.25769230769230766" />
@@ -15,6 +16,8 @@
         <entry key="..\:/Users/12695/Videos/Privacy-preserving-photos-sharing/PPPS/app/src/main/res/layout/fragment_slideshow.xml" value="0.3242753623188406" />
         <entry key="..\:/Users/12695/Videos/Privacy-preserving-photos-sharing/PPPS/app/src/main/res/layout/nav_header_main.xml" value="0.3242753623188406" />
         <entry key="..\:/Users/12695/Videos/Privacy-preserving-photos-sharing/PPPS/app/src/main/res/layout/roundbutton.xml" value="0.3482905982905983" />
+        <entry key="..\:/Users/12695/Videos/Privacy-preserving-photos-sharing/PPPS/app/src/main/res/menu/activity_main_drawer.xml" value="0.3482905982905983" />
+        <entry key="..\:/Users/12695/Videos/Privacy-preserving-photos-sharing/PPPS/app/src/main/res/menu/main.xml" value="0.3482905982905983" />
         <entry key="..\:/Users/12695/Videos/Privacy-preserving-photos-sharing/PPPS/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.2505" />
         <entry key="..\:/Users/12695/Videos/Privacy-preserving-photos-sharing/PPPS/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.423" />
       </map>
