@@ -23,12 +23,12 @@ public class ImageAdapter extends BaseAdapter {
     private String mDirPath;
     private List<String> mImgPaths;
     private LayoutInflater mInflater;
-    private AlbumActivity albumActivity;
+    private MainActivity albumActivity;
     private boolean isMutil;//是否是多张
 
 
     public ImageAdapter(Activity activity, List<String> mDatas, String dirPath){
-        albumActivity = (AlbumActivity) activity;
+        albumActivity = (MainActivity) activity;
         this.mDirPath = dirPath;
         this.mImgPaths = mDatas;
         mInflater = LayoutInflater.from(activity);
