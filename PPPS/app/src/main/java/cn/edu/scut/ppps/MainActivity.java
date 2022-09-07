@@ -54,7 +54,7 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
     // 控件四个
-    private GridView mGridView;
+    public GridView mGridView;
     private RelativeLayout mBottomly;
     private TextView mDirName;
     private TextView mDirCount;
@@ -83,7 +83,7 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
         @Override
         public void handleMessage(Message msg) {
             if (msg.what == 0x110){
-                mProgressDialog.dismiss();//消失对话框
+               // mProgressDialog.dismiss();//消失对话框
                 data2View();
                 initDirPopupWindow();
             }
@@ -107,8 +107,7 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
                         .setAction("Action", null).show();*/
                 // TODO 获取拍照的url并进行下一步操作
                 Intent intent = new Intent();
-                //intent.setClass(MainActivity.this, CameraActivity.class);
-                intent.setClass(MainActivity.this, AlbumActivity.class);
+                intent.setClass(MainActivity.this, CameraActivity.class);
                 //intent.putExtra("")
                 startActivity(intent);
             }
@@ -133,6 +132,14 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
                         Manifest.permission.RECORD_AUDIO
                 }, 123);
         initWidget();
+        mBottomly.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDirPopupWindow.setAnimationStyle(R.style.dir_popupwindow_anim);
+                mDirPopupWindow.showAsDropDown(mBottomly,0,0);
+                lightOff();
+            }
+        });
     }
 
     @Override
@@ -219,7 +226,7 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
 
     @Override
     public void doSDWrite() {
-        mProgressDialog = ProgressDialog.show(this,null,"正在加载...");
+        //mProgressDialog = ProgressDialog.show(this,null,"正在加载...");
         new Thread(){
             @Override
             public void run() {
@@ -363,5 +370,12 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
     /** 单选的处理 */
     public void singleGet(String path){
         // TODO 单图的处理
+    }
+
+    public void refresh(){
+        initWidget();
+        initData();
+        doSDWrite();
+        initDirPopupWindow();
     }
 }

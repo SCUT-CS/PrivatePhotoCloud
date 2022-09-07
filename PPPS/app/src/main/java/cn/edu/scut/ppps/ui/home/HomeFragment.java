@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -43,7 +42,7 @@ public class HomeFragment extends Fragment {
             count--;
         } else {
             // TODO 刷新界面
-            mainActivity.mHandler.sendEmptyMessage(0x110);
+            mainActivity.refresh();
         }
     }
 
