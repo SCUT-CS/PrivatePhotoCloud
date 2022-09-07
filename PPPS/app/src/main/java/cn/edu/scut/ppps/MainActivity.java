@@ -63,6 +63,7 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
     private int mMaxCount;
     // 文件夹列表
     private List<FolderBean> mFolderBeans = new ArrayList<>();
+    private Set<String> mDirPaths = new HashSet<String>();
     // 进度条弹框
     private ProgressDialog mProgressDialog;
     // 弹框
@@ -235,7 +236,6 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
                 Cursor cursor = cr.query(mImgUri,null,MediaStore.Images.Media.MIME_TYPE+"=? or "+MediaStore
                         .Images.Media.MIME_TYPE+"=?",new String[]{"image/jpeg","image/png"},MediaStore
                         .Images.Media.DATE_MODIFIED);
-                Set<String> mDirPaths = new HashSet<String>();
                 while (cursor.moveToNext()){
                     String path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
                     File parentFile = new File(path).getParentFile();
@@ -376,7 +376,5 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
     public void refresh(){
         initWidget();
         initData();
-        doSDWrite();
-        initDirPopupWindow();
     }
 }
