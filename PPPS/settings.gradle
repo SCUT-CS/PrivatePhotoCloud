@@ -14,3 +14,5 @@ dependencyResolutionManagement {
 }
 rootProject.name = "PPPS"
 include ':app'
+include ':baselib'
+project(':baselib').projectDir = file('app/libs/hzh_android/baselib/')
