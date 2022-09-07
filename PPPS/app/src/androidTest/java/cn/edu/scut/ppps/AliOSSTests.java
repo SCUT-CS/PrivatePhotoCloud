@@ -135,21 +135,37 @@ public class AliOSSTests {
         System.out.println(isDownload);
     }
 
+    /**
+     * Test AliOSS getThumbnail method.
+     * @author Huang Zixi
+     */
     @Test
     public void getThumbnailTest() throws Exception{
-        //参数准备
-        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        Tokens tokens = new Tokens(appContext);
-        Map<String, String> token = new HashMap<>();
-        token.put("access_token", "123456");
-        token.put("refresh_token", "654321");
-        Map<String, Map<String, String>> tokensMap = new HashMap<>();
-        tokensMap.put("test", token);
-        AliOSSTests = new AliOSS("test", appContext, tokens);
-        //测试
         boolean isDownload = AliOSSTests.getThumbnail("testImg",downloadImgFileDir);
         System.out.println(isDownload);
     }
+
+    @Test
+    public void getFileListTest() throws Exception{
+
+    }
+    @Test
+    public void deleteTest() throws Exception{
+
+
+    }
+
+    @Test
+    public void deleteAllTest() throws Exception{
+
+    }
+
+    @Test
+    public void deleteAllTest2() throws Exception{
+
+    }
+
+
 
 }
 
