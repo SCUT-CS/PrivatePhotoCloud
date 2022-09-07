@@ -125,12 +125,19 @@ public class AliOSSTests {
      * @author Huang Zixi
      */
     @Test
-    public void downloadTest() {
+    public void downloadTest() throws Exception{
         //参数准备
-        String imgFileDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
-                + File.separator + "WeiXin";
-
-
+        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        Tokens tokens = new Tokens(appContext);
+        Map<String, String> token = new HashMap<>();
+        token.put("access_token", "123456");
+        token.put("refresh_token", "654321");
+        Map<String, Map<String, String>> tokensMap = new HashMap<>();
+        tokensMap.put("test", token);
+        AliOSSTests = new AliOSS("test", appContext, tokens);
+        //测试
+        boolean isDownload = AliOSSTests.download("testImg",imgFileDir);
+        System.out.println(isDownload);
     }
-
 }
+
