@@ -145,23 +145,44 @@ public class AliOSSTests {
         System.out.println(isDownload);
     }
 
+    /**
+     * Test AliOSS getFileList method.
+     * @author Feng yucheng
+     */
     @Test
     public void getFileListTest() throws Exception{
 
     }
+
+    /**
+     * Test AliOSS delete method.
+     * boolean delete (String fileName)
+     * @author Huang Zixi
+     */
     @Test
     public void deleteTest() throws Exception{
-
-
+        String fileName = "testImg";
+        boolean isDelete = AliOSSTests.delete(fileName);
+        System.out.println(isDelete);
     }
 
+    /**
+     * Test AliOSS deleteAll method.
+     * @author Huang Zixi
+     */
     @Test
     public void deleteAllTest() throws Exception{
-
+        boolean isDelete = AliOSSTests.deleteAll();
+        System.out.println(isDelete);
     }
 
+    /**
+     * Test AliOSS delete method.
+     * boolean delete (List<String> fileNames)
+     * @author Huang Zixi
+     */
     @Test
-    public void deleteAllTest2() throws Exception{
+    public void deleteTest2() throws Exception{
 
     }
 
