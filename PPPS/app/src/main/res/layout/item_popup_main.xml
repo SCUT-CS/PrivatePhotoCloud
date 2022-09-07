@@ -20,23 +20,23 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="10dp"
-        android:layout_toRightOf="@id/id_id_dir_item_image"
+        android:layout_marginRight="25dp"
+        android:layout_alignParentRight="true"
         android:orientation="vertical">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/id_dir_item_name"
             android:text="所有图片"
-            android:textSize="12sp" />
+            android:textSize="18sp" />
 
         <TextView
+            android:id="@+id/id_dir_item_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/id_dir_item_count"
-            android:layout_gravity="center"
+            android:layout_gravity="right"
             android:text="1212张"
-            android:textSize="10sp"
-            android:textColor="#444"/>
+            android:textColor="#444"
+            android:textSize="16sp" />
     </LinearLayout>
 </RelativeLayout>
