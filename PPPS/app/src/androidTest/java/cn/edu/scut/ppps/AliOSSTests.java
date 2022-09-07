@@ -40,6 +40,7 @@ public class AliOSSTests {
 
     public String imgFileDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + File.separator + "WeiXin";
     public final File weiXinPictureDir = new File(imgFileDir);
+    public String downloadImgFileDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + File.separator + "PPPS";
 
     /**
      * Test AliOSS upload method.
@@ -136,7 +137,7 @@ public class AliOSSTests {
         tokensMap.put("test", token);
         AliOSSTests = new AliOSS("test", appContext, tokens);
         //测试
-        boolean isDownload = AliOSSTests.download("testImg",imgFileDir);
+        boolean isDownload = AliOSSTests.download("testImg",downloadImgFileDir);
         System.out.println(isDownload);
     }
 
@@ -152,7 +153,7 @@ public class AliOSSTests {
         tokensMap.put("test", token);
         AliOSSTests = new AliOSS("test", appContext, tokens);
         //测试
-        boolean isDownload = AliOSSTests.getThumbnail("testImg",imgFileDir);
+        boolean isDownload = AliOSSTests.getThumbnail("testImg",downloadImgFileDir);
         System.out.println(isDownload);
     }
 
