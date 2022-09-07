@@ -1,0 +1,226 @@
+一、BaseLib组件说明：
+1.baselib中的StatusBarUtil.java是沉浸式状态栏工具，如果有特殊需求可以在这个文档中找方法，如果是普通的
+变色可以调用
+statusBarColor(R.color.white, false);
+基类中已经重写了这个方法，第一个参数是要变化的颜色，第二个参数，
+true，状态栏字体白色，
+false，状态栏字体黑色
+这个可以看示例
+2.继承基类使用mvc框架，使用强关联，新建页面需要新建出Activity，modle和callback，Fragment也是一样的。
+所有页面都使用这个架构，随便找一个仿就好
+3.动态权限方案可以查看示例
+4.吐司工具类：ToastUtil
+5.基类Application，可以让自己的Application继承它，该基类提供全局上下文获取方法
+6.每个Activity和Fragment基类都提供了TAG标签，打印Log的时候可以使用
+7.提供像素转换工具类，主要是dp转px和sp转px
+8.提供屏幕获取宽高工具类
+9.提供日志打印类，可以设置统一tag
+10.提供path装bitmap工具类
+11.提供判空工具类
+12.提供路径获取方法
+13.提供了SP的使用封装工具类
+14.集成ButterKnife:
+<1>先要在app中添加依赖
+//ButterKnife注解依赖
+implementation 'com.jakewharton:butterknife:10.2.3'
+annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.3'
+<2>再加一个java8的支持
+Android节点下
+compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+}
+<3>绑定点击事件写法
+@OnClick({R.id.bt_cjs,R.id.bt_dtqx})
+void click(View v){
+    Intent intent = null;
+    switch (v.getId()){
+        case R.id.bt_cjs:
+            //沉浸式状态栏
+            intent = new Intent(this,CjsActivity.class);
+            startActivity(intent);
+            break;
+        case R.id.bt_dtqx:
+            //动态权限
+            intent = new Intent(this,DtqxActivity.class);
+            startActivity(intent);
+            break;
+    }
+}
+<4>绑定控件
+@BindView(R.id.bt_cjs)
+Button bt_cjs;
+二、app组件设置：
+1.app入口module中，style.xml文件下<item name="windowNoTitle">true</item>是配置去掉默认的actionbar
+2.HomeActivity一般要设置为SingleTask
+3.提供了一套首页搭建机制，提供了示例
+4.提供了第二套首页搭建机制，提供了示例
+5.提供了一套多布局的列表加载机制
+6.提供了一套轮播图制作方法，包括普通轮播和自动轮播两种
+三、okhttpLib(依赖baselib)网络请求组件介绍：
+使用时一定要把baselib一同导入，因为该包依赖于baselib
+1.该包提供了get,post,文件上传，文件下载和application/json五种请求方式，如果有别的完了可以扩展
+2.该包还提供了一个Gson使用的工具类，不用重复引入Gson
+四、imageloadlib图片加载组件介绍：
+该组件提供了图片的基础加载功能，包括普通加载，圆角，圆形，资源图片加载。现在支持的是Glide版本库
+本库提供了示例
+五、pic_compress图片压缩组件介绍：
+该组件提供了图片压缩功能，依托鲁班压缩第三方库
+六、big_pic(依赖baselib和imageloadlib)大图预览组件介绍：
+该组件需要在项目的gradle下添加
+maven { url "https://jitpack.io" }
+依赖
+同时该项目依赖于imageloadlib和baselib两个库
+本库提供了使用示例
+七、uil_imageload
+该包是基于UniversalImageLoader的，带有圆形和圆角的自定义控件。该包提供了使用示例。
+八、imageloadbydown基于baselib和imageloadlib、okhttplib
+和imageloadlib对比该包最大特点是：
+1.可以提供图片下载到指定路径的功能
+2.可以提供一键清除图片本地磁盘缓存的功能
+3.添加一个一键下载图片的功能，不用显示，走一遍下载的流程就好。如果离线要显示，直接根据URL就可以加载出来
+九、albumlib基于baselib
+该包提供了图库图片的单选和多选两种功能，还提供了拍照功能
+十、zinglib
+该库提供了一套完整的二维码扫描功能
+十一、videolib基于baselib
+该库提供的是一套视频播放组件，需要在targetversion<=27的平台使用，可以在大屏和小屏之间切换
+十二、updatelib基于baselib，okhttplib
+该类是版本更新类库，可以进行简单的调用就能实现版本更新
+十三、极光推送集成
+1.build中添加
+在defaultConfig中，添加如下代码
+ndk {
+    abiFilters 'armeabi', 'armeabi-v7a', 'arm64-v8a'
+}
+
+manifestPlaceholders = [
+    JPUSH_PKGNAME : applicationId,
+    JPUSH_APPKEY : "acbd0c8749cbbd2ed899e12b", //JPush 上注册的包名对应的 Appkey.
+    JPUSH_CHANNEL : "developer-default", //暂时填写默认值即可.
+]
+添加依赖
+//极光推送
+implementation 'cn.jiguang.sdk:jpush:3.7.0'  // 此处以JPush 3.7.0 版本为例。
+implementation 'cn.jiguang.sdk:jcore:2.4.2'  // 此处以JCore 2.4.2 版本为例。
+2.清单文件中添加
+权限
+<!-- Required -->
+    <permission
+        android:name="${applicationId}.permission.JPUSH_MESSAGE"
+        android:protectionLevel="signature" />
+
+    <!-- Required  一些系统要求的权限，如访问网络等-->
+    <uses-permission android:name="${applicationId}.permission.JPUSH_MESSAGE" />
+    <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+
+    <!--华为角标-->
+    <uses-permission
+        android:name="com.huawei.android.launcher.permission.CHANGE_BADGE"/>
+
+
+    <!-- Optional for location -->
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" /> <!-- 用于开启 debug 版本的应用在6.0 系统上 层叠窗口权限 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" /><!-- Android Q后台定位权限-->
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.GET_TASKS"/>
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"/>
+配置
+ <!-- 若您的业务中有使用极光富媒体功能，或者极光早上好功能，需要把此 Activity 的 exported 修改成 true 覆盖 jcenter 上的组件。 -->
+        <activity
+            android:name="cn.jpush.android.ui.PopWinActivity"
+            android:exported="true"
+            tools:node="replace"
+            android:theme="@style/MyDialogStyle">
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+                <action android:name="cn.jpush.android.ui.PopWinActivity" />
+                <category android:name="com.hao.hzh_android" />
+            </intent-filter>
+        </activity>
+
+        <!-- 若您的业务中有使用极光富媒体功能，或者极光早上好功能，需要把此 Activity 的 exported 修改成 true 覆盖 jcenter 上的组件。 -->
+        <activity
+            android:name="cn.jpush.android.ui.PushActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:exported="true"
+            tools:node="replace"
+            android:theme="@android:style/Theme.NoTitleBar">
+            <intent-filter>
+                <action android:name="cn.jpush.android.ui.PushActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="com.hao.hzh_android" />
+            </intent-filter>
+        </activity>
+
+        <!-- Since JCore2.0.0 Required SDK核心功能-->
+        <!-- 可配置android:process参数将Service放在其他进程中；android:enabled属性不能是false -->
+        <!-- 这个是自定义Service，要继承极光JCommonService，可以在更多手机平台上使得推送通道保持的更稳定 -->
+        <service android:name=".jpush.JpushService"
+            android:enabled="true"
+            android:exported="false"
+            android:process=":pushcore">
+            <intent-filter>
+                <action android:name="cn.jiguang.user.service.action" />
+            </intent-filter>
+        </service>
+
+        <!-- Required since 3.0.7 -->
+        <!-- 新的 tag/alias 接口结果返回需要开发者配置一个自定的广播 -->
+        <!-- 3.3.0开始所有事件将通过该类回调 -->
+        <!-- 该广播需要继承 JPush 提供的 JPushMessageReceiver 类, 并如下新增一个 Intent-Filter -->
+        <receiver
+            android:name=".jpush.JpushReceiver"
+            android:enabled="true"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="cn.jpush.android.intent.RECEIVE_MESSAGE" />
+                <category android:name="com.hao.hzh_android" />
+            </intent-filter>
+        </receiver>
+3.类
+考入jpush包中代码
+4.application
+JpushUtil.getInstance().initJpush(this);
+十四、initlib依赖于各种要初始化的包
+各种值的存储统一管理，可以达到接口API，HOST API，全局上下文，各种初始化的效果
+十五、web_lib网页加载库
+使用方式详见代码，lib中提供的相关功能在父类提供了明确说明，并提供了Activity和Fragment两种继承父类，供两个场景使用
+十六、ARouter相关配置
+1.所有模块添加依赖
+implementation 'com.alibaba:arouter-api:1.1.0'
+annotationProcessor 'com.alibaba:arouter-compiler:1.1.1'
+2.所有模块defaultConfig中添加
+javaCompileOptions {
+    annotationProcessorOptions {
+        arguments = [moduleName: project.getName()]
+    }
+}
+3.所有业务模块，使用哪个功能包依赖哪个
+4.所有业务模块，都要被入口app模块依赖
+5.所有模块定义名称，第一个是同一个模块用一个，第二个是每个名字用不同的
+6.跳转
+ARouter.getInstance().build("/home/1").withString("name","value").navigation();
+7.目标类配置
+@Route(path = "/login/1")
+8.各个业务模块之间不需要进行依赖。
+9.结构说明
+                                  app
+                                   |
+                                   |
+                              各个业务模块
+                                   |
+                                   |
+                              各个功能模块

@@ -29,6 +29,9 @@ import java.util.Map;
 public class AliOSSTests {
 
     AliOSS AliOSSTests = null;
+    public String imgFileDir = null;
+    public final File weiXinPictureDir = null;
+    public String downloadImgFileDir = null;
 
     /**
      * Grant permissions.
@@ -38,8 +41,34 @@ public class AliOSSTests {
     public GrantPermissionRule mRuntimePermissionRule = GrantPermissionRule.grant(
             android.Manifest.permission.READ_EXTERNAL_STORAGE);
 
-    public String imgFileDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + File.separator + "WeiXin";
-    public final File weiXinPictureDir = new File(imgFileDir);
+    /**
+     * Prepare the environment for the test.
+     * @author Huang zixi
+     */
+    @Before
+    public void setUp() throws Exception {
+        //文件路径
+        imgFileDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
+                + File.separator + "WeiXin";
+        File weiXinPictureDir = new File(imgFileDir);
+        downloadImgFileDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
+                + File.separator + "PPPS";
+        //构造参数
+        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        Tokens tokenMaps = new Tokens(appContext);
+        Map<String, String> token_1 = new HashMap<>();
+        //阿里云token赋值
+        token_1.put("type", "aliyun");
+        token_1.put("accessID", "LTAI5t9Wx9ZwYxCuPEGoxoct");
+        token_1.put("accessSecret", "IJWyl2xxwYC1vwaTkw8mZ4hWnKZXxP");
+        token_1.put("endpoint", "oss-cn-hangzhou.aliyuncs.com");
+        token_1.put("bucketName", "ppps1.oss-cn-hangzhou.aliyuncs.com ");
+        token_1.put("filePath", "test/");
+        tokenMaps.updateToken("test", token_1);
+        //构造函数
+        AliOSSTests = new AliOSS("test", appContext, tokenMaps);
+    }
+
 
     /**
      * Test AliOSS upload method.
@@ -48,24 +77,11 @@ public class AliOSSTests {
      */
     @Test
     public void uploadTest() throws FileNotFoundException {
-        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        Tokens tokens = null;
-        try {
-            tokens = new Tokens(appContext);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        Map<String, String> token = new HashMap<>();
-        token.put("access_token", "123456");
-        token.put("refresh_token", "654321");
-        Map<String, Map<String, String>> tokensMap = new HashMap<>();
-        tokensMap.put("test", token);
-        AliOSS aliOSS = new AliOSS("test", appContext, tokens);
-        aliOSS.upload(imgFileDir);
+        AliOSSTests.upload(imgFileDir);
     }
 
     public byte[] picture_to_byteArray(String picturePath) {
-        File file = new File(String.valueOf(weiXinPictureDir));
+        File file = new File(String.valueOf(imgFileDir));
         byte[] ds = null;
         InputStream zp = null;
         ByteArrayOutputStream boos = null;
@@ -103,21 +119,9 @@ public class AliOSSTests {
      * @author Feng Yucheng
      */
      public void uploadTest2() {
-         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-         Tokens tokens = null;
-         try {
-             tokens = new Tokens(appContext);
-         } catch (Exception e) {
-             e.printStackTrace();
-         }
-         Map<String, String> token = new HashMap<>();
-         token.put("access_token", "123456");
-         token.put("refresh_token", "654321");
-         Map<String, Map<String, String>> tokensMap = new HashMap<>();
-         tokensMap.put("test", token);
-         AliOSS aliOSS = new AliOSS("test", appContext, tokens);
          byte[] file = picture_to_byteArray(imgFileDir);
-         aliOSS.upload(file,imgFileDir);
+         AliOSSTests.upload(file,imgFileDir);
+         
  }
 
     /**
@@ -125,12 +129,45 @@ public class AliOSSTests {
      * @author Huang Zixi
      */
     @Test
-    public void downloadTest() {
-        //参数准备
-        String imgFileDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
-                + File.separator + "WeiXin";
+    public void downloadTest() throws Exception{
+        //测试
+        boolean isDownload = AliOSSTests.download("图片2.png",downloadImgFileDir);
+        System.out.println(isDownload);
+    }
+
+    /**
+     * Test AliOSS getThumbnail method.
+     * @author Huang Zixi
+     */
+    @Test
+    public void getThumbnailTest() throws Exception{
+        boolean isDownload = AliOSSTests.getThumbnail("testImg",downloadImgFileDir);
+        System.out.println(isDownload);
+    }
+
+    @Test
+    public void getFileListTest() throws Exception{
+
+    }
+    @Test
+    public void deleteTest() throws Exception{
 
 
     }
 
+    @Test
+    public void deleteAllTest() throws Exception{
+
+    }
+
+    @Test
+    public void deleteAllTest2() throws Exception{
+
+    }
+
+
+
 }
+
+
+

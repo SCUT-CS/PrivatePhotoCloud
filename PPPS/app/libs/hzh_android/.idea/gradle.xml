@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="GradleMigrationSettings" migrationVersion="1" />
+  <component name="GradleSettings">
+    <option name="linkedExternalProjectsSettings">
+      <GradleProjectSettings>
+        <option name="testRunner" value="PLATFORM" />
+        <option name="distributionType" value="DEFAULT_WRAPPED" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="gradleJvm" value="1.8" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/albumlib" />
+            <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/baselib" />
+            <option value="$PROJECT_DIR$/big_pic" />
+            <option value="$PROJECT_DIR$/easyvideolib" />
+            <option value="$PROJECT_DIR$/homelib" />
+            <option value="$PROJECT_DIR$/imageloadbydown" />
+            <option value="$PROJECT_DIR$/imageloadlib" />
+            <option value="$PROJECT_DIR$/initlib" />
+            <option value="$PROJECT_DIR$/jpushlib" />
+            <option value="$PROJECT_DIR$/loginlib" />
+            <option value="$PROJECT_DIR$/mylibrary" />
+            <option value="$PROJECT_DIR$/mylibrary2" />
+            <option value="$PROJECT_DIR$/okhttplib" />
+            <option value="$PROJECT_DIR$/pic_compress" />
+            <option value="$PROJECT_DIR$/pushlib" />
+            <option value="$PROJECT_DIR$/roomdb" />
+            <option value="$PROJECT_DIR$/uil_imageload" />
+            <option value="$PROJECT_DIR$/updatelib" />
+            <option value="$PROJECT_DIR$/videolib" />
+            <option value="$PROJECT_DIR$/web_lib" />
+            <option value="$PROJECT_DIR$/zxinglib" />
+          </set>
+        </option>
+        <option name="resolveModulePerSourceSet" value="false" />
+      </GradleProjectSettings>
+    </option>
+  </component>
+</project>
