@@ -76,7 +76,7 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
     // 已经选择图片的集合
     private ArrayList<String> listChoosePics = new ArrayList<>();
     // 该参数负责子线程查询图片后通知主线程更新UI
-    public Handler mHandler = new Handler(){
+    private Handler mHandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
             if (msg.what == 0x110){
@@ -204,7 +204,7 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
     }
 
     @Override
-    public void initData() {
+    protected void initData() {
         if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
             Toast.makeText(this,"当前存储卡不可用！",Toast.LENGTH_SHORT).show();
             return;
@@ -226,7 +226,7 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
     }
 
     @Override
-    public void doSDWrite() {
+    protected void doSDWrite() {
         //mProgressDialog = ProgressDialog.show(this,null,"正在加载...");
         new Thread(){
             @Override
@@ -280,7 +280,7 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
         }.start();
     }
 
-    public void data2View(){
+    protected void data2View(){
         if (mCurrentDir == null){
             Toast.makeText(this,"未扫描到任何图片",Toast.LENGTH_SHORT).show();
             return;
@@ -293,7 +293,7 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
         mDirName.setText(mCurrentDir.getName());
     }
 
-    public void initDirPopupWindow(){
+    protected void initDirPopupWindow(){
         mDirPopupWindow = new ListImageDirPopupWindow(this,mFolderBeans);
         mDirPopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
