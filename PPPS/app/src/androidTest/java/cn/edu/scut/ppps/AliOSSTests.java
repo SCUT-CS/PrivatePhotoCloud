@@ -77,24 +77,11 @@ public class AliOSSTests {
      */
     @Test
     public void uploadTest() throws FileNotFoundException {
-        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        Tokens tokens = null;
-        try {
-            tokens = new Tokens(appContext);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        Map<String, String> token = new HashMap<>();
-        token.put("access_token", "123456");
-        token.put("refresh_token", "654321");
-        Map<String, Map<String, String>> tokensMap = new HashMap<>();
-        tokensMap.put("test", token);
-        AliOSS aliOSS = new AliOSS("test", appContext, tokens);
-        aliOSS.upload(imgFileDir);
+        AliOSSTests.upload(imgFileDir);
     }
 
     public byte[] picture_to_byteArray(String picturePath) {
-        File file = new File(String.valueOf(weiXinPictureDir));
+        File file = new File(String.valueOf(imgFileDir));
         byte[] ds = null;
         InputStream zp = null;
         ByteArrayOutputStream boos = null;
@@ -132,21 +119,9 @@ public class AliOSSTests {
      * @author Feng Yucheng
      */
      public void uploadTest2() {
-         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-         Tokens tokens = null;
-         try {
-             tokens = new Tokens(appContext);
-         } catch (Exception e) {
-             e.printStackTrace();
-         }
-         Map<String, String> token = new HashMap<>();
-         token.put("access_token", "123456");
-         token.put("refresh_token", "654321");
-         Map<String, Map<String, String>> tokensMap = new HashMap<>();
-         tokensMap.put("test", token);
-         AliOSS aliOSS = new AliOSS("test", appContext, tokens);
          byte[] file = picture_to_byteArray(imgFileDir);
-         aliOSS.upload(file,imgFileDir);
+         AliOSSTests.upload(file,imgFileDir);
+         
  }
 
     /**
