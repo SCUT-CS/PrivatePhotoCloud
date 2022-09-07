@@ -11,7 +11,6 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
@@ -23,7 +22,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
 import com.hao.baselib.base.WaterPermissionActivity;
 
 import androidx.core.app.ActivityCompat;
@@ -32,8 +30,6 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.AppCompatActivity;
-
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
@@ -75,7 +71,7 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
     public static final String MUTIL_PICS = "imgs";//多图回传标识
     public static final String SINGLE_PICS = "single_img";//单图回传标识
     public static final String IS_MUTIL = "is_mutil";//是否是多图选择
-    private boolean isMutil;
+    private boolean isMutil = false;
     // 已经选择图片的集合
     private ArrayList<String> listChoosePics = new ArrayList<>();
     // 该参数负责子线程查询图片后通知主线程更新UI
@@ -149,11 +145,6 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
         return true;
     }
 
-    /**
-     * Override onOptionsItemSelected method，implement the menu click event.
-     * @param item MenuItem
-     * @author Cui Yuxin
-     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         if (item.getItemId() == R.id.action_settings){
@@ -162,6 +153,16 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
             intent.addCategory(Intent.CATEGORY_OPENABLE);
             intent.setType("image/*");
             startActivityForResult(intent,2);
+        } else if (item.getItemId() == R.id.action_muti){
+            isMutil = !isMutil;
+            refresh();
+            if (!isMutil){
+                // 隐藏完成 隐藏多选对勾
+                tv_complete.setVisibility(View.GONE);
+            } else {
+                //显示完成 显示多选对勾
+                tv_complete.setVisibility(View.VISIBLE);
+            }
         }
         return super.onOptionsItemSelected(item);
     }
@@ -194,7 +195,6 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
         tv_complete.setOnClickListener(this);
         Intent intent = getIntent();
         // TODO 多选的切换
-        isMutil = intent.getBooleanExtra(IS_MUTIL, true);
         if (!isMutil){
             //隐藏完成
             tv_complete.setVisibility(View.GONE);
@@ -372,6 +372,7 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
         // TODO 单图的处理
     }
 
+    /** 刷新界面 */
     public void refresh(){
         initWidget();
         initData();

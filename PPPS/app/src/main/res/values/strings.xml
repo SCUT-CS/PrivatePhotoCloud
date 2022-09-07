@@ -16,4 +16,5 @@
 
     <string name="home_button">Take a photo</string>
     <string name="next">下一步</string>
+    <string name="mutiSelect">多选/单选</string>
 </resources>
