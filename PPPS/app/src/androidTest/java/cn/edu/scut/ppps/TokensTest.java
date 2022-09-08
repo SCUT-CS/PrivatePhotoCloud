@@ -1,7 +1,6 @@
 package cn.edu.scut.ppps;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.os.Environment;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -14,8 +13,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.io.File;
-import java.io.IOException;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
