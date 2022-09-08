@@ -60,7 +60,7 @@ public interface CloudService {
      * Delete all files from the cloud storage and return if success.
      * @author Cui Yuxin
      */
-    boolean deleteAll();
+    boolean deleteAll() throws Exception;
 
     /**
      * Delete files from the cloud storage and return if success.
