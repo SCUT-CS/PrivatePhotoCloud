@@ -12,25 +12,26 @@ public interface CloudService {
     /**
      * Upload a file to the cloud storage and return if success.
      * @param filePath Path of the file to be uploaded.
+     * @param cloudPath Path of the file in the cloud storage.
      * @author Cui Yuxin
      */
-    boolean upload(String filePath) throws FileNotFoundException;
+    boolean upload(String filePath, String cloudPath);
 
     /**
      * Upload a file to the cloud storage and return if success.
      * @param file File to be uploaded.
-     * @param fileName Name of the file to be uploaded.
+     * @param cloudPath Path of the file in the cloud storage.
      * @author Cui Yuxin
      */
-    boolean upload(byte[] file, String fileName);
+    boolean upload(byte[] file, String cloudPath) throws Exception;
 
     /**
      * Download a file from the cloud storage and return if success.
-     * @param fileName Name of the file to be downloaded.
+     * @param cloudPath Path of the file in the cloud storage.
      * @param downloadPath Path to store the file, e.g. "Disk1".
      * @author Cui Yuxin
      */
-    boolean download(String fileName, String downloadPath);
+    boolean download(String cloudPath, String downloadPath);
 
     /**
      * Save a thumbnail of a file from the cloud storage and return if success.
