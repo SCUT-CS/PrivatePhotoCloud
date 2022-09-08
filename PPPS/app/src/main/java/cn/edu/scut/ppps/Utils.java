@@ -1,10 +1,13 @@
 package cn.edu.scut.ppps;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.ImageDecoder;
+import android.net.Uri;
 import android.os.Build;
 
+import androidx.core.content.FileProvider;
 import androidx.heifwriter.HeifWriter;
 
 import org.junit.Ignore;

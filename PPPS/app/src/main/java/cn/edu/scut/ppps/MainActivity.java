@@ -54,7 +54,6 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
     private RelativeLayout mBottomly;
     private TextView mDirName;
     private TextView mDirCount;
-    private TextView tv_complete;
     // 图片数据集
     private List<String> mImgs;
     // 对应当前文件夹的File对象
@@ -64,14 +63,9 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
     // 文件夹列表
     private List<FolderBean> mFolderBeans = new ArrayList<>();
     private Set<String> mDirPaths = new HashSet<String>();
-    // 进度条弹框
-    private ProgressDialog mProgressDialog;
     // 弹框
     private ListImageDirPopupWindow mDirPopupWindow;
     // 使用参数
-    public static final String MUTIL_PICS = "imgs";//多图回传标识
-    public static final String SINGLE_PICS = "single_img";//单图回传标识
-    public static final String IS_MUTIL = "is_mutil";//是否是多图选择
     private boolean isMutil = false;
     // 已经选择图片的集合
     private ArrayList<String> listChoosePics = new ArrayList<>();
@@ -114,7 +108,7 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow)
+                R.id.nav_home, R.id.nav_slideshow)
                 .setOpenableLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
@@ -141,7 +135,6 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
@@ -157,12 +150,9 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
         } else if (item.getItemId() == R.id.action_muti){
             isMutil = !isMutil;
             refresh();
-            if (!isMutil){
-                // 隐藏完成 隐藏多选对勾
-                tv_complete.setVisibility(View.GONE);
-            } else {
-                //显示完成 显示多选对勾
-                tv_complete.setVisibility(View.VISIBLE);
+        } else if (item.getItemId() == R.id.action_next){
+            if (isMutil) {
+                // TODO 完成多选逻辑
             }
         }
         return super.onOptionsItemSelected(item);
@@ -192,15 +182,6 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
         mBottomly = findViewById(R.id.mBottomly);
         mDirName = findViewById(R.id.mDirName);
         mDirCount = findViewById(R.id.mDirCount);
-        tv_complete = findViewById(R.id.tv_complete);
-        tv_complete.setOnClickListener(this);
-        Intent intent = getIntent();
-        // TODO 多选的切换
-        if (!isMutil){
-            //隐藏完成
-            tv_complete.setVisibility(View.GONE);
-            //隐藏多选对勾
-        }
     }
 
     @Override
@@ -340,11 +321,7 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.tv_complete) {
-            if (isMutil) {
-                // TODO 多图的处理
-            }
-        }
+
     }
 
     /** 添加图片到已选集合中 */
