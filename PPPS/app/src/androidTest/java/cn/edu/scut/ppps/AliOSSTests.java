@@ -19,6 +19,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -121,7 +122,6 @@ public class AliOSSTests {
      public void uploadTest2() {
          byte[] file = picture_to_byteArray(imgFileDir);
          AliOSSTests.upload(file,imgFileDir);
-         
  }
 
     /**
@@ -151,7 +151,8 @@ public class AliOSSTests {
      */
     @Test
     public void getFileListTest() throws Exception{
-
+        List<String> temp = AliOSSTests.getFileList();
+        System.out.print(temp);
     }
 
     /**
