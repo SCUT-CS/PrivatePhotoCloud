@@ -160,7 +160,7 @@ public class AliOSSTests {
      * @author Huang Zixi
      */
     @Test
-    public void deleteTest() throws Exception{
+    public void deleteTest_String() throws Exception{
         String fileName = "testImg";
         boolean isDelete = AliOSSTests.delete(fileName);
         System.out.println(isDelete);
@@ -182,7 +182,7 @@ public class AliOSSTests {
      * @author Huang Zixi
      */
     @Test
-    public void deleteTest2() throws Exception{
+    public void deleteTest_List() throws Exception{
 
     }
 
