@@ -17,6 +17,9 @@ import com.alibaba.sdk.android.oss.common.auth.OSSStsTokenCredentialProvider;
 import com.alibaba.sdk.android.oss.internal.OSSAsyncTask;
 import com.alibaba.sdk.android.oss.model.GetObjectRequest;
 import com.alibaba.sdk.android.oss.model.GetObjectResult;
+import com.alibaba.sdk.android.oss.model.ListObjectsRequest;
+import com.alibaba.sdk.android.oss.model.ListObjectsResult;
+import com.alibaba.sdk.android.oss.model.OSSObjectSummary;
 import com.alibaba.sdk.android.oss.model.PutObjectRequest;
 import com.alibaba.sdk.android.oss.model.PutObjectResult;
 
@@ -67,15 +70,16 @@ public class AliOSS implements CloudService {
     /**
      * Upload a file to the cloud storage and return if success.
      * @param filePath Path of the file to be uploaded.
-     * @param cloudPath Path of the file in the cloud storage.
      * @author Cui Yuxin
      */
     @Override
-    public boolean upload(String filePath, String cloudPath) {
+    public boolean upload(String filePath) {
+        String fileName = (new File(filePath)).getName();
+        String objectName = token.get("filePath") + fileName;
         // 构造上传请求。
         // 依次填写Bucket名称（例如examplebucket）、Object完整路径（例如exampledir/exampleobject.txt）和本地文件完整路径（例如/storage/emulated/0/oss/examplefile.txt）。
         // Object完整路径中不能包含Bucket名称。
-        PutObjectRequest put = new PutObjectRequest(token.get("bucketName"), cloudPath, filePath);
+        PutObjectRequest put = new PutObjectRequest(token.get("bucketName"), objectName, filePath);
         // 异步上传时可以设置进度回调。
         put.setProgressCallback(new OSSProgressCallback<PutObjectRequest>() {
             @Override
@@ -116,12 +120,12 @@ public class AliOSS implements CloudService {
     /**
      * Upload a file to the cloud storage and return if success.
      * @param file     File bytes to be uploaded.
-     * @param cloudPath Path of the file in the cloud storage.
+     * @param fileName Name of the file to be uploaded.
      * @author Cui Yuxin
      */
     @Override
-    public boolean upload(byte[] file, String cloudPath) throws Exception {
-        PutObjectRequest put = new PutObjectRequest(token.get("bucketName"), cloudPath, file);
+    public boolean upload(byte[] file, String fileName) throws Exception {
+        PutObjectRequest put = new PutObjectRequest(token.get("bucketName"), token.get("filePath") + fileName, file);
         PutObjectResult putResult = ossClient.putObject(put);
         Log.d("PutObject", "UploadSuccess");
         Log.d("ETag", putResult.getETag());
@@ -131,13 +135,19 @@ public class AliOSS implements CloudService {
 
     /**
      * Download a file from the cloud storage and return if success.
-     * @param cloudPath Path of the file in the cloud storage.
+     * @param fileName Name of the file to be uploaded.
      * @param downloadPath Path to store the file, e.g. "Disk1".
      * @author Cui Yuxin
      */
     @Override
-    public boolean download(String cloudPath, String downloadPath) {
-        GetObjectRequest get = new GetObjectRequest(token.get("bucketName"), cloudPath);
+    public boolean download(String fileName, String downloadPath) {
+        String savePath = context.getCacheDir().getAbsolutePath() + File.separator + downloadPath;
+        File saveDir = new File(savePath);
+        if (!saveDir.exists()) {
+            saveDir.mkdirs();
+        }
+        String pathName = savePath + File.separator + fileName;
+        GetObjectRequest get = new GetObjectRequest(token.get("bucketName"), token.get("filePath") + fileName);
         ossClient.asyncGetObject(get, new OSSCompletedCallback<GetObjectRequest, GetObjectResult>() {
             @Override
             public void onSuccess(GetObjectRequest request, GetObjectResult result) {
@@ -155,7 +165,7 @@ public class AliOSS implements CloudService {
                     }
                     // 将下载后的文件存放在指定的本地路径，例如D:\\localpath\\exampleobject.jpg。
                     try {
-                        FileOutputStream fout = new FileOutputStream(downloadPath);
+                        FileOutputStream fout = new FileOutputStream(pathName);
                         fout.write(buffer);
                         fout.close();
                     } catch (Exception e) {
@@ -218,36 +228,39 @@ public class AliOSS implements CloudService {
      * @author Cui Yuxin
      */
     @Override
-    public List<String> getFileList() {
-        String prefix = token.get("filePath");
-        try {
-            // 列举指定前缀的文件。
-            ListObjectsV2Request listObjectsV2Request = new ListObjectsV2Request(token.get("bucketName"));
-            listObjectsV2Request.setPrefix(prefix);
-            ListObjectsV2Result result = ossClient.listObjectsV2(listObjectsV2Request);
-            List<OSSObjectSummary> ossObjectSummaries = result.getObjectSummaries();
-            List<String> fileList = new ArrayList<>();
-            ossObjectSummaries.forEach(ossObjectSummary -> {
-                fileList.add(ossObjectSummary.getKey());
-            });
-            return fileList;
-        } catch (OSSException oe) {
-            // TODO Error handling.
-            System.out.println("Caught an OSSException, which means your request made it to OSS, "
-                    + "but was rejected with an error response for some reason.");
-            System.out.println("Error Message:" + oe.getErrorMessage());
-            System.out.println("Error Code:" + oe.getErrorCode());
-            System.out.println("Request ID:" + oe.getRequestId());
-            System.out.println("Host ID:" + oe.getHostId());
-            return null;
-        } catch (ClientException ce) {
-            // TODO Error handling.
-            System.out.println("Caught an ClientException, which means the client encountered "
-                    + "a serious internal problem while trying to communicate with OSS, "
-                    + "such as not being able to access the network.");
-            System.out.println("Error Message:" + ce.getMessage());
-            return null;
-        }
+    public List<String> getFileList() throws Exception {
+        // 填写Bucket名称，例如examplebucket。
+        ListObjectsRequest request = new ListObjectsRequest(token.get("bucketName"));
+        // 填写前缀。
+        request.setPrefix(token.get("filePath"));
+        List<OSSObjectSummary> objectSummaries = ossClient.asyncListObjects(request, new OSSCompletedCallback<ListObjectsRequest, ListObjectsResult>() {
+            @Override
+            public void onSuccess(ListObjectsRequest request, ListObjectsResult result) {
+                for (OSSObjectSummary objectSummary : result.getObjectSummaries()) {
+                    Log.i("ListObjects", objectSummary.getKey());
+                }
+            }
+            @Override
+            public void onFailure(ListObjectsRequest request, ClientException clientException, ServiceException serviceException) {
+                // 请求异常。
+                if (clientException != null) {
+                    // 客户端异常，例如网络异常等。
+                    clientException.printStackTrace();
+                }
+                if (serviceException != null) {
+                    // 服务端异常。
+                    Log.e("ErrorCode", serviceException.getErrorCode());
+                    Log.e("RequestId", serviceException.getRequestId());
+                    Log.e("HostId", serviceException.getHostId());
+                    Log.e("RawMessage", serviceException.getRawMessage());
+                }
+            }
+        }).getResult().getObjectSummaries();
+        List<String> fileList = new ArrayList<>();
+        objectSummaries.forEach(ossObjectSummary -> {
+            fileList.add(ossObjectSummary.getKey());
+        });
+        return fileList;
     }
 
     /**
