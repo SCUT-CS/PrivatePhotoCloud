@@ -165,7 +165,7 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
 
     @Override
     protected int getContentLayoutId() {
-        return R.layout.activity_album;
+        return R.layout.fragment_home;
     }
 
     @Override
