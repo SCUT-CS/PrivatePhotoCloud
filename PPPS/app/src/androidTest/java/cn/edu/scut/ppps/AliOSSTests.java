@@ -166,7 +166,7 @@ public class AliOSSTests {
      * Test AliOSS deleteAll method.
      * @author Huang Zixi
      */
-    @Ignore("deleteAll method is not implemented yet")
+    @Test
     public void deleteAllTest() throws Exception{
         aliOSSTests.deleteAll();
     }

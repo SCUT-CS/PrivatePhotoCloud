@@ -30,6 +30,7 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Alibaba cloud OSS service.
@@ -57,7 +58,6 @@ public class AliOSS implements CloudService {
      */
     public AliOSS(String tokenName, Context context, Tokens tokens) {
         Map<String, String> token = tokens.getToken(tokenName);
-        // TODO Error handling.
         assert token.get("type").equals("aliyun");
         this.token = token;
         this.context = context;
@@ -91,6 +91,7 @@ public class AliOSS implements CloudService {
                 Log.d("PutObject", "UploadSuccess");
                 Log.d("ETag", result.getETag());
                 Log.d("RequestId", result.getRequestId());
+                // TODO 异步处理结果返回
             }
             @Override
             public void onFailure(PutObjectRequest request, ClientException clientExcepion, ServiceException serviceException) {
@@ -106,6 +107,7 @@ public class AliOSS implements CloudService {
                     Log.e("HostId", serviceException.getHostId());
                     Log.e("RawMessage", serviceException.getRawMessage());
                 }
+                // TODO 异步处理结果返回
             }
         });
         // 取消上传任务。
@@ -128,6 +130,7 @@ public class AliOSS implements CloudService {
         Log.d("PutObject", "UploadSuccess");
         Log.d("ETag", putResult.getETag());
         Log.d("RequestId", putResult.getRequestId());
+        // TODO 异步处理结果返回
         return true;
     }
 
@@ -170,10 +173,12 @@ public class AliOSS implements CloudService {
                         OSSLog.logInfo(e.toString());
                     }
                 }
+                // TODO 异步处理结果返回
             }
             @Override
             public void onFailure(GetObjectRequest request, ClientException clientException,
                                   ServiceException serviceException)  {
+                // TODO 异步处理结果返回
             }
         });
         return true;
@@ -221,11 +226,12 @@ public class AliOSS implements CloudService {
                         OSSLog.logInfo(e.toString());
                     }
                 }
+                // TODO 异步处理结果返回
             }
 
             @Override
             public void onFailure(GetObjectRequest request, ClientException clientExcepion, ServiceException serviceException) {
-                // 处理异常，用户可自行填写。
+                // TODO 异步处理结果返回
             }
         });
         return true;
@@ -247,6 +253,7 @@ public class AliOSS implements CloudService {
                 for (OSSObjectSummary objectSummary : result.getObjectSummaries()) {
                     Log.i("ListObjects", objectSummary.getKey());
                 }
+                // TODO 异步处理结果返回
             }
             @Override
             public void onFailure(ListObjectsRequest request, ClientException clientException, ServiceException serviceException) {
@@ -262,11 +269,12 @@ public class AliOSS implements CloudService {
                     Log.e("HostId", serviceException.getHostId());
                     Log.e("RawMessage", serviceException.getRawMessage());
                 }
+                // TODO 异步处理结果返回
             }
         }).getResult().getObjectSummaries();
         List<String> fileList = new ArrayList<>();
         objectSummaries.forEach(ossObjectSummary -> {
-            fileList.add(ossObjectSummary.getKey());
+            fileList.add(ossObjectSummary.getKey().replace(Objects.requireNonNull(token.get("filePath")), ""));
         });
         return fileList;
     }
@@ -286,6 +294,7 @@ public class AliOSS implements CloudService {
                 @Override
                 public void onSuccess(DeleteObjectRequest request, DeleteObjectResult result) {
                     Log.d("asyncDeleteObject", "success!");
+                    // TODO 异步处理结果返回
                 }
 
                 @Override
@@ -302,6 +311,7 @@ public class AliOSS implements CloudService {
                         Log.e("HostId", serviceException.getHostId());
                         Log.e("RawMessage", serviceException.getRawMessage());
                     }
+                    // TODO 异步处理结果返回
                 }
             });
         }
@@ -310,12 +320,13 @@ public class AliOSS implements CloudService {
 
     /**
      * Delete all files from the cloud storage and return if success.
-     * This method is not implement.
      * @author Cui Yuxin
      */
     @Override
     public boolean deleteAll() throws Exception {
-        return false;
+        List<String> fileList = getFileList();
+        fileList.forEach(this::delete);
+        return true;
     }
 
     /**
@@ -337,6 +348,7 @@ public class AliOSS implements CloudService {
             @Override
             public void onSuccess(DeleteMultipleObjectRequest request, DeleteMultipleObjectResult result) {
                 Log.i("DeleteMultipleObject", "success");
+                // TODO 异步处理结果返回
             }
 
             @Override
@@ -353,6 +365,7 @@ public class AliOSS implements CloudService {
                     Log.e("HostId", serviceException.getHostId());
                     Log.e("RawMessage", serviceException.getRawMessage());
                 }
+                // TODO 异步处理结果返回
             }
         });
         return true;

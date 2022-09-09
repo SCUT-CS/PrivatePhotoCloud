@@ -1,6 +1,7 @@
 package cn.edu.scut.ppps;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
@@ -211,7 +212,7 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
                         .Images.Media.MIME_TYPE + "=?", new String[]{"image/jpeg", "image/png"}, MediaStore
                         .Images.Media.DATE_MODIFIED);
                 while (cursor.moveToNext()) {
-                    String path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
+                    @SuppressLint("Range") String path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
                     File parentFile = new File(path).getParentFile();
                     if (parentFile == null) {
                         continue;
