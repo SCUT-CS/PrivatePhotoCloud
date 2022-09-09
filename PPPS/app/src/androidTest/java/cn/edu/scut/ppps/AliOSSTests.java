@@ -1,8 +1,6 @@
 package cn.edu.scut.ppps;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.os.Environment;
 import android.util.Log;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -10,6 +8,7 @@ import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.GrantPermissionRule;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -59,7 +58,7 @@ public class AliOSSTests {
         token_1.put("type", "aliyun");
         token_1.put("accessId", "LTAI5t9Wx9ZwYxCuPEGoxoct");
         token_1.put("accessSecret", "IJWyl2xxwYC1vwaTkw8mZ4hWnKZXxP");
-        token_1.put("endpoint", "oss-cn-hangzhou.aliyuncs.com");
+        token_1.put("endpoint", "https://oss-cn-hangzhou.aliyuncs.com");
         token_1.put("bucketName", "ppps1");
         token_1.put("filePath", "test/");
         tokenMaps.updateToken("test", token_1);
@@ -81,7 +80,7 @@ public class AliOSSTests {
      * A helping method to get the byteArray of the image.
      * @author Feng Yucheng
      */
-    private byte[] picture_to_byteArray(String picturePath) {
+    private byte[] pictureToByteArray(String picturePath) {
         File file = new File(String.valueOf(picturePath));
         byte[] ds = null;
         InputStream zp = null;
@@ -118,9 +117,10 @@ public class AliOSSTests {
      * Test AliOSS upload method.
      * @author Feng Yucheng
      */
-     public void uploadTest2() throws Exception {
-         byte[] file = picture_to_byteArray(filePath_test);
-         aliOSSTests.upload(file, "图片3.png");
+    @Test
+     public void uploadTestCaseByteArray() throws Exception {
+         byte[] file = pictureToByteArray(filePath_test);
+         aliOSSTests.upload(file, "图片4.png");
      }
 
     /**
@@ -129,7 +129,7 @@ public class AliOSSTests {
      */
     @Test
     public void downloadTest() {
-        aliOSSTests.download("图片2.png", downloadImgFileDir);
+        aliOSSTests.download("图片3.png", "Disk1");
     }
 
     /**
@@ -138,7 +138,7 @@ public class AliOSSTests {
      */
     @Test
     public void getThumbnailTest() {
-        aliOSSTests.getThumbnail("图片2.png", downloadThumbnailDir);
+        aliOSSTests.getThumbnail("图片2.png", "Disk1Thumbnail");
     }
 
     /**
@@ -158,7 +158,7 @@ public class AliOSSTests {
      */
     @Test
     public void deleteTestCaseString() {
-        String fileName = "图片1.png";
+        String fileName = "图片3.png";
         aliOSSTests.delete(fileName);
     }
 
@@ -166,7 +166,7 @@ public class AliOSSTests {
      * Test AliOSS deleteAll method.
      * @author Huang Zixi
      */
-    @Test
+    @Ignore("deleteAll method is not implemented yet")
     public void deleteAllTest() throws Exception{
         aliOSSTests.deleteAll();
     }

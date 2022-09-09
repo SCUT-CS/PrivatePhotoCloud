@@ -111,7 +111,7 @@ public class AliOSS implements CloudService {
         // 取消上传任务。
         // task.cancel();
         // 等待上传任务完成。
-        // task.waitUntilFinished();
+        task.waitUntilFinished();
         return true;
     }
 
@@ -278,41 +278,44 @@ public class AliOSS implements CloudService {
      */
     @Override
     public boolean delete(String fileName) {
-        DeleteObjectRequest delete = new DeleteObjectRequest(token.get("bucketName"), token.get("filePath") + fileName);
-        OSSAsyncTask deleteTask = ossClient.asyncDeleteObject(delete, new OSSCompletedCallback<DeleteObjectRequest, DeleteObjectResult>() {
-            @Override
-            public void onSuccess(DeleteObjectRequest request, DeleteObjectResult result) {
-                Log.d("asyncDeleteObject", "success!");
-            }
+        if (fileName == null || fileName.equals("")) {
+            return false;
+        } else {
+            DeleteObjectRequest delete = new DeleteObjectRequest(token.get("bucketName"), token.get("filePath") + fileName);
+            OSSAsyncTask deleteTask = ossClient.asyncDeleteObject(delete, new OSSCompletedCallback<DeleteObjectRequest, DeleteObjectResult>() {
+                @Override
+                public void onSuccess(DeleteObjectRequest request, DeleteObjectResult result) {
+                    Log.d("asyncDeleteObject", "success!");
+                }
 
-            @Override
-            public void onFailure(DeleteObjectRequest request, ClientException clientExcepion, ServiceException serviceException) {
-                // 请求异常。
-                if (clientExcepion != null) {
-                    // 客户端异常，例如网络异常等。
-                    clientExcepion.printStackTrace();
+                @Override
+                public void onFailure(DeleteObjectRequest request, ClientException clientExcepion, ServiceException serviceException) {
+                    // 请求异常。
+                    if (clientExcepion != null) {
+                        // 客户端异常，例如网络异常等。
+                        clientExcepion.printStackTrace();
+                    }
+                    if (serviceException != null) {
+                        // 服务端异常。
+                        Log.e("ErrorCode", serviceException.getErrorCode());
+                        Log.e("RequestId", serviceException.getRequestId());
+                        Log.e("HostId", serviceException.getHostId());
+                        Log.e("RawMessage", serviceException.getRawMessage());
+                    }
                 }
-                if (serviceException != null) {
-                    // 服务端异常。
-                    Log.e("ErrorCode", serviceException.getErrorCode());
-                    Log.e("RequestId", serviceException.getRequestId());
-                    Log.e("HostId", serviceException.getHostId());
-                    Log.e("RawMessage", serviceException.getRawMessage());
-                }
-            }
-        });
+            });
+        }
         return true;
     }
 
     /**
      * Delete all files from the cloud storage and return if success.
+     * This method is not implement.
      * @author Cui Yuxin
      */
     @Override
     public boolean deleteAll() throws Exception {
-        List<String> fileList = getFileList();
-        delete(fileList);
-        return true;
+        return false;
     }
 
     /**
