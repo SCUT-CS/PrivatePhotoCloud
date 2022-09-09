@@ -1,7 +1,9 @@
 package cn.edu.scut.ppps;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Environment;
+import android.util.Log;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -25,16 +27,15 @@ import java.util.Map;
 
 /**
  * AliOSS Unit Tests
- * @author Feng Yucheng , Huang Zixi , Zuo Xiaole
+ * @author Feng Yucheng, Huang Zixi
  */
 @RunWith(AndroidJUnit4.class)
 public class AliOSSTests {
 
-    AliOSS AliOSSTests = null;
-    public String imgFileDir = null;
-    public final File weiXinPictureDir = null;
-    public String downloadImgFileDir = null;
-    public String filePath_test = null;
+    AliOSS aliOSSTests = null;
+    public final String downloadImgFileDir = "/storage/emulated/0/Pictures/WeiXin/图片1.png";
+    public final String downloadThumbnailDir = "/storage/emulated/0/Pictures/WeiXin/thumbnail.png";
+    public final String filePath_test = "/storage/emulated/0/Pictures/WeiXin/jpg_small.jpg";
 
     /**
      * Grant permissions.
@@ -50,13 +51,6 @@ public class AliOSSTests {
      */
     @Before
     public void setUp() throws Exception {
-        //文件路径
-        imgFileDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
-                + File.separator + "WeiXin";
-        File weiXinPictureDir = new File(imgFileDir);
-        downloadImgFileDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
-                + File.separator + "PPPS";
-       filePath_test = "/storage/emulated/0/Pictures/PPPS/2022-09-04-10-20-20-918.jpg";
         //构造参数
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         Tokens tokenMaps = new Tokens(appContext);
@@ -70,22 +64,25 @@ public class AliOSSTests {
         token_1.put("filePath", "test/");
         tokenMaps.updateToken("test", token_1);
         //构造函数
-        AliOSSTests = new AliOSS("test", appContext, tokenMaps);
+        aliOSSTests = new AliOSS("test", appContext, tokenMaps);
     }
 
 
     /**
      * Test AliOSS upload method.
-     *
-     * @author Feng Yucheng , Huang Zixi
+     * @author Feng Yucheng, Huang Zixi
      */
     @Test
-    public void uploadTest() throws FileNotFoundException {
-        AliOSSTests.upload(filePath_test);
+    public void uploadTest() {
+        aliOSSTests.upload(filePath_test);
     }
 
-    public byte[] picture_to_byteArray(String picturePath) {
-        File file = new File(String.valueOf(imgFileDir));
+    /**
+     * A helping method to get the byteArray of the image.
+     * @author Feng Yucheng
+     */
+    private byte[] picture_to_byteArray(String picturePath) {
+        File file = new File(String.valueOf(picturePath));
         byte[] ds = null;
         InputStream zp = null;
         ByteArrayOutputStream boos = null;
@@ -113,7 +110,6 @@ public class AliOSSTests {
                     e.printStackTrace();
                 }
             }
-
         }
         return null;
     }
@@ -123,20 +119,17 @@ public class AliOSSTests {
      * @author Feng Yucheng
      */
      public void uploadTest2() throws Exception {
-         byte[] file = picture_to_byteArray(imgFileDir);
-         AliOSSTests.upload(file,imgFileDir);
-
- }
+         byte[] file = picture_to_byteArray(filePath_test);
+         aliOSSTests.upload(file, "图片3.png");
+     }
 
     /**
      * Test AliOSS download method.
      * @author Huang Zixi
      */
     @Test
-    public void downloadTest() throws Exception{
-        //测试
-        boolean isDownload = AliOSSTests.download("图片2.png",downloadImgFileDir);
-        System.out.println(isDownload);
+    public void downloadTest() {
+        aliOSSTests.download("图片2.png", downloadImgFileDir);
     }
 
     /**
@@ -144,9 +137,8 @@ public class AliOSSTests {
      * @author Huang Zixi
      */
     @Test
-    public void getThumbnailTest() throws Exception{
-        boolean isDownload = AliOSSTests.getThumbnail("testImg",downloadImgFileDir);
-        System.out.println(isDownload);
+    public void getThumbnailTest() {
+        aliOSSTests.getThumbnail("图片2.png", downloadThumbnailDir);
     }
 
     /**
@@ -155,8 +147,8 @@ public class AliOSSTests {
      */
     @Test
     public void getFileListTest() throws Exception{
-        List<String> temp = AliOSSTests.getFileList();
-        System.out.print(temp);
+        List<String> temp = aliOSSTests.getFileList();
+        Log.d("AliOSSTest", temp.toString());
     }
 
     /**
@@ -165,10 +157,9 @@ public class AliOSSTests {
      * @author Huang Zixi
      */
     @Test
-    public void deleteTest_String() throws Exception{
-        String fileName = "testImg";
-        boolean isDelete = AliOSSTests.delete(fileName);
-        System.out.println(isDelete);
+    public void deleteTestCaseString() {
+        String fileName = "图片1.png";
+        aliOSSTests.delete(fileName);
     }
 
     /**
@@ -177,8 +168,7 @@ public class AliOSSTests {
      */
     @Test
     public void deleteAllTest() throws Exception{
-        boolean isDelete = AliOSSTests.deleteAll();
-        System.out.println(isDelete);
+        aliOSSTests.deleteAll();
     }
 
     /**
@@ -187,12 +177,11 @@ public class AliOSSTests {
      * @author Huang Zixi
      */
     @Test
-    public void deleteTest_List() throws Exception{
+    public void deleteTestCaseList() {
         List<String> fileNames = new ArrayList<>();
-        fileNames.add("testImg");
-        fileNames.add("testImg2");
-        boolean isDelete = AliOSSTests.delete(fileNames);
-        System.out.println(isDelete);
+        fileNames.add("图片1.png");
+        fileNames.add("图片2.png");
+        aliOSSTests.delete(fileNames);
     }
 }
 
