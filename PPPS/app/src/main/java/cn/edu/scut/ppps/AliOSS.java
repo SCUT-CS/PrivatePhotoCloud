@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.logging.Handler;
 
 /**
  * Alibaba cloud OSS service.
@@ -48,19 +49,22 @@ public class AliOSS implements CloudService {
     private Map<String, String> token;
     private OSS ossClient;
     private Context context;
+    private Handler handler;
 
     /**
      * Constructor.
      * @param tokenName Token`s name.
      * @param context Context of the application.
      * @param tokens Tokens for the cloud storage.
+     * @param handler Handler for the cloud storage.
      * @author Cui Yuxin
      */
-    public AliOSS(String tokenName, Context context, Tokens tokens) {
+    public AliOSS(String tokenName, Context context, Tokens tokens, Handler handler) {
         Map<String, String> token = tokens.getToken(tokenName);
         assert token.get("type").equals("aliyun");
         this.token = token;
         this.context = context;
+        this.handler = handler;
         OSSCredentialProvider credentialProvider = new OSSPlainTextAKSKCredentialProvider(token.get("accessId"), token.get("accessSecret"));
         ossClient = new OSSClient(context, token.get("endpoint"), credentialProvider);
     }
