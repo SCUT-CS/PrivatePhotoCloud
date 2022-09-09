@@ -1,7 +1,6 @@
 package cn.edu.scut.ppps;
 
 import android.app.Activity;
-import android.content.Context;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,9 +13,7 @@ import android.widget.RelativeLayout;
 import com.hao.baselib.utils.DpUtil;
 import com.hao.baselib.utils.ScreenUtil;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class ImageAdapter extends BaseAdapter {
 
@@ -84,12 +81,12 @@ public class ImageAdapter extends BaseAdapter {
                     //多选的处理
                     if (albumActivity.getPicList().contains(filePath)) {
                         //已经被选择
-                        albumActivity.removePicFromList(filePath);
+                        albumActivity.removeImgFromList(filePath);
                         finalViewHolder.mImg.setColorFilter(null);
                         finalViewHolder.mSelect.setImageResource(R.drawable.ic_unchoose);
                     } else {
                         //未被选择
-                        albumActivity.setPicToList(filePath);
+                        albumActivity.addImgToList(filePath);
                         finalViewHolder.mImg.setColorFilter(Color.parseColor("#77000000"));
                         finalViewHolder.mSelect.setImageResource(R.drawable.ic_choose);
                     }

@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Handler;
+import java.util.logging.LogRecord;
 
 /**
  * AliOSS Unit Tests
@@ -63,7 +65,22 @@ public class AliOSSTests {
         token_1.put("filePath", "test/");
         tokenMaps.updateToken("test", token_1);
         //构造函数
-        aliOSSTests = new AliOSS("test", appContext, tokenMaps);
+        aliOSSTests = new AliOSS("test", appContext, tokenMaps, new Handler() {
+            @Override
+            public void publish(LogRecord record) {
+
+            }
+
+            @Override
+            public void flush() {
+
+            }
+
+            @Override
+            public void close() throws SecurityException {
+
+            }
+        });
     }
 
 
