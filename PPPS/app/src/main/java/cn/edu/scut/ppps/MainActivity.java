@@ -1,6 +1,5 @@
 package cn.edu.scut.ppps;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
@@ -25,7 +24,6 @@ import android.widget.Toast;
 import com.google.android.material.navigation.NavigationView;
 import com.hao.baselib.base.WaterPermissionActivity;
 
-import androidx.core.app.ActivityCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -38,6 +36,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import cn.edu.scut.ppps.databinding.ActivityMainBinding;
@@ -58,7 +57,7 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
     private TextView mDirName;
     private TextView mDirCount;
     // 图片数据集
-    private List<String> mImgs;
+    private List<String> mImages;
     // 对应当前文件夹的File对象
     private File mCurrentDir;
     // 当前文件夹中的文件个数
@@ -68,24 +67,64 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
     private Set<String> mDirPaths = new HashSet<String>();
     // 弹框
     private ListImageDirPopupWindow mDirPopupWindow;
-    // 使用参数
-    private boolean isMutil = false;
+    // 是否为批量处理
+    private boolean multiSelect = false;
     // 已经选择图片的集合
     private ArrayList<String> listChoosePics = new ArrayList<>();
+    // 执行中弹框
+    private ProgressDialog mProgressDialog;
     // 该参数负责子线程查询图片后通知主线程更新UI
-    private Handler mHandler = new Handler() {
+    @SuppressLint("HandlerLeak")
+    private Handler uiHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what == 0x110) {
+                showData();
+                initDirPopupWindow();
+            }
+        }
+    };
+    // 该参数负责获取加密子线程执行结果
+    @SuppressLint("HandlerLeak")
+    private Handler encryptHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             if (msg.what == 0x110) {
                 // mProgressDialog.dismiss();//消失对话框
-                data2View();
-                initDirPopupWindow();
+                //mProgressDialog = ProgressDialog.show(this,null,"正在加载...");
+            }
+        }
+    };
+    // 该参数负责获取解密子线程执行结果
+    @SuppressLint("HandlerLeak")
+    private Handler decryptHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what == 0x110) {
+                // mProgressDialog.dismiss();//消失对话框
+                //mProgressDialog = ProgressDialog.show(this,null,"正在加载...");
+            }
+        }
+    };
+    // 该参数负责获取计算缩略图子线程执行结果
+    @SuppressLint("HandlerLeak")
+    private Handler thumbnailHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what == 0x110) {
+                // mProgressDialog.dismiss();//消失对话框
+                //mProgressDialog = ProgressDialog.show(this,null,"正在加载...");
             }
         }
     };
     // 图片适配器
     private ImageAdapter mImgAdapter;
 
+    /**
+     * Create the main activity
+     * @param savedInstanceState Bundle
+     * @author Cui Yuxin
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -126,12 +165,22 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
         });
     }
 
+    /**
+     * Create options menu.
+     * @param menu menu
+     * @author Cui Yuxin
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
+    /**
+     * Select menu item event.
+     * @param item menu item
+     * @author Cui Yuxin
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_settings) {
@@ -141,17 +190,21 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
             intent.setType("image/*");
             startActivityForResult(intent, 2);
         } else if (item.getItemId() == R.id.action_muti) {
-            isMutil = !isMutil;
+            multiSelect = !multiSelect;
             listChoosePics = new ArrayList<>();
             refresh();
         } else if (item.getItemId() == R.id.action_next) {
-            if (isMutil) {
+            if (multiSelect) {
                 // TODO 完成多选逻辑
             }
         }
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Support navigate up.
+     * @author Cui Yuxin
+     */
     @Override
     public boolean onSupportNavigateUp() {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
@@ -159,16 +212,28 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
                 || super.onSupportNavigateUp();
     }
 
+    /**
+     * Get album model.
+     * @author Cui Yuxin
+     */
     @Override
     protected AlbumModel getModelImp() {
         return new AlbumModel(this, this);
     }
 
+    /**
+     * Get content layout Id.
+     * @author Cui Yuxin
+     */
     @Override
     protected int getContentLayoutId() {
         return R.layout.fragment_home;
     }
 
+    /**
+     * Init widget.
+     * @author Cui Yuxin
+     */
     @Override
     protected void initWidget() {
         statusBarColor(R.color.white, false);
@@ -178,6 +243,10 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
         mDirCount = findViewById(R.id.mDirCount);
     }
 
+    /**
+     * Init data.
+     * @author Cui Yuxin
+     */
     @Override
     protected void initData() {
         if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
@@ -195,14 +264,21 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
         });
     }
 
+    /**
+     * Request permission.
+     * @author Cui Yuxin
+     */
     @Override
     protected void doSDRead() {
         requestPermission(WRITE_EXTERNAL_STORAGE);
     }
 
+    /**
+     * Read gallery images.
+     * @author Cui Yuxin
+     */
     @Override
     protected void doSDWrite() {
-        //mProgressDialog = ProgressDialog.show(this,null,"正在加载...");
         new Thread() {
             @Override
             public void run() {
@@ -231,7 +307,7 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
                     if (parentFile.list() == null) {
                         continue;
                     }
-                    int picSize = parentFile.list(new FilenameFilter() {
+                    int picSize = Objects.requireNonNull(parentFile.list(new FilenameFilter() {
                         @Override
                         public boolean accept(File dir, String filename) {
                             if (filename.endsWith(".jpg")
@@ -241,7 +317,7 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
                             }
                             return false;
                         }
-                    }).length;
+                    })).length;
                     folderBean.setCount(picSize);
                     mFolderBeans.add(folderBean);
                     if (picSize > mMaxCount) {
@@ -250,24 +326,32 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
                     }
                 }
                 cursor.close();
-                mHandler.sendEmptyMessage(0x110);
+                uiHandler.sendEmptyMessage(0x110);
             }
         }.start();
     }
 
-    protected void data2View() {
+    /**
+     * Display the data on the UI
+     * @author CUi Yuxin
+     */
+    protected void showData() {
         if (mCurrentDir == null) {
             Toast.makeText(this, "未扫描到任何图片", Toast.LENGTH_SHORT).show();
             return;
         }
-        mImgs = Arrays.asList(mCurrentDir.list());
-        mImgAdapter = new ImageAdapter(this, mImgs, mCurrentDir.getAbsolutePath());
-        mImgAdapter.setMutil(isMutil);
+        mImages = Arrays.asList(Objects.requireNonNull(mCurrentDir.list()));
+        mImgAdapter = new ImageAdapter(this, mImages, mCurrentDir.getAbsolutePath());
+        mImgAdapter.setMutil(multiSelect);
         mGridView.setAdapter(mImgAdapter);
-        mDirCount.setText(mMaxCount + "");
+        mDirCount.setText(String.valueOf(mMaxCount));
         mDirName.setText(mCurrentDir.getName());
     }
 
+    /**
+     * Init dir popup window.
+     * @author Cui Yuxin
+     */
     protected void initDirPopupWindow() {
         mDirPopupWindow = new ListImageDirPopupWindow(this, mFolderBeans);
         mDirPopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
@@ -280,7 +364,7 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
             @Override
             public void onSelected(FolderBean folderBean) {
                 mCurrentDir = new File(folderBean.getDir());
-                mImgs = Arrays.asList(mCurrentDir.list(new FilenameFilter() {
+                mImages = Arrays.asList(Objects.requireNonNull(mCurrentDir.list(new FilenameFilter() {
                     @Override
                     public boolean accept(File dir, String filename) {
                         if (filename.endsWith(".jpg")
@@ -290,17 +374,21 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
                         }
                         return false;
                     }
-                }));
-                mImgAdapter = new ImageAdapter(MainActivity.this, mImgs, mCurrentDir.getAbsolutePath());
-                mImgAdapter.setMutil(isMutil);
+                })));
+                mImgAdapter = new ImageAdapter(MainActivity.this, mImages, mCurrentDir.getAbsolutePath());
+                mImgAdapter.setMutil(multiSelect);
                 mGridView.setAdapter(mImgAdapter);
-                mDirCount.setText(mImgs.size() + "");
+                mDirCount.setText(String.valueOf(mImages.size()));
                 mDirName.setText(folderBean.getName());
                 mDirPopupWindow.dismiss();
             }
         });
     }
 
+    /**
+     * Day mode.
+     * @author Cui Yuxin
+     */
     private void lightOn() {
         // TODO 修改颜色
         WindowManager.LayoutParams lp = getWindow().getAttributes();
@@ -308,6 +396,10 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
         getWindow().setAttributes(lp);
     }
 
+    /**
+     * Night mode.
+     * @author Cui Yuxin
+     */
     private void lightOff() {
         // TODO 修改颜色
         WindowManager.LayoutParams lp = getWindow().getAttributes();
@@ -315,48 +407,60 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
         getWindow().setAttributes(lp);
     }
 
+    /**
+     * Bind event for view
+     * @param v view
+     * @author Cui Yuxin
+     */
     @Override
-    public void onClick(View v) {
-
-    }
+    public void onClick(View v) {}
 
     /**
-     * 添加图片到已选集合中
+     * Add pictures to the selected collection.
+     * @param imgPath The path of the picture to be added.
+     * @author Cui Yuxin
      */
-    public void setPicToList(String pathPic) {
-        listChoosePics.add(pathPic);
+    public void addImgToList(String imgPath) {
+        listChoosePics.add(imgPath);
     }
 
     /**
-     * 从集合中删除指定图片
+     * Delete the specified picture from the collection.
+     * @param imgPath The path of the picture to be removed.
+     * @author Cui Yuxin
      */
-    public void removePicFromList(String pathPic) {
-        listChoosePics.remove(pathPic);
+    public void removeImgFromList(String imgPath) {
+        listChoosePics.remove(imgPath);
     }
 
     /**
-     * 获取图片集合
+     * Get picture collection.
+     * @author Cui Yuxin
      */
     public ArrayList<String> getPicList() {
         return listChoosePics;
     }
 
     /**
-     * 是否多图
+     * Return if multiple choice.
+     * @author Cui Yuxin
      */
-    public boolean isMutil() {
-        return isMutil;
+    public boolean isMultiSelect() {
+        return multiSelect;
     }
 
     /**
-     * 单选的处理
+     * Single choice processing
+     * @param path The path of the picture to be selected.
+     * @author Cui Yuxin
      */
     public void singleGet(String path) {
         // TODO 单图的处理
     }
 
     /**
-     * 刷新界面
+     * Refresh the screen.
+     * @author Cui Yuxin
      */
     public void refresh() {
         initWidget();

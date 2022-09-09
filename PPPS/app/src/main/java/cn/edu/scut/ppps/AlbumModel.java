@@ -9,4 +9,5 @@ public class AlbumModel extends MvcBaseModel<AlbumCallback> {
     public AlbumModel(Context context, AlbumCallback callback) {
         super(context, callback);
     }
+
 }
