@@ -26,6 +26,14 @@ import java.util.concurrent.Callable;
  */
 public class Utils {
 
+    public static final int CLOUD_SUCCESS = 0;
+    public static final int CLOUD_ERROR = -1;
+    public static final int START_CLOUD = 4;
+    public static final int FINISH_CLOUD = 5;
+    public static final int START_ALGORITHM = 2;
+    public static final int FINISH_ALGORITHM = 3;
+    public static final int ALGORITHM_ERROR = -2;
+
     /**
      * Open an image and return.
      * This method may take several seconds to complete, so it should only be called from a worker thread.
