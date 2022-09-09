@@ -1,5 +1,8 @@
 package cn.edu.scut.ppps;
 
+import com.alibaba.sdk.android.oss.ClientException;
+import com.alibaba.sdk.android.oss.ServiceException;
+
 import java.io.FileNotFoundException;
 import java.util.List;
 
@@ -14,7 +17,7 @@ public interface CloudService {
      * @param filePath Path of the file to be uploaded.
      * @author Cui Yuxin
      */
-    boolean upload(String filePath) throws FileNotFoundException;
+    boolean upload(String filePath);
 
     /**
      * Upload a file to the cloud storage and return if success.
@@ -22,11 +25,11 @@ public interface CloudService {
      * @param fileName Name of the file to be uploaded.
      * @author Cui Yuxin
      */
-    boolean upload(byte[] file, String fileName);
+    boolean upload(byte[] file, String fileName) throws Exception;
 
     /**
      * Download a file from the cloud storage and return if success.
-     * @param fileName Name of the file to be downloaded.
+     * @param fileName Name of the file to be uploaded.
      * @param downloadPath Path to store the file, e.g. "Disk1".
      * @author Cui Yuxin
      */
@@ -44,7 +47,7 @@ public interface CloudService {
      * Get a list of files in the cloud storage and return.
      * @author Cui Yuxin
      */
-    List<String> getFileList();
+    List<String> getFileList() throws Exception;
 
     /**
      * Delete a file from the cloud storage and return if success.
@@ -57,7 +60,7 @@ public interface CloudService {
      * Delete all files from the cloud storage and return if success.
      * @author Cui Yuxin
      */
-    boolean deleteAll();
+    boolean deleteAll() throws Exception;
 
     /**
      * Delete files from the cloud storage and return if success.
