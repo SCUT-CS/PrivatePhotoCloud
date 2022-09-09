@@ -18,7 +18,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -32,6 +34,7 @@ public class AliOSSTests {
     public String imgFileDir = null;
     public final File weiXinPictureDir = null;
     public String downloadImgFileDir = null;
+    public String filePath_test = null;
 
     /**
      * Grant permissions.
@@ -53,16 +56,17 @@ public class AliOSSTests {
         File weiXinPictureDir = new File(imgFileDir);
         downloadImgFileDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
                 + File.separator + "PPPS";
+       filePath_test = "/storage/emulated/0/Pictures/PPPS/2022-09-04-10-20-20-918.jpg";
         //构造参数
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         Tokens tokenMaps = new Tokens(appContext);
         Map<String, String> token_1 = new HashMap<>();
         //阿里云token赋值
         token_1.put("type", "aliyun");
-        token_1.put("accessID", "LTAI5t9Wx9ZwYxCuPEGoxoct");
+        token_1.put("accessId", "LTAI5t9Wx9ZwYxCuPEGoxoct");
         token_1.put("accessSecret", "IJWyl2xxwYC1vwaTkw8mZ4hWnKZXxP");
         token_1.put("endpoint", "oss-cn-hangzhou.aliyuncs.com");
-        token_1.put("bucketName", "ppps1.oss-cn-hangzhou.aliyuncs.com ");
+        token_1.put("bucketName", "ppps1");
         token_1.put("filePath", "test/");
         tokenMaps.updateToken("test", token_1);
         //构造函数
@@ -73,11 +77,11 @@ public class AliOSSTests {
     /**
      * Test AliOSS upload method.
      *
-     * @author Feng Yucheng
+     * @author Feng Yucheng , Huang Zixi
      */
     @Test
     public void uploadTest() throws FileNotFoundException {
-        AliOSSTests.upload(imgFileDir);
+        AliOSSTests.upload(filePath_test);
     }
 
     public byte[] picture_to_byteArray(String picturePath) {
@@ -118,10 +122,10 @@ public class AliOSSTests {
      * Test AliOSS upload method.
      * @author Feng Yucheng
      */
-     public void uploadTest2() {
+     public void uploadTest2() throws Exception {
          byte[] file = picture_to_byteArray(imgFileDir);
          AliOSSTests.upload(file,imgFileDir);
-         
+
  }
 
     /**
@@ -151,7 +155,8 @@ public class AliOSSTests {
      */
     @Test
     public void getFileListTest() throws Exception{
-
+        List<String> temp = AliOSSTests.getFileList();
+        System.out.print(temp);
     }
 
     /**
@@ -183,11 +188,12 @@ public class AliOSSTests {
      */
     @Test
     public void deleteTest_List() throws Exception{
-
+        List<String> fileNames = new ArrayList<>();
+        fileNames.add("testImg");
+        fileNames.add("testImg2");
+        boolean isDelete = AliOSSTests.delete(fileNames);
+        System.out.println(isDelete);
     }
-
-
-
 }
 
 
