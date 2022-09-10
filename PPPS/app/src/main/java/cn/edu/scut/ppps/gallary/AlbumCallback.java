@@ -1,4 +1,4 @@
-package cn.edu.scut.ppps;
+package cn.edu.scut.ppps.gallary;
 
 
 import com.hao.baselib.base.MvcBaseCallBack;

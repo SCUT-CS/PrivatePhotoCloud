@@ -40,6 +40,11 @@ import java.util.Objects;
 import java.util.Set;
 
 import cn.edu.scut.ppps.databinding.ActivityMainBinding;
+import cn.edu.scut.ppps.gallary.AlbumCallback;
+import cn.edu.scut.ppps.gallary.AlbumModel;
+import cn.edu.scut.ppps.gallary.FolderBean;
+import cn.edu.scut.ppps.gallary.ImageAdapter;
+import cn.edu.scut.ppps.gallary.ListImageDirPopupWindow;
 
 /**
  * Main Activity

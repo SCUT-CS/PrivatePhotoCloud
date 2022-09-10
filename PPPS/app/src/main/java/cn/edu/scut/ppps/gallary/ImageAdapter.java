@@ -1,4 +1,4 @@
-package cn.edu.scut.ppps;
+package cn.edu.scut.ppps.gallary;
 
 import android.app.Activity;
 import android.graphics.Color;
@@ -14,6 +14,9 @@ import com.hao.baselib.utils.DpUtil;
 import com.hao.baselib.utils.ScreenUtil;
 
 import java.util.List;
+
+import cn.edu.scut.ppps.MainActivity;
+import cn.edu.scut.ppps.R;
 
 public class ImageAdapter extends BaseAdapter {
 

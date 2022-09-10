@@ -1,4 +1,4 @@
-package cn.edu.scut.ppps;
+package cn.edu.scut.ppps.gallary;
 
 import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
@@ -18,6 +18,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.util.List;
+
+import cn.edu.scut.ppps.R;
+import cn.edu.scut.ppps.gallary.FolderBean;
+import cn.edu.scut.ppps.gallary.ImageLoader;
 
 public class ListImageDirPopupWindow extends PopupWindow {
 
