@@ -27,7 +27,7 @@
             android:id="@+id/mBottomly"
             android:layout_width="match_parent"
             android:layout_height="45dp"
-            android:background="#000">
+            android:background="#286CAA">
 
             <TextView
                 android:id="@+id/mDirName"
