@@ -66,7 +66,6 @@ public class Utils {
         if (file.exists() && file.isFile()) {
             return file.getName();
         } else {
-            // TODO handle exception
             throw new IOException("File not found or ?.");
         }
     }

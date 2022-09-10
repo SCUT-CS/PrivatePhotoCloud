@@ -104,7 +104,6 @@ public class LoginActivity extends WaterPermissionActivity<LoginModel> implement
 
     @Override
     public void updateApkSuccess() {
-        // TODO: 2021/1/12 启动版本更新
 //        UpdateUtil.getInstance().startUpdate(this
 //                , updateApkEntity.getData().getVersioncode()
 //                , updateApkEntity.getData().getBbms().replaceAll("\\\\n","\n")
