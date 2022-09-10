@@ -7,10 +7,11 @@ import android.os.Handler;
 import android.os.Message;
 
 import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+
+import cn.edu.scut.ppps.cloud.CloudService;
 
 /**
  * Pipeline for processing.

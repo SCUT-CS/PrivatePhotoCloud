@@ -22,6 +22,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import cn.edu.scut.ppps.cloud.Tokens;
+
 /**
  * Tokens Unit Tests
  * @author Huang zixi, Feng Yucheng
@@ -51,7 +53,7 @@ public class TokensTest {
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         // 通过反射创造Tokens类
         Class tokensClass = null;
-        tokensClass = Class.forName("cn.edu.scut.ppps.Tokens");
+        tokensClass = Class.forName("cn.edu.scut.ppps.cloud.Tokens");
         Constructor constructor = null;
         constructor = tokensClass.getConstructor(Context.class);
         tokensTest = (Tokens) constructor.newInstance(appContext);

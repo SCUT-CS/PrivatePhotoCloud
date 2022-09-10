@@ -8,7 +8,6 @@ import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.GrantPermissionRule;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,6 +24,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Handler;
 import java.util.logging.LogRecord;
+
+import cn.edu.scut.ppps.cloud.AliOSS;
+import cn.edu.scut.ppps.cloud.Tokens;
 
 /**
  * AliOSS Unit Tests

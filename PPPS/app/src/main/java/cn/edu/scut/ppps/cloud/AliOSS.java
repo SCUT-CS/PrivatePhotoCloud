@@ -1,4 +1,4 @@
-package cn.edu.scut.ppps;
+package cn.edu.scut.ppps.cloud;
 
 import android.content.Context;
 import android.util.Log;
