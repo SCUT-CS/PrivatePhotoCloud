@@ -1,5 +1,7 @@
 package cn.edu.scut.ppps.cloud;
 
+import android.os.Handler;
+
 import com.alibaba.sdk.android.oss.ClientException;
 import com.alibaba.sdk.android.oss.ServiceException;
 
@@ -18,6 +20,13 @@ public interface CloudService {
      * @author Cui Yuxin
      */
     boolean upload(String filePath);
+
+    /**
+     * Set the handler.
+     * @param handler Handler to set.
+     * @author Cui Yuxin
+     */
+    void setHandler(Handler handler);
 
     /**
      * Upload a file to the cloud storage and return if success.

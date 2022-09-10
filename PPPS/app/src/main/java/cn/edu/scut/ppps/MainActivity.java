@@ -89,31 +89,9 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
             }
         }
     };
-    // 该参数负责获取加密子线程执行结果
+    // 该参数负责获取子线程执行结果
     @SuppressLint("HandlerLeak")
-    private Handler encryptHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            if (msg.what == 0x110) {
-                // mProgressDialog.dismiss();//消失对话框
-                //mProgressDialog = ProgressDialog.show(this,null,"正在加载...");
-            }
-        }
-    };
-    // 该参数负责获取解密子线程执行结果
-    @SuppressLint("HandlerLeak")
-    private Handler decryptHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            if (msg.what == 0x110) {
-                // mProgressDialog.dismiss();//消失对话框
-                //mProgressDialog = ProgressDialog.show(this,null,"正在加载...");
-            }
-        }
-    };
-    // 该参数负责获取计算缩略图子线程执行结果
-    @SuppressLint("HandlerLeak")
-    private Handler thumbnailHandler = new Handler() {
+    private Handler AlgorithmHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             if (msg.what == 0x110) {

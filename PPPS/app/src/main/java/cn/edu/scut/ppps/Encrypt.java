@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.util.Random;
 import java.util.concurrent.Callable;
 
+import cn.edu.scut.ppps.cloud.CloudService;
+
 /**
  * Encrypt a image.
  * @author Cui Yuxin, Zhao Bowen

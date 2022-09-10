@@ -51,24 +51,32 @@ public class AliOSS implements CloudService {
     private Map<String, String> token;
     private OSS ossClient;
     private Context context;
-    private Handler handler;
+    private Handler handler = null;
 
     /**
      * Constructor.
      * @param tokenName Token`s name.
      * @param context Context of the application.
      * @param tokens Tokens for the cloud storage.
-     * @param handler Handler for the cloud storage.
      * @author Cui Yuxin
      */
-    public AliOSS(String tokenName, Context context, Tokens tokens, Handler handler) {
+    public AliOSS(String tokenName, Context context, Tokens tokens) {
         Map<String, String> token = tokens.getToken(tokenName);
         assert token.get("type").equals("aliyun");
         this.token = token;
         this.context = context;
-        this.handler = handler;
         OSSCredentialProvider credentialProvider = new OSSPlainTextAKSKCredentialProvider(token.get("accessId"), token.get("accessSecret"));
         ossClient = new OSSClient(context, token.get("endpoint"), credentialProvider);
+    }
+
+    /**
+     * Set the handler.
+     * @param handler Handler to set.
+     * @author Cui Yuxin
+     */
+    @Override
+    public void setHandler(Handler handler) {
+        this.handler = handler;
     }
 
     /**

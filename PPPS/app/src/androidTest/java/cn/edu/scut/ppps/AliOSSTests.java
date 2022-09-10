@@ -67,7 +67,7 @@ public class AliOSSTests {
         token_1.put("filePath", "test/");
         tokenMaps.updateToken("test", token_1);
         //构造函数
-        aliOSSTests = new AliOSS("test", appContext, tokenMaps, new Handler());
+        aliOSSTests = new AliOSS("test", appContext, tokenMaps);
     }
 
 
