@@ -37,6 +37,10 @@ public class Utils {
     public static final int ALGORITHM_ERROR = -2;
     // Encrypt Handler value
     public static final int ENCRYPT_SUCCESS = 5;
+    // Decrypt Handler value
+    public static final int DECRYPT_SUCCESS = 6;
+    // Thumbnail Handler value
+    public static final int THUMBNAIL_SUCCESS = 7;
 
     /**
      * Open an image and return.
