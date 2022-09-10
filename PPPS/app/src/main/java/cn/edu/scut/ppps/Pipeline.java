@@ -5,8 +5,9 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.Future;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -44,6 +45,9 @@ public class Pipeline {
     // Cloud handler count
     int cloudHandler1Count = 0;
     int cloudHandler2Count = 0;
+    int cloudTotalCount = 0;
+    String[] cloud1Upload;
+    String[] cloud2Upload;
     // Algorithm handler
     int encryptAlgoHandlerCount = 0;
     int decryptAlgoHandlerCount = 0;
@@ -57,6 +61,12 @@ public class Pipeline {
                 if (encryptAlgoHandlerCount <= 0) {
                     mainHandler.sendEmptyMessage(Utils.FINISH_ALGORITHM);
 
+
+                }
+            } else if (msg.what == Utils.CLOUD_SUCCESS) {
+                cloudTotalCount--;
+                if (cloudTotalCount <= 0) {
+                    mainHandler.sendEmptyMessage(Utils.FINISH_CLOUD);
                 }
             }
         }
@@ -111,6 +121,7 @@ public class Pipeline {
         thumbnailAlgoHandlerCount = 0;
         cloudHandler1Count = 0;
         cloudHandler2Count = 0;
+        cloudTotalCount = 0;
     }
 
     /**
@@ -120,19 +131,39 @@ public class Pipeline {
     public void encryptPipeline(String[] path) {
         init();
         int length = path.length;
-        // TODO 准备上传路径
+        // cloud
+        cloud1Upload = new String[length];
+        cloud2Upload = new String[length];
+        String cachePath = context.getCacheDir().getAbsolutePath();
+        String savePath1 = cachePath + File.separator + "Disk1" + File.separator;
+        String savePath2 = cachePath + File.separator + "Disk2" + File.separator;
+        for (int i = 0; i < length; i++) {
+            try {
+                cloud1Upload[i] = savePath1 + Utils.getFileName(path[i]) + ".ori.webp";
+                cloud2Upload[i] = savePath2 + Utils.getFileName(path[i]) + ".ori.webp";
+            } catch (IOException e) {
+                e.printStackTrace();
+                mainHandler.sendEmptyMessage(Utils.ERROR);
+                return;
+            }
+        }
+        cloudStorage1.setHandler(encryptAlgoHandler);
+        cloudStorage2.setHandler(encryptAlgoHandler);
+        // algorithm
         mainHandler.sendEmptyMessage(Utils.START_ALGORITHM);
         encryptAlgoHandlerCount = length;
-        for (int i = 0; i < length; i++) {
-            Encrypt encrypt = new Encrypt(path[i], context, encryptAlgoHandler);
-            EncryptThreadPool.submit(encrypt);
+        for (String s : path) {
+            EncryptThreadPool.submit(new Encrypt(s, context, encryptAlgoHandler));
         }
     }
 
     private void uploadCloud(String[] path1, String[] path2) {
         int length = path1.length;
-        cloudHandler1Count = length;
+        cloudTotalCount = length * 2;
         cloudHandler2Count = length;
+
+        mainHandler.sendEmptyMessage(Utils.START_CLOUD);
+        
         for (int i = 0; i < length; i++) {
 
         }
