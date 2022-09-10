@@ -176,9 +176,8 @@ public class AlgorithmTest {
         AliOSS aliOSS4 = constructAliOSS("ppps2");
         aliOSS3.getThumbnail( imgName + ".ori.webp", "Disk1Thumbnail");
         aliOSS4.getThumbnail( imgName + ".ori.webp", "Disk2Thumbnail");
-        String downloadPath1 =context.getCacheDir().getAbsolutePath() + File.separator + "Disk1Thumbnail"+File.separator + imgName + "Thumbnail1.ori.webp";
-        String downloadPath2 =context.getCacheDir().getAbsolutePath() + File.separator + "Disk1Thumbnail"+File.separator + imgName + "Thumbnail2.ori.webp";
-
+        String downloadPath1 =context.getCacheDir().getAbsolutePath() + File.separator + "Disk1Thumbnail"+File.separator + imgName + ".ori.webp";
+        String downloadPath2 =context.getCacheDir().getAbsolutePath() + File.separator + "Disk2Thumbnail"+File.separator + imgName + ".ori.webp";
         //解密
         Decrypt decrypt = new Decrypt(downloadPath1, downloadPath2, context, true);
         ThreadPoolExecutor threadPoolExecutor3 = new ThreadPoolExecutor(5, 10, 1000, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(16));
