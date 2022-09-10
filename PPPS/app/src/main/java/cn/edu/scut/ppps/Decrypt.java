@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.ColorSpace;
+import android.os.Handler;
 import android.util.Log;
 
 import java.io.File;
@@ -26,6 +27,7 @@ public class Decrypt implements Callable {
     private boolean isThumbnail;
     private int[][][] overflow = null;
     private Context context;
+    private Handler handler;
 
     /**
      * Constructor.
@@ -40,6 +42,23 @@ public class Decrypt implements Callable {
         this.imgFilePath2 = imgFilePath2;
         this.isThumbnail = isThumbnail;
         this.context = context;
+    }
+
+    /**
+     * Constructor.
+     * @param imgFilePath1 The path of the first image.
+     * @param imgFilePath2 The path of the second image.
+     * @param isThumbnail Whether the image is a thumbnail.
+     * @param context The context.
+     * @param handler The handler.
+     * @author Cui Yuxin
+     */
+    public Decrypt(String imgFilePath1, String imgFilePath2, Context context, boolean isThumbnail, Handler handler) {
+        this.imgFilePath1 = imgFilePath1;
+        this.imgFilePath2 = imgFilePath2;
+        this.isThumbnail = isThumbnail;
+        this.context = context;
+        this.handler = handler;
     }
 
     /**
@@ -151,8 +170,14 @@ public class Decrypt implements Callable {
         initialize();
         if (isThumbnail) {
             decryptThumbnail();
+            if (handler != null) {
+                handler.sendEmptyMessage(Utils.THUMBNAIL_SUCCESS);
+            }
         } else {
             decrypt();
+            if (handler != null) {
+                handler.sendEmptyMessage(Utils.DECRYPT_SUCCESS);
+            }
         }
         return img;
     }

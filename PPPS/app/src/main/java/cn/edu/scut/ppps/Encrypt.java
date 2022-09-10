@@ -2,14 +2,16 @@ package cn.edu.scut.ppps;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.ColorSpace;
+import android.os.Handler;
 import android.util.Log;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 import java.util.concurrent.Callable;
+
+import cn.edu.scut.ppps.cloud.CloudService;
 
 /**
  * Encrypt a image.
@@ -27,6 +29,20 @@ public class Encrypt implements Callable {
     private int width;
     private int height;
     private byte[][][] overflow;
+    private Handler handler;
+
+    /**
+     * Constructor.
+     * @param filePath Path of the image file to be encrypted.
+     * @param context Context of the application.
+     * @param handler Handler of the activity.
+     * @author Cui Yuxin
+     */
+    public Encrypt(String filePath, Context context, Handler handler) {
+        this.filePath = filePath;
+        this.context = context;
+        this.handler = handler;
+    }
 
     /**
      * Constructor.
@@ -37,6 +53,7 @@ public class Encrypt implements Callable {
     public Encrypt(String filePath, Context context) {
         this.filePath = filePath;
         this.context = context;
+        this.handler = null;
     }
 
     /**
@@ -116,6 +133,9 @@ public class Encrypt implements Callable {
         openFile();
         encrypt();
         saveFile();
+        if (handler != null) {
+            handler.sendEmptyMessage(Utils.ENCRYPT_SUCCESS);
+        }
         return new Bitmap[]{img1, img2};
     }
 

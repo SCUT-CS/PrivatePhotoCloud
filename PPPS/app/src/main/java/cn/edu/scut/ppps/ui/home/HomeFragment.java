@@ -17,7 +17,7 @@ public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
     private MainActivity mainActivity;
-    private int count = 2;
+    private int count = 1;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {

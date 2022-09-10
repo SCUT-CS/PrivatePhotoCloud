@@ -1,10 +1,13 @@
 package cn.edu.scut.ppps;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.ImageDecoder;
+import android.net.Uri;
 import android.os.Build;
 
+import androidx.core.content.FileProvider;
 import androidx.heifwriter.HeifWriter;
 
 import org.junit.Ignore;
@@ -22,6 +25,22 @@ import java.util.concurrent.Callable;
  * @author Cui Yuxin, Feng Yucheng
  */
 public class Utils {
+
+    // Cloud Handler value
+    public static final int CLOUD_SUCCESS = 0;
+    public static final int CLOUD_FAILURE = -1;
+    // MainActivity Handler value
+    public static final int START_CLOUD = 1;
+    public static final int FINISH_CLOUD = 2;
+    public static final int START_ALGORITHM = 3;
+    public static final int FINISH_ALGORITHM = 4;
+    public static final int ALGORITHM_ERROR = -2;
+    // Encrypt Handler value
+    public static final int ENCRYPT_SUCCESS = 5;
+    // Decrypt Handler value
+    public static final int DECRYPT_SUCCESS = 6;
+    // Thumbnail Handler value
+    public static final int THUMBNAIL_SUCCESS = 7;
 
     /**
      * Open an image and return.
