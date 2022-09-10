@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Environment;
+import android.util.Log;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -15,6 +16,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -39,15 +42,10 @@ public class AlgorithmTest {
             + File.separator + "PPPS"
             + File.separator + imgName;
     //加密后的图片路径 除了名字都已经写死了
-    String Path1 = context.getCacheDir().getAbsolutePath() + File.separator + "Disk1" + File.separator + imgName + "1.ori.webp";
-    String Path2 = context.getCacheDir().getAbsolutePath() + File.separator + "Disk2" + File.separator + imgName + "2.ori.webp";
+    String Path1 = context.getCacheDir().getAbsolutePath() + File.separator + "Disk1" + File.separator + imgName + ".ori.webp";
+    String Path2 = context.getCacheDir().getAbsolutePath() + File.separator + "Disk2" + File.separator + imgName + ".ori.webp";
     //加密缩率图下载路径
-    String downloadPath1 = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
-            + File.separator + "PPPS"
-            + File.separator + imgName + "Thumbnail1.ori.webp";
-    String downloadPath2 = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
-            + File.separator + "PPPS"
-            + File.separator + imgName + "Thumbnail2.ori.webp";
+
     //解密缩率图保存路径
     String thumbnailImgPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
             + File.separator + "PPPS"
@@ -125,6 +123,37 @@ public class AlgorithmTest {
     }
 
     /**
+     * 保存bitmap到本地
+     * @param bitmap Bitmap
+     */
+    private static void saveBitmap(Bitmap bitmap,String path) throws Exception {
+        String savePath;
+        File filePic;
+        if (Environment.getExternalStorageState().equals(
+                Environment.MEDIA_MOUNTED)) {
+            savePath = path;
+        } else {
+            Log.e("tag", "saveBitmap failure : sdcard not mounted");
+            return;
+        }
+        try {
+            filePic = new File(savePath);
+            if (!filePic.exists()) {
+                filePic.getParentFile().mkdirs();
+                filePic.createNewFile();
+            }
+            FileOutputStream fos = new FileOutputStream(filePic);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+            fos.flush();
+            fos.close();
+        } catch (IOException e) {
+            Log.e("tag", "saveBitmap: " + e.getMessage());
+            return;
+        }
+        Log.i("tag", "saveBitmap success: " + filePic.getAbsolutePath());
+    }
+
+    /**
      * Test Algorithm Validity.
      * Upload the image and decrypt thumbnail, and compare the two images.
      * @author Huang Zixi
@@ -145,38 +174,24 @@ public class AlgorithmTest {
         //下载缩略图
         AliOSS aliOSS3 = constructAliOSS("ppps1");
         AliOSS aliOSS4 = constructAliOSS("ppps2");
-        aliOSS3.getThumbnail("test/" + imgName + ".ori.webp", downloadPath1);
-        aliOSS4.getThumbnail("test/" + imgName + ".ori.webp", downloadPath2;
+        aliOSS3.getThumbnail( imgName + ".ori.webp", "Disk1Thumbnail");
+        aliOSS4.getThumbnail( imgName + ".ori.webp", "Disk2Thumbnail");
+        String downloadPath1 =context.getCacheDir().getAbsolutePath() + File.separator + "Disk1Thumbnail"+File.separator + imgName + "Thumbnail1.ori.webp";
+        String downloadPath2 =context.getCacheDir().getAbsolutePath() + File.separator + "Disk1Thumbnail"+File.separator + imgName + "Thumbnail2.ori.webp";
 
         //解密
         Decrypt decrypt = new Decrypt(downloadPath1, downloadPath2, context, true);
         ThreadPoolExecutor threadPoolExecutor3 = new ThreadPoolExecutor(5, 10, 1000, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(16));
         Future<Bitmap> results = threadPoolExecutor3.submit(decrypt);
         Bitmap result = results.get();
-        String imgPath = context.getCacheDir().getAbsolutePath() + File.separator + "Disk1" + File.separator + "ZHAO_thumbnail.png";
+        saveBitmap(result,thumbnailImgPath);
+        //正确性检查
         Bitmap expectedImg = Utils.openImg(imgPath);
         Assert.assertEquals(expectedImg.getWidth(), result.getWidth());
         Assert.assertEquals(expectedImg.getHeight(), result.getHeight());
         for (int i = 0; i < result.getWidth(); i++) {
             for (int j = 0; j < result.getHeight(); j++) {
                 Assert.assertEquals(expectedImg.getPixel(i, j), result.getPixel(i, j));
-            }
-        }
-        // 正确性检查
-        for (int i = 0; i < 1000; i++) {
-            int row = (int) (Math.random() * resultDecrypt.getHeight());
-            int col = (int) (Math.random() * resultDecrypt.getWidth());
-            int originalPixel = originalImg.getPixel(col, row);
-            int pixel = resultDecrypt.getPixel(col, row);
-            Assert.assertEquals("加密算法错误！(R)row：" + row + "col:" + col,
-                    Color.red(originalPixel), Color.red(pixel));
-            Assert.assertEquals("加密算法错误！(G)row：" + row + "col:" + col,
-                    Color.green(originalPixel), Color.green(pixel));
-            Assert.assertEquals("加密算法错误！(B)row：" + row + "col:" + col,
-                    Color.blue(originalPixel), Color.blue(pixel));
-            if (resultDecrypt.hasAlpha()) {
-                Assert.assertEquals("加密算法错误！(A)row：" + row + "col:" + col,
-                        Color.alpha(originalPixel), Color.alpha(pixel));
             }
         }
     }
