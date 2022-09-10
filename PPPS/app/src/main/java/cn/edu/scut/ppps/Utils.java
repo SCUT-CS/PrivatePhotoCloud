@@ -27,7 +27,7 @@ import java.util.concurrent.Callable;
 public class Utils {
 
     public static final int CLOUD_SUCCESS = 0;
-    public static final int CLOUD_ERROR = -1;
+    public static final int CLOUD_FAILURE = -1;
     public static final int START_CLOUD = 4;
     public static final int FINISH_CLOUD = 5;
     public static final int START_ALGORITHM = 2;

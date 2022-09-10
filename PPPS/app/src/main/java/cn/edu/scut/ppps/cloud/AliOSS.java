@@ -1,6 +1,7 @@
 package cn.edu.scut.ppps.cloud;
 
 import android.content.Context;
+import android.os.Handler;
 import android.util.Log;
 
 import com.alibaba.sdk.android.oss.ClientException;
@@ -31,7 +32,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.logging.Handler;
+
+import cn.edu.scut.ppps.Utils;
 
 /**
  * Alibaba cloud OSS service.
@@ -95,7 +97,7 @@ public class AliOSS implements CloudService {
                 Log.d("PutObject", "UploadSuccess");
                 Log.d("ETag", result.getETag());
                 Log.d("RequestId", result.getRequestId());
-                // TODO 异步处理结果返回
+                handler.sendEmptyMessage(Utils.CLOUD_SUCCESS);
             }
             @Override
             public void onFailure(PutObjectRequest request, ClientException clientExcepion, ServiceException serviceException) {
@@ -111,13 +113,13 @@ public class AliOSS implements CloudService {
                     Log.e("HostId", serviceException.getHostId());
                     Log.e("RawMessage", serviceException.getRawMessage());
                 }
-                // TODO 异步处理结果返回
+                handler.sendEmptyMessage(Utils.CLOUD_FAILURE);
             }
         });
         // 取消上传任务。
         // task.cancel();
         // 等待上传任务完成。
-        task.waitUntilFinished();
+        //task.waitUntilFinished();
         return true;
     }
 
@@ -131,10 +133,7 @@ public class AliOSS implements CloudService {
     public boolean upload(byte[] file, String fileName) throws Exception {
         PutObjectRequest put = new PutObjectRequest(token.get("bucketName"), token.get("filePath") + fileName, file);
         PutObjectResult putResult = ossClient.putObject(put);
-        Log.d("PutObject", "UploadSuccess");
-        Log.d("ETag", putResult.getETag());
-        Log.d("RequestId", putResult.getRequestId());
-        // TODO 异步处理结果返回
+        handler.sendEmptyMessage(Utils.CLOUD_SUCCESS);
         return true;
     }
 
@@ -177,12 +176,12 @@ public class AliOSS implements CloudService {
                         OSSLog.logInfo(e.toString());
                     }
                 }
-                // TODO 异步处理结果返回
+                handler.sendEmptyMessage(Utils.CLOUD_SUCCESS);
             }
             @Override
             public void onFailure(GetObjectRequest request, ClientException clientException,
                                   ServiceException serviceException)  {
-                // TODO 异步处理结果返回
+                handler.sendEmptyMessage(Utils.CLOUD_FAILURE);
             }
         });
         return true;
@@ -230,12 +229,12 @@ public class AliOSS implements CloudService {
                         OSSLog.logInfo(e.toString());
                     }
                 }
-                // TODO 异步处理结果返回
+                handler.sendEmptyMessage(Utils.CLOUD_SUCCESS);
             }
 
             @Override
             public void onFailure(GetObjectRequest request, ClientException clientExcepion, ServiceException serviceException) {
-                // TODO 异步处理结果返回
+                handler.sendEmptyMessage(Utils.CLOUD_FAILURE);
             }
         });
         return true;
@@ -257,7 +256,7 @@ public class AliOSS implements CloudService {
                 for (OSSObjectSummary objectSummary : result.getObjectSummaries()) {
                     Log.i("ListObjects", objectSummary.getKey());
                 }
-                // TODO 异步处理结果返回
+                handler.sendEmptyMessage(Utils.CLOUD_SUCCESS);
             }
             @Override
             public void onFailure(ListObjectsRequest request, ClientException clientException, ServiceException serviceException) {
@@ -273,7 +272,7 @@ public class AliOSS implements CloudService {
                     Log.e("HostId", serviceException.getHostId());
                     Log.e("RawMessage", serviceException.getRawMessage());
                 }
-                // TODO 异步处理结果返回
+                handler.sendEmptyMessage(Utils.CLOUD_FAILURE);
             }
         }).getResult().getObjectSummaries();
         List<String> fileList = new ArrayList<>();
@@ -298,7 +297,7 @@ public class AliOSS implements CloudService {
                 @Override
                 public void onSuccess(DeleteObjectRequest request, DeleteObjectResult result) {
                     Log.d("asyncDeleteObject", "success!");
-                    // TODO 异步处理结果返回
+                    handler.sendEmptyMessage(Utils.CLOUD_SUCCESS);
                 }
 
                 @Override
@@ -315,7 +314,7 @@ public class AliOSS implements CloudService {
                         Log.e("HostId", serviceException.getHostId());
                         Log.e("RawMessage", serviceException.getRawMessage());
                     }
-                    // TODO 异步处理结果返回
+                    handler.sendEmptyMessage(Utils.CLOUD_FAILURE);
                 }
             });
         }
@@ -330,6 +329,7 @@ public class AliOSS implements CloudService {
     public boolean deleteAll() throws Exception {
         List<String> fileList = getFileList();
         fileList.forEach(this::delete);
+        handler.sendEmptyMessage(Utils.CLOUD_SUCCESS);
         return true;
     }
 
@@ -352,7 +352,7 @@ public class AliOSS implements CloudService {
             @Override
             public void onSuccess(DeleteMultipleObjectRequest request, DeleteMultipleObjectResult result) {
                 Log.i("DeleteMultipleObject", "success");
-                // TODO 异步处理结果返回
+                handler.sendEmptyMessage(Utils.CLOUD_SUCCESS);
             }
 
             @Override
@@ -369,7 +369,7 @@ public class AliOSS implements CloudService {
                     Log.e("HostId", serviceException.getHostId());
                     Log.e("RawMessage", serviceException.getRawMessage());
                 }
-                // TODO 异步处理结果返回
+                handler.sendEmptyMessage(Utils.CLOUD_FAILURE);
             }
         });
         return true;

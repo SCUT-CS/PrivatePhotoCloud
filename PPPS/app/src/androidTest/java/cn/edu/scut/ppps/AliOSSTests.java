@@ -1,6 +1,7 @@
 package cn.edu.scut.ppps;
 
 import android.content.Context;
+import android.os.Handler;
 import android.util.Log;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -22,7 +23,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Handler;
 import java.util.logging.LogRecord;
 
 import cn.edu.scut.ppps.cloud.AliOSS;
@@ -67,22 +67,7 @@ public class AliOSSTests {
         token_1.put("filePath", "test/");
         tokenMaps.updateToken("test", token_1);
         //构造函数
-        aliOSSTests = new AliOSS("test", appContext, tokenMaps, new Handler() {
-            @Override
-            public void publish(LogRecord record) {
-
-            }
-
-            @Override
-            public void flush() {
-
-            }
-
-            @Override
-            public void close() throws SecurityException {
-
-            }
-        });
+        aliOSSTests = new AliOSS("test", appContext, tokenMaps, new Handler());
     }
 
 
