@@ -23,18 +23,18 @@ import java.util.concurrent.TimeUnit;
  * Decrypt Unit Tests
  * @author Feng Yucheng , Huang Zixi
  */
+
 @RunWith(AndroidJUnit4.class)
 public class AlgorithmTest {
     Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
     //原始图片路径
-    String imgName = "jpg_medium.jpg";
+    String imgName = "2022-09-04-10-20-20-918.jpg";
     String imgPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
-            + File.separator + "WeiXin"
+            + File.separator + "PPPS"
             + File.separator + imgName;
     //加密后的图片路径 除了名字都已经写死了
-    String Path1 = context.getCacheDir().getAbsolutePath() + File.separator + "Disk1" + File.separator + imgName + ".ori";
-    String Path2 = context.getCacheDir().getAbsolutePath() + File.separator + "Disk2" + File.separator + imgName + ".ori";
-
+    String Path1 = context.getCacheDir().getAbsolutePath() + File.separator + "Disk1" + File.separator + imgName + ".ori.webp";
+    String Path2 = context.getCacheDir().getAbsolutePath() + File.separator + "Disk2" + File.separator + imgName + ".ori.webp";
 
     /**
      * Grant permissions.
@@ -59,7 +59,8 @@ public class AlgorithmTest {
         Assert.assertNotNull(resultEncrypt);
         //解密
         Decrypt decrypt = new Decrypt(Path1, Path2, context);
-        Future<Bitmap> resultsDecrypt = threadPoolExecutor.submit(decrypt);
+        ThreadPoolExecutor threadPoolExecutor2 = new ThreadPoolExecutor(5, 10, 1000, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(16));
+        Future<Bitmap> resultsDecrypt = threadPoolExecutor2.submit(decrypt);
         Bitmap resultDecrypt = resultsDecrypt.get();
         Bitmap originalImg = Utils.openImg(imgPath);
         Assert.assertNotNull(resultDecrypt);
