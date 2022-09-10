@@ -26,13 +26,17 @@ import java.util.concurrent.Callable;
  */
 public class Utils {
 
+    // Cloud Handler value
     public static final int CLOUD_SUCCESS = 0;
     public static final int CLOUD_FAILURE = -1;
-    public static final int START_CLOUD = 4;
-    public static final int FINISH_CLOUD = 5;
-    public static final int START_ALGORITHM = 2;
-    public static final int FINISH_ALGORITHM = 3;
+    // MainActivity Handler value
+    public static final int START_CLOUD = 1;
+    public static final int FINISH_CLOUD = 2;
+    public static final int START_ALGORITHM = 3;
+    public static final int FINISH_ALGORITHM = 4;
     public static final int ALGORITHM_ERROR = -2;
+    // Encrypt Handler value
+    public static final int ENCRYPT_SUCCESS = 5;
 
     /**
      * Open an image and return.

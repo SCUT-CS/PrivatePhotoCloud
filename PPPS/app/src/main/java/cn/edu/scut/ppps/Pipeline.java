@@ -55,6 +55,7 @@ public class Pipeline {
     };
     @SuppressLint("HandlerLeak")
     private Handler cloudHandler2 = new Handler() {
+        public int count = 0;
         @Override
         public void handleMessage(Message msg) {
             if (msg.what == Utils.CLOUD_SUCCESS) {
