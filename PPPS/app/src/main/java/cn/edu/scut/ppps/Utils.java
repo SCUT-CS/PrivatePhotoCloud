@@ -18,6 +18,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.Callable;
 
 /**
@@ -278,6 +281,30 @@ public class Utils {
             }
         }
         Utils.saveImg(thumbnail, newfile);
+    }
+
+    /**
+     * Return all files in the directory.
+     * @param path The path of the dir.
+     * @author Cui YuXin
+     */
+    public static List<String> getAllFile(String path) {
+        File dir = new File(path);
+        // 如果文件夹不存在或着不是文件夹，则返回 null
+        if (Objects.isNull(dir) || !dir.exists() || dir.isFile()) {
+            return null;
+        }
+        File[] childrenFiles = dir.listFiles();
+        if (Objects.isNull(childrenFiles) || childrenFiles.length == 0)
+            return null;
+        List<String> files = new ArrayList<>();
+        for (File childFile : childrenFiles) {
+            // 如果是文件，直接添加到结果集合
+            if (childFile.isFile()) {
+                files.add(childFile.getName());
+            }
+        }
+        return files;
     }
 
     /**

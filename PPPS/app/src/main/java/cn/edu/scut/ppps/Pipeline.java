@@ -2,6 +2,7 @@ package cn.edu.scut.ppps;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 
@@ -112,7 +113,26 @@ public class Pipeline {
     private Handler thumbnailAlgoHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            if (msg.what == Utils.THUMBNAIL_SUCCESS) {
+            if (msg.what == Utils.FINISH_CLOUD) {
+                cloudTotalCount--;
+                if (cloudTotalCount <= 0) {
+                    mainHandler.sendEmptyMessage(Utils.FINISH_CLOUD);
+                    mainHandler.sendEmptyMessage(Utils.START_ALGORITHM);
+                    String cachePath = context.getCacheDir().getAbsolutePath();
+                    String savePath1 = cachePath + File.separator + "Disk1Thumbnail" + File.separator;
+                    String savePath2 = cachePath + File.separator + "Disk2Thumbnail" + File.separator;
+                    thumbnailAlgoHandlerCount = cloud1Path.size();
+                    try {
+                        for (int i = 0; i < cloud1Path.size(); i++) {
+                            String path1 = savePath1 + cloud1Path.get(i);
+                            String path2 = savePath2 + cloud1Path.get(i);
+                            EncryptThreadPool.submit(new Decrypt(path1, path2, context, true, decryptAlgoHandler));
+                        }
+                    } catch (Exception e) {
+                        mainHandler.sendEmptyMessage(Utils.ERROR);
+                    }
+                }
+            } else if (msg.what == Utils.THUMBNAIL_SUCCESS) {
                 thumbnailAlgoHandlerCount--;
                 if (thumbnailAlgoHandlerCount <= 0) {
                     mainHandler.sendEmptyMessage(Utils.FINISH_ALGORITHM);
@@ -184,7 +204,7 @@ public class Pipeline {
      * Decrypt pipeline.
      * @param path Paths of the file.
      */
-    public void decrtptPipeline(String[] path) {
+    public void decryptPipeline(String[] path) {
         mainHandler.sendEmptyMessage(Utils.START_CLOUD);
         init();
         cloud1Path = new ArrayList<>();
@@ -209,6 +229,34 @@ public class Pipeline {
         for (String s : cloud1Path) {
             cloudStorage1.download(s, savePath1 + s);
             cloudStorage2.download(s, savePath2 + s);
+        }
+    }
+
+    public void thumbnailPipeline() {
+        mainHandler.sendEmptyMessage(Utils.START_CLOUD);
+        init();
+        String imgPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
+                + File.separator + "Thumbnail" + File.separator;
+        cloudStorage1.setHandler(thumbnailAlgoHandler);
+        cloudStorage2.setHandler(thumbnailAlgoHandler);
+        cloud1Path = new ArrayList<>();
+        List<String> existFiles = Utils.getAllFile(imgPath);
+        List<String> cloudFiles = null;
+        try {
+            cloudFiles = cloudStorage1.getFileList();
+        } catch (Exception e) {
+            e.printStackTrace();
+            mainHandler.sendEmptyMessage(Utils.ERROR);
+        }
+        for (String s : cloudFiles) {
+            if (!existFiles.contains(s)) {
+                cloud1Path.add(s);
+            }
+        }
+        cloudTotalCount = cloud1Path.size() * 2;
+        for (String s : cloud1Path) {
+            cloudStorage1.download(s, imgPath + s);
+            cloudStorage2.download(s, imgPath + s);
         }
     }
 
