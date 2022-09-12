@@ -34,7 +34,7 @@ public class Utils {
     public static final int FINISH_CLOUD = 2;
     public static final int START_ALGORITHM = 3;
     public static final int FINISH_ALGORITHM = 4;
-    public static final int ALGORITHM_ERROR = -2;
+    public static final int ERROR = -2;
     // Encrypt Handler value
     public static final int ENCRYPT_SUCCESS = 5;
     // Decrypt Handler value
@@ -66,7 +66,6 @@ public class Utils {
         if (file.exists() && file.isFile()) {
             return file.getName();
         } else {
-            // TODO handle exception
             throw new IOException("File not found or ?.");
         }
     }

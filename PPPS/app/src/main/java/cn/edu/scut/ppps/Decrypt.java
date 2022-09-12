@@ -123,7 +123,6 @@ public class Decrypt implements Callable {
             try {
                 threads[i].join();
             } catch (InterruptedException e) {
-                // TODO handle exception.
                 e.printStackTrace();
             }
         }

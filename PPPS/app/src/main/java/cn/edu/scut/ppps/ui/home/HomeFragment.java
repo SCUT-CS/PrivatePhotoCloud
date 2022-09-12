@@ -41,7 +41,6 @@ public class HomeFragment extends Fragment {
         if (count > 0) {
             count--;
         } else {
-            // TODO 刷新界面
             mainActivity.refresh();
         }
     }

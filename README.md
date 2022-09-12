@@ -8,7 +8,47 @@ Part A是项目代码的相关规范，Part B是项目架构。
 
 ## Updates
 
-#### 2022.9.1-2022.9.11
+### 2022.9.12-2022.9.18
+
+#### Task1：
+
+参考Utils时间测试，完成加密算法和解密算法的时间测试。
+
+这里需要运行五次取平均值，使用App提供的相机拍摄的图片（2k resolution）
+
+将相关的数据记录在Readme里面的Evaluation。
+
+**Files you'll edit:**
+
+AlogorithmTimeTests.java
+
+**Files you might want to look at:**
+
+UtilsTimeTests.java
+
+#### Task2：
+
+完成以下文件的Check Code Style
+
+**Files you'll edit:**
+
+*Tests.java（\*代表任意字符串）
+
+#### Task3：
+
+Optimization：寻找在2k分辨率下，加密和解密算法的最优线程数（时间相对较少）。
+
+具体位置为Encrypt.java和Decrypt.java里面的TODO。
+
+时间测试使用Task1提供的时间测试，同时将相关的数据记录在Readme里面的Evaluation。
+
+**Files you'll edit:**
+
+Encrypt.java
+
+Decrypt.java
+
+### 2022.9.1-2022.9.11
 
 #### Task1：
 
@@ -33,26 +73,6 @@ AliOSSTests.java
 **Files you might want to look at:**
 
 *Tests.java
-
-#### Task3：
-
-参考Utils时间测试，完成加密算法和解密算法的时间测试。
-
-**Files you'll edit:**
-
-AlogorithmTimeTests.java
-
-**Files you might want to look at:**
-
-UtilsTimeTests.java
-
-#### Task4：
-
-完成以下文件的Check Code Style
-
-**Files you'll edit:**
-
-*Tests.java（\*代表任意字符串）
 
 ### 2022.8.29-2022.9.1
 

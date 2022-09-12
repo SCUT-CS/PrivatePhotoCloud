@@ -122,12 +122,12 @@ class CameraActivity : AppCompatActivity() {
             if (viewBinding.viewFinder.display.rotation == Surface.ROTATION_0 || viewBinding.viewFinder.display.rotation == Surface.ROTATION_180) {
                 imageCapture = ImageCapture.Builder()
                     .setTargetRotation(viewBinding.viewFinder.display.rotation)
-                    .setTargetResolution(Size(3000, 4000))
+                    .setTargetResolution(Size(1440, 2560))
                     .build()
             } else {
                 imageCapture = ImageCapture.Builder()
                     .setTargetRotation(viewBinding.viewFinder.display.rotation)
-                    .setTargetResolution(Size(4000, 3000))
+                    .setTargetResolution(Size(2560, 1440))
                     .build()
             }
             // Select back camera as a default
