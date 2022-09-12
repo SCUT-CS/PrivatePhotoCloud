@@ -48,6 +48,16 @@ Encrypt.java
 
 Decrypt.java
 
+### Task4：
+
+测试Decrypt类的save方法保存的文件名和路径是否符合预期。
+
+**Files you'll edit:**
+
+DecryptTest.java
+
+DecryptThumbnail.java
+
 ### 2022.9.1-2022.9.11
 
 #### Task1：
@@ -356,9 +366,9 @@ UI的制作。
 
 溢出信息：img.*1		$dataDir$/overflow/
 
-缩略图：img.*1.ori.\*2
+缩略图：img.*1.ori.webp $picturesDir$/Thumbnail/
 
-阿里云部分未统计。
+解密结果：img.*1.jpg $picturesDir$/PPPS
 
 ### 多线程
 

@@ -7,6 +7,9 @@ import android.os.Message;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -43,11 +46,9 @@ public class Pipeline {
             TimeUnit.SECONDS,
             new ArrayBlockingQueue<Runnable>(16));
     // Cloud handler count
-    int cloudHandler1Count = 0;
-    int cloudHandler2Count = 0;
     int cloudTotalCount = 0;
-    String[] cloud1Upload;
-    String[] cloud2Upload;
+    List<String> cloud1Path;
+    List<String> cloud2Path;
     // Algorithm handler
     int encryptAlgoHandlerCount = 0;
     int decryptAlgoHandlerCount = 0;
@@ -60,8 +61,13 @@ public class Pipeline {
                 encryptAlgoHandlerCount--;
                 if (encryptAlgoHandlerCount <= 0) {
                     mainHandler.sendEmptyMessage(Utils.FINISH_ALGORITHM);
-
-
+                    mainHandler.sendEmptyMessage(Utils.START_CLOUD);
+                    int length = cloud1Path.size();
+                    cloudTotalCount = length * 2;
+                    for (int i = 0; i < length; i++) {
+                        cloudStorage1.upload(cloud1Path.get(i));
+                        cloudStorage2.upload(cloud2Path.get(i));
+                    }
                 }
             } else if (msg.what == Utils.CLOUD_SUCCESS) {
                 cloudTotalCount--;
@@ -75,7 +81,26 @@ public class Pipeline {
     private Handler decryptAlgoHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            if (msg.what == Utils.DECRYPT_SUCCESS) {
+            if (msg.what == Utils.CLOUD_SUCCESS) {
+                cloudTotalCount--;
+                if (cloudTotalCount <= 0) {
+                    mainHandler.sendEmptyMessage(Utils.FINISH_CLOUD);
+                    mainHandler.sendEmptyMessage(Utils.START_ALGORITHM);
+                    String cachePath = context.getCacheDir().getAbsolutePath();
+                    String savePath1 = cachePath + File.separator + "Disk1" + File.separator;
+                    String savePath2 = cachePath + File.separator + "Disk2" + File.separator;
+                    decryptAlgoHandlerCount = cloud2Path.size();
+                    try {
+                        for (int i = 0; i < cloud2Path.size(); i++) {
+                            String path1 = savePath1 + Utils.getFileName(cloud2Path.get(i));
+                            String path2 = savePath2 + Utils.getFileName(cloud2Path.get(i));
+                            EncryptThreadPool.submit(new Decrypt(path1, path2, context, false, decryptAlgoHandler));
+                        }
+                    } catch (Exception e) {
+                        mainHandler.sendEmptyMessage(Utils.ERROR);
+                    }
+                }
+            } else if (msg.what == Utils.DECRYPT_SUCCESS) {
                 decryptAlgoHandlerCount--;
                 if (decryptAlgoHandlerCount <= 0) {
                     mainHandler.sendEmptyMessage(Utils.FINISH_ALGORITHM);
@@ -119,8 +144,6 @@ public class Pipeline {
         encryptAlgoHandlerCount = 0;
         decryptAlgoHandlerCount = 0;
         thumbnailAlgoHandlerCount = 0;
-        cloudHandler1Count = 0;
-        cloudHandler2Count = 0;
         cloudTotalCount = 0;
     }
 
@@ -129,18 +152,19 @@ public class Pipeline {
      * @param path Paths of the file.
      */
     public void encryptPipeline(String[] path) {
+        mainHandler.sendEmptyMessage(Utils.START_ALGORITHM);
         init();
         int length = path.length;
         // cloud
-        cloud1Upload = new String[length];
-        cloud2Upload = new String[length];
+        cloud1Path = new ArrayList<>();
+        cloud2Path = new ArrayList<>();
         String cachePath = context.getCacheDir().getAbsolutePath();
         String savePath1 = cachePath + File.separator + "Disk1" + File.separator;
         String savePath2 = cachePath + File.separator + "Disk2" + File.separator;
         for (int i = 0; i < length; i++) {
             try {
-                cloud1Upload[i] = savePath1 + Utils.getFileName(path[i]) + ".ori.webp";
-                cloud2Upload[i] = savePath2 + Utils.getFileName(path[i]) + ".ori.webp";
+                cloud1Path.set(i, savePath1 + Utils.getFileName(path[i]) + ".ori.webp");
+                cloud2Path.set(i, savePath2 + Utils.getFileName(path[i]) + ".ori.webp");
             } catch (IOException e) {
                 e.printStackTrace();
                 mainHandler.sendEmptyMessage(Utils.ERROR);
@@ -150,22 +174,41 @@ public class Pipeline {
         cloudStorage1.setHandler(encryptAlgoHandler);
         cloudStorage2.setHandler(encryptAlgoHandler);
         // algorithm
-        mainHandler.sendEmptyMessage(Utils.START_ALGORITHM);
         encryptAlgoHandlerCount = length;
         for (String s : path) {
             EncryptThreadPool.submit(new Encrypt(s, context, encryptAlgoHandler));
         }
     }
 
-    private void uploadCloud(String[] path1, String[] path2) {
-        int length = path1.length;
-        cloudTotalCount = length * 2;
-        cloudHandler2Count = length;
-
+    /**
+     * Decrypt pipeline.
+     * @param path Paths of the file.
+     */
+    public void decrtptPipeline(String[] path) {
         mainHandler.sendEmptyMessage(Utils.START_CLOUD);
-        
-        for (int i = 0; i < length; i++) {
-
+        init();
+        cloud1Path = new ArrayList<>();
+        cloud2Path = Arrays.asList(path);
+        String cachePath = context.getCacheDir().getAbsolutePath();
+        String savePath1 = cachePath + File.separator + "Disk1" + File.separator;
+        String savePath2 = cachePath + File.separator + "Disk2" + File.separator;
+        for (String s : path) {
+            try {
+                String fileName = Utils.getFileName(s);
+                File file1 = new File(savePath1 + fileName);
+                if (!file1.exists()) {
+                    cloud1Path.add(fileName);
+                }
+            } catch (Exception e) {
+                mainHandler.sendEmptyMessage(Utils.ERROR);
+            }
+        }
+        cloudStorage1.setHandler(decryptAlgoHandler);
+        cloudStorage2.setHandler(decryptAlgoHandler);
+        cloudTotalCount = cloud1Path.size() * 2;
+        for (String s : cloud1Path) {
+            cloudStorage1.download(s, savePath1 + s);
+            cloudStorage2.download(s, savePath2 + s);
         }
     }
 
