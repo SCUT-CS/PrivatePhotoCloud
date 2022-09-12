@@ -259,6 +259,4 @@ public class Pipeline {
             cloudStorage2.download(s, imgPath + s);
         }
     }
-
-
 }
