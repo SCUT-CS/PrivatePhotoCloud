@@ -264,7 +264,6 @@ public class AliOSS implements CloudService {
                 for (OSSObjectSummary objectSummary : result.getObjectSummaries()) {
                     Log.i("ListObjects", objectSummary.getKey());
                 }
-                handler.sendEmptyMessage(Utils.CLOUD_SUCCESS);
             }
             @Override
             public void onFailure(ListObjectsRequest request, ClientException clientException, ServiceException serviceException) {
@@ -280,7 +279,6 @@ public class AliOSS implements CloudService {
                     Log.e("HostId", serviceException.getHostId());
                     Log.e("RawMessage", serviceException.getRawMessage());
                 }
-                handler.sendEmptyMessage(Utils.CLOUD_FAILURE);
             }
         }).getResult().getObjectSummaries();
         List<String> fileList = new ArrayList<>();

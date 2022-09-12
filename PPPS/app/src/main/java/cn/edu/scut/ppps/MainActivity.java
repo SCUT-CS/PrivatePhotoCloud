@@ -3,6 +3,7 @@ package cn.edu.scut.ppps;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -22,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.hao.baselib.base.WaterPermissionActivity;
 
 import androidx.navigation.NavController;
@@ -39,6 +41,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
+import cn.edu.scut.ppps.cloud.CloudService;
 import cn.edu.scut.ppps.databinding.ActivityMainBinding;
 import cn.edu.scut.ppps.gallary.AlbumCallback;
 import cn.edu.scut.ppps.gallary.AlbumModel;
@@ -48,7 +51,6 @@ import cn.edu.scut.ppps.gallary.ListImageDirPopupWindow;
 
 /**
  * Main Activity
- *
  * @author Cui Yuxin
  * @source https://blog.csdn.net/weixin_38322371/article/details/106312474
  */
@@ -56,6 +58,8 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
+    private Context context;
+    private View view;
     // 控件四个
     public GridView mGridView;
     private RelativeLayout mBottomly;
@@ -78,12 +82,14 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
     private ArrayList<String> listChoosePics = new ArrayList<>();
     // 执行中弹框
     private ProgressDialog mProgressDialog;
+    // Pipeline
+    private Pipeline pipeline;
     // 该参数负责子线程查询图片后通知主线程更新UI
     @SuppressLint("HandlerLeak")
     private Handler uiHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            if (msg.what == 0x110) {
+            if (msg.what == Utils.UI) {
                 showData();
                 initDirPopupWindow();
             }
@@ -94,9 +100,18 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
     private Handler AlgorithmHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            if (msg.what == 0x110) {
-                // mProgressDialog.dismiss();//消失对话框
-                //mProgressDialog = ProgressDialog.show(this,null,"正在加载...");
+            if (msg.what == Utils.START_ALGORITHM) {
+                mProgressDialog = ProgressDialog.show(context,null,"正在执行...");
+            } else if (msg.what == Utils.FINISH_ALGORITHM) {
+                mProgressDialog.dismiss();
+            } else if (msg.what == Utils.START_CLOUD) {
+                mProgressDialog = ProgressDialog.show(context,null,"正在上传/下载...");
+            } else if (msg.what == Utils.FINISH_CLOUD) {
+                mProgressDialog.dismiss();
+            } else if (msg.what == Utils.ERROR) {
+                mProgressDialog.dismiss();
+                Snackbar.make(view, "失败!", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
             }
         }
     };
@@ -146,6 +161,10 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
                 lightOff();
             }
         });
+        context = this;
+        view = binding.getRoot();
+        // TODO 初始化Pipeline cloudStorage
+        //pipeline = new Pipeline(AlgorithmHandler);
     }
 
     /**
@@ -180,6 +199,9 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
             if (multiSelect) {
                 // TODO 完成多选逻辑
             }
+        } else if (item.getItemId() == R.id.action_update) {
+            pipeline.thumbnailPipeline();
+            refresh();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -309,7 +331,7 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
                     }
                 }
                 cursor.close();
-                uiHandler.sendEmptyMessage(0x110);
+                uiHandler.sendEmptyMessage(Utils.UI);
             }
         }.start();
     }

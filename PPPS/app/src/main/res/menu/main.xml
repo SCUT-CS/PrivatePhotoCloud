@@ -9,11 +9,16 @@
     <item
         android:id="@+id/action_muti"
         android:orderInCategory="100"
-        android:title="@string/mutiSelect"
+        android:title="@string/muti_select"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_next"
         android:orderInCategory="100"
         android:title="@string/gonext"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_update"
+        android:orderInCategory="100"
+        android:title="@string/update_from_cloud"
         app:showAsAction="never" />
 </menu>

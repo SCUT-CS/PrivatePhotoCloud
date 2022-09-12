@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.ColorSpace;
+import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
 
@@ -160,6 +161,27 @@ public class Decrypt implements Callable {
     }
 
     /**
+     * Save images.
+     * This method may take several seconds to complete, so it should only be called from a worker thread.
+     * @author Cui Yuxin
+     */
+    private void saveFile() throws Exception {
+        if (isThumbnail) {
+            String imgName = Utils.getFileName(imgFilePath1);
+            String imgPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
+                    + File.separator + "Thumbnail"
+                    + File.separator + imgName.substring(0, imgName.lastIndexOf(".webp"));
+            Utils.saveImg(img, imgFilePath1);
+        } else {
+            String imgName = Utils.getFileName(imgFilePath1);
+            String imgPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
+                    + File.separator + "PPPS"
+                    + File.separator + imgName.substring(0, imgName.lastIndexOf(".ori"));
+            Utils.saveJpgImg(img, imgPath);
+        }
+    }
+
+    /**
      * Run decryption and return results.
      * @author Cui Yuxin
      */
@@ -178,6 +200,7 @@ public class Decrypt implements Callable {
                 handler.sendEmptyMessage(Utils.DECRYPT_SUCCESS);
             }
         }
+        saveFile();
         return img;
     }
 
