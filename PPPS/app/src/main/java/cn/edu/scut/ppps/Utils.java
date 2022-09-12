@@ -38,6 +38,7 @@ public class Utils {
     public static final int START_ALGORITHM = 3;
     public static final int FINISH_ALGORITHM = 4;
     public static final int ERROR = -2;
+    public static final int UI = 8;
     // Encrypt Handler value
     public static final int ENCRYPT_SUCCESS = 5;
     // Decrypt Handler value

@@ -41,6 +41,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
+import cn.edu.scut.ppps.cloud.CloudService;
 import cn.edu.scut.ppps.databinding.ActivityMainBinding;
 import cn.edu.scut.ppps.gallary.AlbumCallback;
 import cn.edu.scut.ppps.gallary.AlbumModel;
@@ -81,12 +82,14 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
     private ArrayList<String> listChoosePics = new ArrayList<>();
     // 执行中弹框
     private ProgressDialog mProgressDialog;
+    // Pipeline
+    private Pipeline pipeline;
     // 该参数负责子线程查询图片后通知主线程更新UI
     @SuppressLint("HandlerLeak")
     private Handler uiHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            if (msg.what == 0x110) {
+            if (msg.what == Utils.UI) {
                 showData();
                 initDirPopupWindow();
             }
@@ -160,6 +163,8 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
         });
         context = this;
         view = binding.getRoot();
+        // TODO 初始化Pipeline cloudStorage
+        //pipeline = new Pipeline(AlgorithmHandler);
     }
 
     /**
@@ -194,6 +199,9 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
             if (multiSelect) {
                 // TODO 完成多选逻辑
             }
+        } else if (item.getItemId() == R.id.action_update) {
+            pipeline.thumbnailPipeline();
+            refresh();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -323,7 +331,7 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
                     }
                 }
                 cursor.close();
-                uiHandler.sendEmptyMessage(0x110);
+                uiHandler.sendEmptyMessage(Utils.UI);
             }
         }.start();
     }
