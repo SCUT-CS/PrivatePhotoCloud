@@ -212,11 +212,11 @@ public class Pipeline {
         String cachePath = context.getCacheDir().getAbsolutePath();
         String savePath1 = cachePath + File.separator + "Disk1" + File.separator;
         String savePath2 = cachePath + File.separator + "Disk2" + File.separator;
+        List<String> existFiles = Utils.getAllFile(savePath1);
         for (String s : path) {
             try {
                 String fileName = Utils.getFileName(s);
-                File file1 = new File(savePath1 + fileName);
-                if (!file1.exists()) {
+                if (!existFiles.contains(s)) {
                     cloud1Path.add(fileName);
                 }
             } catch (Exception e) {
