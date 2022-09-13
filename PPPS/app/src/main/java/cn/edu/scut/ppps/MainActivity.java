@@ -24,7 +24,6 @@ import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
 import com.hao.baselib.base.WaterPermissionActivity;
 
 import androidx.annotation.Nullable;
@@ -116,12 +115,10 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
                 mProgressDialog.dismiss();
             } else if (msg.what == Utils.ERROR) {
                 mProgressDialog.dismiss();
-                Snackbar.make(view, "Error!", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Toast.makeText(context, "Error!", Toast.LENGTH_SHORT).show();
             } else if (msg.what == Utils.SUCCESS) {
                 mProgressDialog.dismiss();
-                Snackbar.make(view, "Success!", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Toast.makeText(context, "Success!", Toast.LENGTH_SHORT).show();
                 Intent mediaScanIntent = new Intent(
                         Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
                 Uri contentUri = Uri.parse("file://"+ Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES));
@@ -534,9 +531,7 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
     private void multiProcess() {
         // TODO 多图的处理
         if (listChoosePics.size() == 0) {
-            Snackbar.make(view, "请选择图片！", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
-            return;
+            Toast.makeText(context, "请选择图片！", Toast.LENGTH_SHORT).show();
         } else {
             String path = listChoosePics.get(0);
             if (path.contains("Thumbnail")) {
