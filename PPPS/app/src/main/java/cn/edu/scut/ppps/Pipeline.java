@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -219,7 +220,7 @@ public class Pipeline {
         for (String s : path) {
             try {
                 String fileName = Utils.getFileName(s);
-                if (!existFiles.contains(s)) {
+                if (Objects.isNull(existFiles) || !Objects.requireNonNull(existFiles).contains(s)) {
                     cloud1Path.add(fileName);
                 }
             } catch (Exception e) {
@@ -252,7 +253,7 @@ public class Pipeline {
             mainHandler.sendEmptyMessage(Utils.ERROR);
         }
         for (String s : cloudFiles) {
-            if (!existFiles.contains(s)) {
+            if (Objects.isNull(existFiles) || !Objects.requireNonNull(existFiles).contains(s)) {
                 cloud1Path.add(s);
             }
         }

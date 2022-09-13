@@ -201,7 +201,7 @@ public class TokensTest {
         token2.put("accessId", "LTAI5t9Wx9ZwYxCuPEGoxoct");
         token2.put("accessSecret", "IJWyl2xxwYC1vwaTkw8mZ4hWnKZXxP");
         token2.put("endpoint", "https://oss-cn-hangzhou.aliyuncs.com");
-        token2.put("bucketName", "ppps1");
+        token2.put("bucketName", "ppps2");
         token2.put("filePath", "encryptedImage/");
         tokens.updateToken("aliyun2", token2);
     }
