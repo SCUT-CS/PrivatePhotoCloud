@@ -41,7 +41,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
+import cn.edu.scut.ppps.cloud.AliOSS;
 import cn.edu.scut.ppps.cloud.CloudService;
+import cn.edu.scut.ppps.cloud.Tokens;
 import cn.edu.scut.ppps.databinding.ActivityMainBinding;
 import cn.edu.scut.ppps.gallary.AlbumCallback;
 import cn.edu.scut.ppps.gallary.AlbumModel;
@@ -84,6 +86,8 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
     private ProgressDialog mProgressDialog;
     // Pipeline
     private Pipeline pipeline;
+    // Tokens
+    private Tokens tokens;
     // 该参数负责子线程查询图片后通知主线程更新UI
     @SuppressLint("HandlerLeak")
     private Handler uiHandler = new Handler() {
@@ -97,7 +101,7 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
     };
     // 该参数负责获取子线程执行结果
     @SuppressLint("HandlerLeak")
-    private Handler AlgorithmHandler = new Handler() {
+    private Handler algorithmHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             if (msg.what == Utils.START_ALGORITHM) {
@@ -110,7 +114,7 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
                 mProgressDialog.dismiss();
             } else if (msg.what == Utils.ERROR) {
                 mProgressDialog.dismiss();
-                Snackbar.make(view, "失败!", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Error!", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         }
@@ -163,8 +167,16 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
         });
         context = this;
         view = binding.getRoot();
-        // TODO 初始化Pipeline cloudStorage
-        //pipeline = new Pipeline(AlgorithmHandler);
+        try {
+            tokens = new Tokens(context);
+        } catch (Exception e) {
+            e.printStackTrace();
+            algorithmHandler.sendEmptyMessage(Utils.ERROR);
+        }
+        // TODO 在设置中获取
+        CloudService cloudService1 = new AliOSS("aliyun1", context, tokens);
+        CloudService cloudService2 = new AliOSS("aliyun2", context, tokens);
+        pipeline = new Pipeline(algorithmHandler, context, cloudService1, cloudService2);
     }
 
     /**
