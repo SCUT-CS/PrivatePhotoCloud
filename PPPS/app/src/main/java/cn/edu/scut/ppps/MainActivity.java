@@ -328,9 +328,10 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
             public void run() {
                 Uri mImgUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
                 ContentResolver cr = MainActivity.this.getContentResolver();
-                Cursor cursor = cr.query(mImgUri, null, MediaStore.Images.Media.MIME_TYPE + "=? or " + MediaStore
-                        .Images.Media.MIME_TYPE + "=?", new String[]{"image/jpeg", "image/png"}, MediaStore
-                        .Images.Media.DATE_MODIFIED);
+                Cursor cursor = cr.query(mImgUri, null,
+                        MediaStore.Images.Media.MIME_TYPE + "=? or " + MediaStore.Images.Media.MIME_TYPE + "=? or " + MediaStore.Images.Media.MIME_TYPE + "=?",
+                        new String[]{"image/jpeg", "image/png", "image/webp"},
+                        MediaStore.Images.Media.DATE_MODIFIED);
                 while (cursor.moveToNext()) {
                     @SuppressLint("Range") String path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
                     File parentFile = new File(path).getParentFile();
@@ -356,7 +357,8 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
                         public boolean accept(File dir, String filename) {
                             if (filename.endsWith(".jpg")
                                     || filename.endsWith(".jpeg")
-                                    || filename.endsWith(".png")) {
+                                    || filename.endsWith(".png")
+                                    || filename.endsWith(".webp")) {
                                 return true;
                             }
                             return false;
