@@ -261,5 +261,8 @@ public class Pipeline {
             cloudStorage1.getThumbnail(s, "Disk1Thumbnail");
             cloudStorage2.getThumbnail(s, "Disk2Thumbnail");
         }
+        if (cloud1Path.size() == 0) {
+            mainHandler.sendEmptyMessage(Utils.SUCCESS);
+        }
     }
 }
