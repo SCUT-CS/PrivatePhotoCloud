@@ -415,7 +415,8 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
                     public boolean accept(File dir, String filename) {
                         if (filename.endsWith(".jpg")
                                 || filename.endsWith(".jpeg")
-                                || filename.endsWith(".png")) {
+                                || filename.endsWith(".png")
+                                || filename.endsWith(".webp")) {
                             return true;
                         }
                         return false;
