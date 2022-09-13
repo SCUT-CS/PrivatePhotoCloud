@@ -245,6 +245,7 @@ public class AliOSS implements CloudService {
                 handler.sendEmptyMessage(Utils.CLOUD_FAILURE);
             }
         });
+        // task.waitUntilFinished();
         return true;
     }
 

@@ -15,5 +15,5 @@
     <string name="next">下一步</string>
     <string name="muti_select">多选/单选</string>
     <string name="gonext">下一步</string>
-    <string name="update_from_cloud">从云端刷新</string>
+    <string name="update_from_cloud">从云端刷新缩略图</string>
 </resources>

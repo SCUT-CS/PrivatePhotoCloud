@@ -231,8 +231,8 @@ public class Pipeline {
         cloudStorage2.setHandler(decryptAlgoHandler);
         cloudTotalCount = cloud1Path.size() * 2;
         for (String s : cloud1Path) {
-            cloudStorage1.download(s, savePath1 + s);
-            cloudStorage2.download(s, savePath2 + s);
+            cloudStorage1.download(s, "Disk1");
+            cloudStorage2.download(s, "Disk2");
         }
     }
 
@@ -259,8 +259,8 @@ public class Pipeline {
         }
         cloudTotalCount = cloud1Path.size() * 2;
         for (String s : cloud1Path) {
-            cloudStorage1.download(s, imgPath + s);
-            cloudStorage2.download(s, imgPath + s);
+            cloudStorage1.getThumbnail(s, "Disk1Thumbnail");
+            cloudStorage2.getThumbnail(s, "Disk2Thumbnail");
         }
     }
 }
