@@ -22,6 +22,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.hao.baselib.base.WaterPermissionActivity;
@@ -147,9 +148,12 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
         binding.appBarMain.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO 获取拍照的url并进行单图片操作
-                Intent intent = new Intent(MainActivity.this, CameraActivity.class);
-                startActivityForResult(intent, Utils.CAMERA_RESULT);
+                if (multiSelect) {
+                    multiProcess();
+                } else {
+                    Intent intent = new Intent(MainActivity.this, CameraActivity.class);
+                    startActivityForResult(intent, Utils.CAMERA_RESULT);
+                }
             }
         });
         DrawerLayout drawer = binding.drawerLayout;
@@ -223,11 +227,13 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
         if (item.getItemId() == R.id.action_muti) {
             multiSelect = !multiSelect;
             listChoosePics = new ArrayList<>();
-            refresh();
-        } else if (item.getItemId() == R.id.action_next) {
+            FloatingActionButton fab = binding.appBarMain.fab;
             if (multiSelect) {
-                multiProcess();
+                fab.setImageResource(R.drawable.ic_media_play);
+            } else {
+                fab.setImageResource(R.drawable.ic_menu_camera);
             }
+            refresh();
         } else if (item.getItemId() == R.id.action_update) {
             pipeline.thumbnailPipeline();
             refresh();
