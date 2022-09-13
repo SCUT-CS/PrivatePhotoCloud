@@ -74,6 +74,7 @@ public class Pipeline {
                 cloudTotalCount--;
                 if (cloudTotalCount <= 0) {
                     mainHandler.sendEmptyMessage(Utils.FINISH_CLOUD);
+                    mainHandler.sendEmptyMessage(Utils.SUCCESS);
                 }
             }
         }
@@ -105,6 +106,7 @@ public class Pipeline {
                 decryptAlgoHandlerCount--;
                 if (decryptAlgoHandlerCount <= 0) {
                     mainHandler.sendEmptyMessage(Utils.FINISH_ALGORITHM);
+                    mainHandler.sendEmptyMessage(Utils.SUCCESS);
                 }
             }
         }
@@ -136,6 +138,7 @@ public class Pipeline {
                 thumbnailAlgoHandlerCount--;
                 if (thumbnailAlgoHandlerCount <= 0) {
                     mainHandler.sendEmptyMessage(Utils.FINISH_ALGORITHM);
+                    mainHandler.sendEmptyMessage(Utils.SUCCESS);
                 }
             }
         }
@@ -183,8 +186,8 @@ public class Pipeline {
         String savePath2 = cachePath + File.separator + "Disk2" + File.separator;
         for (int i = 0; i < length; i++) {
             try {
-                cloud1Path.set(i, savePath1 + Utils.getFileName(path[i]) + ".ori.webp");
-                cloud2Path.set(i, savePath2 + Utils.getFileName(path[i]) + ".ori.webp");
+                cloud1Path.add(savePath1 + Utils.getFileName(path[i]) + ".ori.webp");
+                cloud2Path.add(savePath2 + Utils.getFileName(path[i]) + ".ori.webp");
             } catch (IOException e) {
                 e.printStackTrace();
                 mainHandler.sendEmptyMessage(Utils.ERROR);

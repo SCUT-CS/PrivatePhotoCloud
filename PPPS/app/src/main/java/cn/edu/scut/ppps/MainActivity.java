@@ -116,6 +116,11 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
                 mProgressDialog.dismiss();
                 Snackbar.make(view, "Error!", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+            } else if (msg.what == Utils.SUCCESS) {
+                mProgressDialog.dismiss();
+                Snackbar.make(view, "Success!", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+                refresh();
             }
         }
     };
@@ -143,6 +148,7 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
                 intent.setClass(MainActivity.this, CameraActivity.class);
                 //intent.putExtra("")
                 startActivity(intent);
+                //singleProcess();
             }
         });
         DrawerLayout drawer = binding.drawerLayout;
@@ -209,7 +215,7 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
             refresh();
         } else if (item.getItemId() == R.id.action_next) {
             if (multiSelect) {
-                // TODO 完成多选逻辑
+                multiProcess();
             }
         } else if (item.getItemId() == R.id.action_update) {
             pipeline.thumbnailPipeline();
@@ -471,8 +477,12 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
      * @param path The path of the picture to be selected.
      * @author Cui Yuxin
      */
-    public void singleGet(String path) {
-        // TODO 单图的处理
+    public void singleProcess(String path) {
+        if (path.contains("Thumbnail")) {
+            pipeline.decryptPipeline(new String[]{path});
+        } else {
+            pipeline.encryptPipeline(new String[]{path});
+        }
     }
 
     /**
@@ -482,5 +492,9 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
     public void refresh() {
         initWidget();
         initData();
+    }
+
+    private void multiProcess() {
+        // TODO 多图的处理
     }
 }

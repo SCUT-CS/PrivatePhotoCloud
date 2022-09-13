@@ -171,7 +171,7 @@ public class Decrypt implements Callable {
             String imgPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
                     + File.separator + "Thumbnail"
                     + File.separator + imgName.substring(0, imgName.lastIndexOf(".webp"));
-            Utils.saveImg(img, imgFilePath1);
+            Utils.saveJpgImg(img, imgFilePath1);
         } else {
             String imgName = Utils.getFileName(imgFilePath1);
             String imgPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
