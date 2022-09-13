@@ -121,21 +121,6 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
                 mProgressDialog.dismiss();
                 Snackbar.make(view, "Success!", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-                /*MediaScannerConnection.scanFile(context, new String[] {
-                        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
-                        }, null, new MediaScannerConnection.OnScanCompletedListener() {
-                            *//**
-                             * Called to notify the client when the media scanner has finished
-                             * scanning a file.
-                             *
-                             * @param path the path to the file that has been scanned.
-                             * @param uri  the Uri for the file if the scanning operation succeeded
-                             *//*
-                            @Override
-                            public void onScanCompleted(String path, Uri uri) {
-
-                            }
-                        });*/
                 Intent mediaScanIntent = new Intent(
                         Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
                 Uri contentUri = Uri.parse("file://"+ Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES));

@@ -213,7 +213,7 @@ public class AliOSS implements CloudService {
         String objectName = token.get("filePath") + fileName;
         GetObjectRequest get = new GetObjectRequest(token.get("bucketName"), objectName);
         // TODO 修改为合适的缩略图参数。
-        get.setxOssProcess("image/resize,lfit,w_100,h_100");
+        get.setxOssProcess("image/resize,mfit,w_200,h_200");
         OSSAsyncTask task = ossClient.asyncGetObject(get, new OSSCompletedCallback<GetObjectRequest, GetObjectResult>() {
             @Override
             public void onSuccess(GetObjectRequest request, GetObjectResult result) {
