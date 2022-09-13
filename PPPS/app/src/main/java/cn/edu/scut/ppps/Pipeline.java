@@ -116,7 +116,7 @@ public class Pipeline {
     private Handler thumbnailAlgoHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            if (msg.what == Utils.FINISH_CLOUD) {
+            if (msg.what == Utils.CLOUD_SUCCESS) {
                 cloudTotalCount--;
                 if (cloudTotalCount <= 0) {
                     mainHandler.sendEmptyMessage(Utils.FINISH_CLOUD);
@@ -129,7 +129,7 @@ public class Pipeline {
                         for (int i = 0; i < cloud1Path.size(); i++) {
                             String path1 = savePath1 + cloud1Path.get(i);
                             String path2 = savePath2 + cloud1Path.get(i);
-                            EncryptThreadPool.submit(new Decrypt(path1, path2, context, true, decryptAlgoHandler));
+                            EncryptThreadPool.submit(new Decrypt(path1, path2, context, true, thumbnailAlgoHandler));
                         }
                     } catch (Exception e) {
                         mainHandler.sendEmptyMessage(Utils.ERROR);
@@ -215,7 +215,6 @@ public class Pipeline {
         cloud2Path = Arrays.asList(path);
         String cachePath = context.getCacheDir().getAbsolutePath();
         String savePath1 = cachePath + File.separator + "Disk1" + File.separator;
-        String savePath2 = cachePath + File.separator + "Disk2" + File.separator;
         List<String> existFiles = Utils.getAllFile(savePath1);
         for (String s : path) {
             try {
