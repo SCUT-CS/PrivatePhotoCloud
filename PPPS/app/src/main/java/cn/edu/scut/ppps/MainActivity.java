@@ -141,7 +141,7 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
                 Uri contentUri = Uri.parse("file://"+ Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES));
                 mediaScanIntent.setData(contentUri);
                 context.sendBroadcast(mediaScanIntent);
-                refresh();
+                deepRefresh();
             }
         }
     };
@@ -517,6 +517,20 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
         initData();
     }
 
+    /**
+     * Deep refresh the screen.
+     * @author Cui Yuxin
+     */
+    public void deepRefresh() {
+        mFolderBeans = new ArrayList<>();
+        mDirPaths = new HashSet<String>();
+        doSDWrite();
+    }
+
+    /**
+     * Multiple choice processing
+     * @author Cui Yuxin
+     */
     private void multiProcess() {
         // TODO 多图的处理
     }
