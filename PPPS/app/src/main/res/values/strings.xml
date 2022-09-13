@@ -5,7 +5,6 @@
     <string name="nav_header_title">安全且高效的图像云存储系统</string>
     <string name="nav_header_subtitle">SCUT 华南小小萌新</string>
     <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">选择其他图片</string>
 
     <string name="menu_home">相册</string>
     <string name="menu_slideshow">设置</string>
