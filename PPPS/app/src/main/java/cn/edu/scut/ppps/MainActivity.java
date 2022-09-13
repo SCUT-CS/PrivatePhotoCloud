@@ -522,5 +522,17 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
      */
     private void multiProcess() {
         // TODO 多图的处理
+        if (listChoosePics.size() == 0) {
+            Snackbar.make(view, "请选择图片！", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+            return;
+        } else {
+            String path = listChoosePics.get(0);
+            if (path.contains("Thumbnail")) {
+                pipeline.decryptPipeline(listChoosePics.toArray(new String[0]));
+            } else {
+                pipeline.encryptPipeline(listChoosePics.toArray(new String[0]));
+            }
+        }
     }
 }
