@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -74,6 +75,7 @@ public class Pipeline {
                 cloudTotalCount--;
                 if (cloudTotalCount <= 0) {
                     mainHandler.sendEmptyMessage(Utils.FINISH_CLOUD);
+                    mainHandler.sendEmptyMessage(Utils.SUCCESS);
                 }
             }
         }
@@ -105,6 +107,7 @@ public class Pipeline {
                 decryptAlgoHandlerCount--;
                 if (decryptAlgoHandlerCount <= 0) {
                     mainHandler.sendEmptyMessage(Utils.FINISH_ALGORITHM);
+                    mainHandler.sendEmptyMessage(Utils.SUCCESS);
                 }
             }
         }
@@ -113,7 +116,7 @@ public class Pipeline {
     private Handler thumbnailAlgoHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            if (msg.what == Utils.FINISH_CLOUD) {
+            if (msg.what == Utils.CLOUD_SUCCESS) {
                 cloudTotalCount--;
                 if (cloudTotalCount <= 0) {
                     mainHandler.sendEmptyMessage(Utils.FINISH_CLOUD);
@@ -126,7 +129,7 @@ public class Pipeline {
                         for (int i = 0; i < cloud1Path.size(); i++) {
                             String path1 = savePath1 + cloud1Path.get(i);
                             String path2 = savePath2 + cloud1Path.get(i);
-                            EncryptThreadPool.submit(new Decrypt(path1, path2, context, true, decryptAlgoHandler));
+                            EncryptThreadPool.submit(new Decrypt(path1, path2, context, true, thumbnailAlgoHandler));
                         }
                     } catch (Exception e) {
                         mainHandler.sendEmptyMessage(Utils.ERROR);
@@ -136,6 +139,7 @@ public class Pipeline {
                 thumbnailAlgoHandlerCount--;
                 if (thumbnailAlgoHandlerCount <= 0) {
                     mainHandler.sendEmptyMessage(Utils.FINISH_ALGORITHM);
+                    mainHandler.sendEmptyMessage(Utils.SUCCESS);
                 }
             }
         }
@@ -183,8 +187,8 @@ public class Pipeline {
         String savePath2 = cachePath + File.separator + "Disk2" + File.separator;
         for (int i = 0; i < length; i++) {
             try {
-                cloud1Path.set(i, savePath1 + Utils.getFileName(path[i]) + ".ori.webp");
-                cloud2Path.set(i, savePath2 + Utils.getFileName(path[i]) + ".ori.webp");
+                cloud1Path.add(savePath1 + Utils.getFileName(path[i]) + ".ori.webp");
+                cloud2Path.add(savePath2 + Utils.getFileName(path[i]) + ".ori.webp");
             } catch (IOException e) {
                 e.printStackTrace();
                 mainHandler.sendEmptyMessage(Utils.ERROR);
@@ -211,12 +215,11 @@ public class Pipeline {
         cloud2Path = Arrays.asList(path);
         String cachePath = context.getCacheDir().getAbsolutePath();
         String savePath1 = cachePath + File.separator + "Disk1" + File.separator;
-        String savePath2 = cachePath + File.separator + "Disk2" + File.separator;
         List<String> existFiles = Utils.getAllFile(savePath1);
         for (String s : path) {
             try {
                 String fileName = Utils.getFileName(s);
-                if (!existFiles.contains(s)) {
+                if (Objects.isNull(existFiles) || !Objects.requireNonNull(existFiles).contains(s)) {
                     cloud1Path.add(fileName);
                 }
             } catch (Exception e) {
@@ -227,8 +230,8 @@ public class Pipeline {
         cloudStorage2.setHandler(decryptAlgoHandler);
         cloudTotalCount = cloud1Path.size() * 2;
         for (String s : cloud1Path) {
-            cloudStorage1.download(s, savePath1 + s);
-            cloudStorage2.download(s, savePath2 + s);
+            cloudStorage1.download(s, "Disk1");
+            cloudStorage2.download(s, "Disk2");
         }
     }
 
@@ -249,14 +252,17 @@ public class Pipeline {
             mainHandler.sendEmptyMessage(Utils.ERROR);
         }
         for (String s : cloudFiles) {
-            if (!existFiles.contains(s)) {
+            if (Objects.isNull(existFiles) || !Objects.requireNonNull(existFiles).contains(s)) {
                 cloud1Path.add(s);
             }
         }
         cloudTotalCount = cloud1Path.size() * 2;
         for (String s : cloud1Path) {
-            cloudStorage1.download(s, imgPath + s);
-            cloudStorage2.download(s, imgPath + s);
+            cloudStorage1.getThumbnail(s, "Disk1Thumbnail");
+            cloudStorage2.getThumbnail(s, "Disk2Thumbnail");
+        }
+        if (cloud1Path.size() == 0) {
+            mainHandler.sendEmptyMessage(Utils.SUCCESS);
         }
     }
 }

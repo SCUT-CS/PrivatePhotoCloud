@@ -1,11 +1,13 @@
 package cn.edu.scut.ppps;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.ImageDecoder;
 import android.net.Uri;
 import android.os.Build;
+import android.provider.MediaStore;
 
 import androidx.core.content.FileProvider;
 import androidx.heifwriter.HeifWriter;
@@ -39,12 +41,15 @@ public class Utils {
     public static final int FINISH_ALGORITHM = 4;
     public static final int ERROR = -2;
     public static final int UI = 8;
+    public static final int SUCCESS = 9;
     // Encrypt Handler value
     public static final int ENCRYPT_SUCCESS = 5;
     // Decrypt Handler value
     public static final int DECRYPT_SUCCESS = 6;
     // Thumbnail Handler value
     public static final int THUMBNAIL_SUCCESS = 7;
+    // CameraActivity result value
+    public static final int CAMERA_RESULT = 1;
 
     /**
      * Open an image and return.
@@ -214,7 +219,8 @@ public class Utils {
                 byte currentByte = bytesArray[i][j];
                 for (int index = 0; index < 8; index++) {
                     if ((currentByte & (1 << index)) != 0) {
-                        result[i][((j << 3) + index) / mappingSize] += 255;
+                        // TODO 应该是255 为了防止溢出 权宜之计
+                        result[i][((j << 3) + index) / mappingSize] += 230;
                     }
                 }
             }
@@ -306,6 +312,37 @@ public class Utils {
             }
         }
         return files;
+    }
+
+    /**
+     * Convert uri to file path.
+     * @param fileUrl The uri of the file.
+     * @param context The context of the activity.
+     * @author Cui Yuxin
+     * @source http://t.zoukankan.com/androidxiaoyang-p-4968663.html
+     */
+    public static String uri2Path(Uri fileUrl, Context context) {
+        String fileName = null;
+        if (fileUrl != null) {
+            if (fileUrl.getScheme().toString().compareTo("content") == 0) // content://开头的uri
+            {
+                Cursor cursor = context.getContentResolver().query(fileUrl, null, null, null, null);
+                if (cursor != null && cursor.moveToFirst()) {
+                    try {
+                        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+                        fileName = cursor.getString(column_index); // 取出文件路径
+                    } catch (IllegalArgumentException e) {
+                        e.printStackTrace();
+                    } finally {
+                        cursor.close();
+                    }
+                }
+            } else if (fileUrl.getScheme().compareTo("file") == 0) // file:///开头的uri
+            {
+                fileName = fileUrl.getPath();
+            }
+        }
+        return fileName;
     }
 
     /**

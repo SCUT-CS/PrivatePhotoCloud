@@ -177,4 +177,32 @@ public class TokensTest {
         Assert.assertEquals("测试updateToken方法失败！", "654321",
                 tokens.getToken("test").get("refresh_token"));
     }
+
+    /**
+     * Load tokens into file.
+     * @author Cui Yuxin
+     */
+    @Test
+    public void loadTokens() throws Exception {
+        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        Tokens tokens = new Tokens(appContext);
+        Map<String, String> token = new HashMap<>();
+        //阿里云token赋值
+        token.put("type", "aliyun");
+        token.put("accessId", "LTAI5t9Wx9ZwYxCuPEGoxoct");
+        token.put("accessSecret", "IJWyl2xxwYC1vwaTkw8mZ4hWnKZXxP");
+        token.put("endpoint", "https://oss-cn-hangzhou.aliyuncs.com");
+        token.put("bucketName", "ppps1");
+        token.put("filePath", "encryptedImage/");
+        tokens.updateToken("aliyun1", token);
+        Map<String, String> token2 = new HashMap<>();
+        //阿里云token赋值
+        token2.put("type", "aliyun");
+        token2.put("accessId", "LTAI5t9Wx9ZwYxCuPEGoxoct");
+        token2.put("accessSecret", "IJWyl2xxwYC1vwaTkw8mZ4hWnKZXxP");
+        token2.put("endpoint", "https://oss-cn-hangzhou.aliyuncs.com");
+        token2.put("bucketName", "ppps2");
+        token2.put("filePath", "encryptedImage/");
+        tokens.updateToken("aliyun2", token2);
+    }
 }

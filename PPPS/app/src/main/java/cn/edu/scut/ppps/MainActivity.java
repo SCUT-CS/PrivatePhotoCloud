@@ -22,10 +22,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
 import com.hao.baselib.base.WaterPermissionActivity;
 
+import androidx.annotation.Nullable;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -41,7 +42,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
+import cn.edu.scut.ppps.cloud.AliOSS;
 import cn.edu.scut.ppps.cloud.CloudService;
+import cn.edu.scut.ppps.cloud.Tokens;
 import cn.edu.scut.ppps.databinding.ActivityMainBinding;
 import cn.edu.scut.ppps.gallary.AlbumCallback;
 import cn.edu.scut.ppps.gallary.AlbumModel;
@@ -84,6 +87,8 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
     private ProgressDialog mProgressDialog;
     // Pipeline
     private Pipeline pipeline;
+    // Tokens
+    private Tokens tokens;
     // 该参数负责子线程查询图片后通知主线程更新UI
     @SuppressLint("HandlerLeak")
     private Handler uiHandler = new Handler() {
@@ -97,7 +102,7 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
     };
     // 该参数负责获取子线程执行结果
     @SuppressLint("HandlerLeak")
-    private Handler AlgorithmHandler = new Handler() {
+    private Handler algorithmHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             if (msg.what == Utils.START_ALGORITHM) {
@@ -110,8 +115,16 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
                 mProgressDialog.dismiss();
             } else if (msg.what == Utils.ERROR) {
                 mProgressDialog.dismiss();
-                Snackbar.make(view, "失败!", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Toast.makeText(context, "Error!", Toast.LENGTH_SHORT).show();
+            } else if (msg.what == Utils.SUCCESS) {
+                mProgressDialog.dismiss();
+                Toast.makeText(context, "Success!", Toast.LENGTH_SHORT).show();
+                Intent mediaScanIntent = new Intent(
+                        Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                Uri contentUri = Uri.parse("file://"+ Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES));
+                mediaScanIntent.setData(contentUri);
+                context.sendBroadcast(mediaScanIntent);
+                deepRefresh();
             }
         }
     };
@@ -132,13 +145,12 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
         binding.appBarMain.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               /* Snackbar.make(view, "拍照", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();*/
-                // TODO 获取拍照的url并进行单图片操作
-                Intent intent = new Intent();
-                intent.setClass(MainActivity.this, CameraActivity.class);
-                //intent.putExtra("")
-                startActivity(intent);
+                if (multiSelect) {
+                    multiProcess();
+                } else {
+                    Intent intent = new Intent(MainActivity.this, CameraActivity.class);
+                    startActivityForResult(intent, Utils.CAMERA_RESULT);
+                }
             }
         });
         DrawerLayout drawer = binding.drawerLayout;
@@ -163,8 +175,16 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
         });
         context = this;
         view = binding.getRoot();
-        // TODO 初始化Pipeline cloudStorage
-        //pipeline = new Pipeline(AlgorithmHandler);
+        try {
+            tokens = new Tokens(context);
+        } catch (Exception e) {
+            e.printStackTrace();
+            algorithmHandler.sendEmptyMessage(Utils.ERROR);
+        }
+        // TODO 在设置中获取
+        CloudService cloudService1 = new AliOSS("aliyun1", context, tokens);
+        CloudService cloudService2 = new AliOSS("aliyun2", context, tokens);
+        pipeline = new Pipeline(algorithmHandler, context, cloudService1, cloudService2);
     }
 
     /**
@@ -179,26 +199,38 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
     }
 
     /**
+     * Callback from CameraActivity
+     * @param requestCode request code.
+     * @param resultCode result code.
+     * @param data data.
+     * @author Cui Yuxin
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Utils.CAMERA_RESULT && resultCode == RESULT_OK) {
+            Uri imgUri = Uri.parse(data.getStringExtra("uri"));
+            singleProcess(Utils.uri2Path(imgUri, context));
+        }
+    }
+
+    /**
      * Select menu item event.
      * @param item menu item
      * @author Cui Yuxin
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_settings) {
-            // TODO 打开其他位置的图片
-            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-            intent.addCategory(Intent.CATEGORY_OPENABLE);
-            intent.setType("image/*");
-            startActivityForResult(intent, 2);
-        } else if (item.getItemId() == R.id.action_muti) {
+        if (item.getItemId() == R.id.action_muti) {
             multiSelect = !multiSelect;
             listChoosePics = new ArrayList<>();
-            refresh();
-        } else if (item.getItemId() == R.id.action_next) {
+            FloatingActionButton fab = binding.appBarMain.fab;
             if (multiSelect) {
-                // TODO 完成多选逻辑
+                fab.setImageResource(R.drawable.ic_media_play);
+            } else {
+                fab.setImageResource(R.drawable.ic_menu_camera);
             }
+            refresh();
         } else if (item.getItemId() == R.id.action_update) {
             pipeline.thumbnailPipeline();
             refresh();
@@ -289,9 +321,10 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
             public void run() {
                 Uri mImgUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
                 ContentResolver cr = MainActivity.this.getContentResolver();
-                Cursor cursor = cr.query(mImgUri, null, MediaStore.Images.Media.MIME_TYPE + "=? or " + MediaStore
-                        .Images.Media.MIME_TYPE + "=?", new String[]{"image/jpeg", "image/png"}, MediaStore
-                        .Images.Media.DATE_MODIFIED);
+                Cursor cursor = cr.query(mImgUri, null,
+                        MediaStore.Images.Media.MIME_TYPE + "=? or " + MediaStore.Images.Media.MIME_TYPE + "=? or " + MediaStore.Images.Media.MIME_TYPE + "=?",
+                        new String[]{"image/jpeg", "image/png", "image/webp"},
+                        MediaStore.Images.Media.DATE_MODIFIED);
                 while (cursor.moveToNext()) {
                     @SuppressLint("Range") String path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
                     File parentFile = new File(path).getParentFile();
@@ -317,7 +350,8 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
                         public boolean accept(File dir, String filename) {
                             if (filename.endsWith(".jpg")
                                     || filename.endsWith(".jpeg")
-                                    || filename.endsWith(".png")) {
+                                    || filename.endsWith(".png")
+                                    || filename.endsWith(".webp")) {
                                 return true;
                             }
                             return false;
@@ -368,13 +402,17 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
         mDirPopupWindow.setmListener(new ListImageDirPopupWindow.OnDirSelectedListener() {
             @Override
             public void onSelected(FolderBean folderBean) {
+                if(multiSelect) {
+                    listChoosePics = new ArrayList<>();
+                }
                 mCurrentDir = new File(folderBean.getDir());
                 mImages = Arrays.asList(Objects.requireNonNull(mCurrentDir.list(new FilenameFilter() {
                     @Override
                     public boolean accept(File dir, String filename) {
                         if (filename.endsWith(".jpg")
                                 || filename.endsWith(".jpeg")
-                                || filename.endsWith(".png")) {
+                                || filename.endsWith(".png")
+                                || filename.endsWith(".webp")) {
                             return true;
                         }
                         return false;
@@ -459,8 +497,12 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
      * @param path The path of the picture to be selected.
      * @author Cui Yuxin
      */
-    public void singleGet(String path) {
-        // TODO 单图的处理
+    public void singleProcess(String path) {
+        if (path.contains("Thumbnail")) {
+            pipeline.decryptPipeline(new String[]{path});
+        } else {
+            pipeline.encryptPipeline(new String[]{path});
+        }
     }
 
     /**
@@ -470,5 +512,33 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
     public void refresh() {
         initWidget();
         initData();
+    }
+
+    /**
+     * Deep refresh the screen.
+     * @author Cui Yuxin
+     */
+    public void deepRefresh() {
+        mFolderBeans = new ArrayList<>();
+        mDirPaths = new HashSet<String>();
+        doSDWrite();
+    }
+
+    /**
+     * Multiple choice processing
+     * @author Cui Yuxin
+     */
+    private void multiProcess() {
+        // TODO 多图的处理
+        if (listChoosePics.size() == 0) {
+            Toast.makeText(context, "请选择图片！", Toast.LENGTH_SHORT).show();
+        } else {
+            String path = listChoosePics.get(0);
+            if (path.contains("Thumbnail")) {
+                pipeline.decryptPipeline(listChoosePics.toArray(new String[0]));
+            } else {
+                pipeline.encryptPipeline(listChoosePics.toArray(new String[0]));
+            }
+        }
     }
 }

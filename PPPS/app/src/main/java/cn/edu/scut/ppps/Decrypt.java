@@ -171,7 +171,7 @@ public class Decrypt implements Callable {
             String imgPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
                     + File.separator + "Thumbnail"
                     + File.separator + imgName.substring(0, imgName.lastIndexOf(".webp"));
-            Utils.saveImg(img, imgFilePath1);
+            Utils.saveImg(img, imgPath);
         } else {
             String imgName = Utils.getFileName(imgFilePath1);
             String imgPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
@@ -191,16 +191,17 @@ public class Decrypt implements Callable {
         initialize();
         if (isThumbnail) {
             decryptThumbnail();
+            saveFile();
             if (handler != null) {
                 handler.sendEmptyMessage(Utils.THUMBNAIL_SUCCESS);
             }
         } else {
             decrypt();
+            saveFile();
             if (handler != null) {
                 handler.sendEmptyMessage(Utils.DECRYPT_SUCCESS);
             }
         }
-        saveFile();
         return img;
     }
 

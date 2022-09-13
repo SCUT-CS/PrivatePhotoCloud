@@ -14,15 +14,12 @@ import android.view.Surface
 import android.widget.Toast
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.camera.video.Recording
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import cn.edu.scut.ppps.databinding.ActivityCameraBinding
 import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
-
-typealias LumaListener = (luma: Double) -> Unit
 
 /**
  * Camera Activity.
@@ -34,7 +31,6 @@ class CameraActivity : AppCompatActivity() {
 
     private lateinit var viewBinding: ActivityCameraBinding
     private var imageCapture: ImageCapture? = null
-    private var recording: Recording? = null
     private lateinit var cameraExecutor: ExecutorService
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -99,9 +95,8 @@ class CameraActivity : AppCompatActivity() {
                     }
                     override fun
                             onImageSaved(output: ImageCapture.OutputFileResults){
-                        val msg = "拍照成功: ${output.savedUri}"
-                        Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
-                        Log.d(TAG, msg)
+                        setResult(RESULT_OK, intent.putExtra("uri", output.savedUri.toString()))
+                        finish()
                     }
                 }
         )
@@ -118,7 +113,7 @@ class CameraActivity : AppCompatActivity() {
                     .also {
                         it.setSurfaceProvider(viewBinding.viewFinder.surfaceProvider)
                     }
-            // TODO 探究合适的照片大小，这里使用了1200万像素的标准大小
+            // 这里使用了2k像素的标准大小
             if (viewBinding.viewFinder.display.rotation == Surface.ROTATION_0 || viewBinding.viewFinder.display.rotation == Surface.ROTATION_180) {
                 imageCapture = ImageCapture.Builder()
                     .setTargetRotation(viewBinding.viewFinder.display.rotation)

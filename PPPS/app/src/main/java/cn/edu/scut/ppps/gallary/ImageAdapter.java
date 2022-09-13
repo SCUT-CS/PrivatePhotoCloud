@@ -95,7 +95,7 @@ public class ImageAdapter extends BaseAdapter {
                     }
                 }else{
                     //单选的处理
-                    albumActivity.singleGet(filePath);
+                    albumActivity.singleProcess(filePath);
                 }
             }
         });

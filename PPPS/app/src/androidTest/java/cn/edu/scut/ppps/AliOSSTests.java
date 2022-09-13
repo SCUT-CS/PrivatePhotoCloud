@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.logging.LogRecord;
 
 import cn.edu.scut.ppps.cloud.AliOSS;
+import cn.edu.scut.ppps.cloud.CloudService;
 import cn.edu.scut.ppps.cloud.Tokens;
 
 /**
