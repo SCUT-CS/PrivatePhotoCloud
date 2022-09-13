@@ -394,6 +394,9 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
         mDirPopupWindow.setmListener(new ListImageDirPopupWindow.OnDirSelectedListener() {
             @Override
             public void onSelected(FolderBean folderBean) {
+                if(multiSelect) {
+                    listChoosePics = new ArrayList<>();
+                }
                 mCurrentDir = new File(folderBean.getDir());
                 mImages = Arrays.asList(Objects.requireNonNull(mCurrentDir.list(new FilenameFilter() {
                     @Override
