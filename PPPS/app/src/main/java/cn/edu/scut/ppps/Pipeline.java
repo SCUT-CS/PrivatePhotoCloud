@@ -32,16 +32,16 @@ public class Pipeline {
     private CloudService cloudStorage2;
     // Thread pool
     private ThreadPoolExecutor CryptThreadPool = new ThreadPoolExecutor(1,
-            20,
-            100,
-            TimeUnit.SECONDS,
-            new ArrayBlockingQueue<Runnable>(16));
-    // TODO optimize for the parameter
-    private ThreadPoolExecutor ThumbnailThreadPool = new ThreadPoolExecutor(5,
+            8,
             10,
-            100,
             TimeUnit.SECONDS,
-            new ArrayBlockingQueue<Runnable>(16));
+            new ArrayBlockingQueue<Runnable>(20));
+    // TODO optimize for the parameter
+    private ThreadPoolExecutor ThumbnailThreadPool = new ThreadPoolExecutor(2,
+            8,
+            10,
+            TimeUnit.SECONDS,
+            new ArrayBlockingQueue<Runnable>(100));
     // Cloud handler count
     int cloudTotalCount = 0;
     List<String> cloud1Path;
