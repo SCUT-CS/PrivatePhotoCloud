@@ -30,21 +30,16 @@ public class Pipeline {
     private Context context;
     private CloudService cloudStorage1;
     private CloudService cloudStorage2;
-    // TODO optimize for the parameter
     // Thread pool
-    private ThreadPoolExecutor EncryptThreadPool = new ThreadPoolExecutor(5,
-            10,
-            1000,
+    private ThreadPoolExecutor CryptThreadPool = new ThreadPoolExecutor(1,
+            20,
+            100,
             TimeUnit.SECONDS,
             new ArrayBlockingQueue<Runnable>(16));
-    private ThreadPoolExecutor DecryptThreadPool = new ThreadPoolExecutor(5,
-            10,
-            1000,
-            TimeUnit.SECONDS,
-            new ArrayBlockingQueue<Runnable>(16));
+    // TODO optimize for the parameter
     private ThreadPoolExecutor ThumbnailThreadPool = new ThreadPoolExecutor(5,
             10,
-            1000,
+            100,
             TimeUnit.SECONDS,
             new ArrayBlockingQueue<Runnable>(16));
     // Cloud handler count
@@ -97,7 +92,7 @@ public class Pipeline {
                         for (int i = 0; i < cloud2Path.size(); i++) {
                             String path1 = savePath1 + Utils.getFileName(cloud2Path.get(i));
                             String path2 = savePath2 + Utils.getFileName(cloud2Path.get(i));
-                            EncryptThreadPool.submit(new Decrypt(path1, path2, context, false, decryptAlgoHandler));
+                            CryptThreadPool.submit(new Decrypt(path1, path2, context, false, decryptAlgoHandler));
                         }
                     } catch (Exception e) {
                         mainHandler.sendEmptyMessage(Utils.ERROR);
@@ -129,7 +124,7 @@ public class Pipeline {
                         for (int i = 0; i < cloud1Path.size(); i++) {
                             String path1 = savePath1 + cloud1Path.get(i);
                             String path2 = savePath2 + cloud1Path.get(i);
-                            EncryptThreadPool.submit(new Decrypt(path1, path2, context, true, thumbnailAlgoHandler));
+                            ThumbnailThreadPool.submit(new Decrypt(path1, path2, context, true, thumbnailAlgoHandler));
                         }
                     } catch (Exception e) {
                         mainHandler.sendEmptyMessage(Utils.ERROR);
@@ -200,7 +195,7 @@ public class Pipeline {
         // algorithm
         encryptAlgoHandlerCount = length;
         for (String s : path) {
-            EncryptThreadPool.submit(new Encrypt(s, context, encryptAlgoHandler));
+            CryptThreadPool.submit(new Encrypt(s, context, encryptAlgoHandler));
         }
     }
 
@@ -219,7 +214,7 @@ public class Pipeline {
         for (String s : path) {
             try {
                 String fileName = Utils.getFileName(s);
-                if (Objects.isNull(existFiles) || !Objects.requireNonNull(existFiles).contains(s)) {
+                if (Objects.isNull(existFiles) || !Objects.requireNonNull(existFiles).contains(fileName)) {
                     cloud1Path.add(fileName);
                 }
             } catch (Exception e) {
@@ -232,6 +227,9 @@ public class Pipeline {
         for (String s : cloud1Path) {
             cloudStorage1.download(s, "Disk1");
             cloudStorage2.download(s, "Disk2");
+        }
+        if (cloud1Path.size() == 0) {
+            decryptAlgoHandler.sendEmptyMessage(Utils.CLOUD_SUCCESS);
         }
     }
 
