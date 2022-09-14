@@ -48,16 +48,6 @@ Encrypt.java
 
 Decrypt.java
 
-#### Task4：
-
-测试Decrypt类的save方法保存的文件名和路径是否符合预期。
-
-**Files you'll edit:**
-
-DecryptTest.java
-
-DecryptThumbnail.java
-
 ### 2022.9.1-2022.9.11
 
 #### Task1：
