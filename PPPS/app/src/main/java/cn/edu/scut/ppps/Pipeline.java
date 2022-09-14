@@ -36,7 +36,6 @@ public class Pipeline {
             10,
             TimeUnit.SECONDS,
             new ArrayBlockingQueue<Runnable>(20));
-    // TODO optimize for the parameter
     private ThreadPoolExecutor ThumbnailThreadPool = new ThreadPoolExecutor(2,
             8,
             10,
