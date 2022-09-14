@@ -14,14 +14,13 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.util.List;
 
 import cn.edu.scut.ppps.R;
-import cn.edu.scut.ppps.gallary.FolderBean;
-import cn.edu.scut.ppps.gallary.ImageLoader;
 
 public class ListImageDirPopupWindow extends PopupWindow {
 
@@ -34,7 +33,7 @@ public class ListImageDirPopupWindow extends PopupWindow {
 
     public ListImageDirPopupWindow(Context context, List<FolderBean> datas) {
         calWidthAndHeight(context);
-        mConvertView = LayoutInflater.from(context).inflate(R.layout.popup_main,null);
+        mConvertView = LayoutInflater.from(context).inflate(R.layout.popup_main, null);
         mDatas = datas;
         setContentView(mConvertView);
         setWidth(mWidth);
@@ -46,7 +45,7 @@ public class ListImageDirPopupWindow extends PopupWindow {
         setTouchInterceptor(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_OUTSIDE){
+                if (event.getAction() == MotionEvent.ACTION_OUTSIDE) {
                     dismiss();
                     return true;
                 }
@@ -59,14 +58,14 @@ public class ListImageDirPopupWindow extends PopupWindow {
 
     private void initView(Context context) {
         mListView = mConvertView.findViewById(R.id.id_list_dir);
-        mListView.setAdapter(new ListDirAdapter(context,mDatas));
+        mListView.setAdapter(new ListDirAdapter(context, mDatas));
     }
 
-    private void initEvent(){
+    private void initEvent() {
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (mListener!=null){
+                if (mListener != null) {
                     mListener.onSelected(mDatas.get(position));
                 }
             }
@@ -78,7 +77,7 @@ public class ListImageDirPopupWindow extends PopupWindow {
         DisplayMetrics outMetrics = new DisplayMetrics();
         wm.getDefaultDisplay().getMetrics(outMetrics);
         mWidth = outMetrics.widthPixels;
-        mHeight = (int) (outMetrics.heightPixels*0.7);
+        mHeight = (int) (outMetrics.heightPixels * 0.7);
     }
 
     private class ListDirAdapter extends ArrayAdapter<FolderBean> {
@@ -86,8 +85,8 @@ public class ListImageDirPopupWindow extends PopupWindow {
         private LayoutInflater mInflater;
         private List<FolderBean> mDatas;
 
-        public ListDirAdapter(Context context,List<FolderBean> objects) {
-            super(context,0,objects);
+        public ListDirAdapter(Context context, List<FolderBean> objects) {
+            super(context, 0, objects);
             mInflater = LayoutInflater.from(context);
         }
 
@@ -95,33 +94,33 @@ public class ListImageDirPopupWindow extends PopupWindow {
         @Override
         public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
             ViewHolder holder = null;
-            if (convertView == null){
+            if (convertView == null) {
                 holder = new ViewHolder();
-                convertView = mInflater.inflate(R.layout.item_popup_main,parent,false);
+                convertView = mInflater.inflate(R.layout.item_popup_main, parent, false);
                 holder.mImg = convertView.findViewById(R.id.id_id_dir_item_image);
                 holder.mDirName = convertView.findViewById(R.id.id_dir_item_name);
                 holder.mDirCount = convertView.findViewById(R.id.id_dir_item_count);
                 convertView.setTag(holder);
-            }else{
+            } else {
                 holder = (ViewHolder) convertView.getTag();
             }
             FolderBean bean = getItem(position);
             //重置
             holder.mImg.setImageResource(R.drawable.no_image);
-            ImageLoader.getInstance().loadImage(bean.getFirstImgPath(),holder.mImg);
-            holder.mDirCount.setText(bean.getCount()+"");
+            ImageLoader.getInstance().loadImage(bean.getFirstImgPath(), holder.mImg);
+            holder.mDirCount.setText(bean.getCount() + "");
             holder.mDirName.setText(bean.getName());
             return convertView;
         }
 
-        private class ViewHolder{
-            ImageView mImg;
-            TextView mDirName;
-            TextView mDirCount;
+        private class ViewHolder {
+            private ImageView mImg;
+            private TextView mDirName;
+            private TextView mDirCount;
         }
     }
 
-    public interface OnDirSelectedListener{
+    public interface OnDirSelectedListener {
         void onSelected(FolderBean folderBean);
     }
 

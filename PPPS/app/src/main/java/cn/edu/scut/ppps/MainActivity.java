@@ -53,7 +53,7 @@ import cn.edu.scut.ppps.gallary.ImageAdapter;
 import cn.edu.scut.ppps.gallary.ListImageDirPopupWindow;
 
 /**
- * Main Activity
+ * Main Activity.
  * @author Cui Yuxin
  * @source https://blog.csdn.net/weixin_38322371/article/details/106312474
  */
@@ -106,11 +106,11 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
         @Override
         public void handleMessage(Message msg) {
             if (msg.what == Utils.START_ALGORITHM) {
-                mProgressDialog = ProgressDialog.show(context,null,"正在执行...");
+                mProgressDialog = ProgressDialog.show(context, null, "正在执行...");
             } else if (msg.what == Utils.FINISH_ALGORITHM) {
                 mProgressDialog.dismiss();
             } else if (msg.what == Utils.START_CLOUD) {
-                mProgressDialog = ProgressDialog.show(context,null,"正在上传/下载...");
+                mProgressDialog = ProgressDialog.show(context, null, "正在上传/下载...");
             } else if (msg.what == Utils.FINISH_CLOUD) {
                 mProgressDialog.dismiss();
             } else if (msg.what == Utils.ERROR) {
@@ -121,7 +121,7 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
                 Toast.makeText(context, "Success!", Toast.LENGTH_SHORT).show();
                 Intent mediaScanIntent = new Intent(
                         Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-                Uri contentUri = Uri.parse("file://"+ Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES));
+                Uri contentUri = Uri.parse("file://" + Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES));
                 mediaScanIntent.setData(contentUri);
                 context.sendBroadcast(mediaScanIntent);
                 deepRefresh();
@@ -402,7 +402,7 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
         mDirPopupWindow.setmListener(new ListImageDirPopupWindow.OnDirSelectedListener() {
             @Override
             public void onSelected(FolderBean folderBean) {
-                if(multiSelect) {
+                if (multiSelect) {
                     listChoosePics = new ArrayList<>();
                 }
                 mCurrentDir = new File(folderBean.getDir());
@@ -456,7 +456,9 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
      * @author Cui Yuxin
      */
     @Override
-    public void onClick(View v) {}
+    public void onClick(View v) {
+
+    }
 
     /**
      * Add pictures to the selected collection.

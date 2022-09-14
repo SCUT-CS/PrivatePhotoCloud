@@ -46,7 +46,6 @@ public class AliOSS implements CloudService {
      * "type", "accessId", "accessSecret", "endpoint", "bucketName", "filePath".
      * "type" is the type of the cloud service, e.g. "aliyun".
      * "filePath" is the directory in the bucket to store files, e.g. "exampleDir/".
-     * @author Cui Yuxin
      */
     private Map<String, String> token;
     private OSS ossClient;
@@ -169,9 +168,9 @@ public class AliOSS implements CloudService {
                     byte[] buffer = new byte[(int) length];
                     int readCount = 0;
                     while (readCount < length) {
-                        try{
+                        try {
                             readCount += result.getObjectContent().read(buffer, readCount, (int) length - readCount);
-                        }catch (Exception e){
+                        } catch (Exception e) {
                             OSSLog.logInfo(e.toString());
                         }
                     }
@@ -222,9 +221,9 @@ public class AliOSS implements CloudService {
                     byte[] buffer = new byte[(int) length];
                     int readCount = 0;
                     while (readCount < length) {
-                        try{
+                        try {
                             readCount += result.getObjectContent().read(buffer, readCount, (int) length - readCount);
-                        }catch (Exception e){
+                        } catch (Exception e) {
                             OSSLog.logInfo(e.toString());
                         }
                     }

@@ -130,7 +130,7 @@ public class DecryptThumbnailTest {
         Utils.saveImg(img, context.getCacheDir().getAbsolutePath() + File.separator + "Disk1" + File.separator + "111.png");
         for (int i = 0; i < img.getWidth(); i++) {
             for (int j = 0; j < img.getHeight(); j++) {
-                Assert.assertEquals("H:W"+j+i,expectedImg.getPixel(i, j), img.getPixel(i, j));
+                Assert.assertEquals("H:W" + j + i, expectedImg.getPixel(i, j), img.getPixel(i, j));
             }
         }
     }

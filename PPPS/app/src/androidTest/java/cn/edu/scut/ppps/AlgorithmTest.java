@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Environment;
-import android.util.Log;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -16,8 +15,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -42,8 +39,8 @@ public class AlgorithmTest {
             + File.separator + "PPPS"
             + File.separator + imgName;
     //加密后的图片路径 除了名字都已经写死了
-    String Path1 = context.getCacheDir().getAbsolutePath() + File.separator + "Disk1" + File.separator + imgName + ".ori.webp";
-    String Path2 = context.getCacheDir().getAbsolutePath() + File.separator + "Disk2" + File.separator + imgName + ".ori.webp";
+    String path1 = context.getCacheDir().getAbsolutePath() + File.separator + "Disk1" + File.separator + imgName + ".ori.webp";
+    String path2 = context.getCacheDir().getAbsolutePath() + File.separator + "Disk2" + File.separator + imgName + ".ori.webp";
     //加密缩率图下载路径
 
     //解密缩率图保存路径
@@ -73,7 +70,7 @@ public class AlgorithmTest {
         Bitmap[] resultEncrypt = resultsEncrypt.get();
         Assert.assertNotNull(resultEncrypt);
         //解密
-        Decrypt decrypt = new Decrypt(Path1, Path2, context);
+        Decrypt decrypt = new Decrypt(path1, path2, context);
         ThreadPoolExecutor threadPoolExecutor2 = new ThreadPoolExecutor(5, 10, 1000, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(16));
         Future<Bitmap> resultsDecrypt = threadPoolExecutor2.submit(decrypt);
         Bitmap resultDecrypt = resultsDecrypt.get();
@@ -128,7 +125,7 @@ public class AlgorithmTest {
      * @author Huang Zixi
      */
     @Test
-    public void decryptThumbnailTest () throws Exception {
+    public void decryptThumbnailTest() throws Exception {
         //加密
         Encrypt encrypt = new Encrypt(imgPath, context);
         ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(5, 10, 1000, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(16));
@@ -136,13 +133,13 @@ public class AlgorithmTest {
         //上传
         AliOSS aliOSS1 = constructAliOSS("ppps1");
         AliOSS aliOSS2 = constructAliOSS("ppps2");
-        aliOSS1.upload(Path1);
-        aliOSS2.upload(Path2);
+        aliOSS1.upload(path1);
+        aliOSS2.upload(path2);
         //下载缩略图
-        aliOSS1.getThumbnail( imgName + ".ori.webp", "Disk1Thumbnail");
-        aliOSS2.getThumbnail( imgName + ".ori.webp", "Disk2Thumbnail");
-        String downloadPath1 =context.getCacheDir().getAbsolutePath() + File.separator + "Disk1Thumbnail"+File.separator + imgName + ".ori.webp";
-        String downloadPath2 =context.getCacheDir().getAbsolutePath() + File.separator + "Disk2Thumbnail"+File.separator + imgName + ".ori.webp";
+        aliOSS1.getThumbnail(imgName + ".ori.webp", "Disk1Thumbnail");
+        aliOSS2.getThumbnail(imgName + ".ori.webp", "Disk2Thumbnail");
+        String downloadPath1 = context.getCacheDir().getAbsolutePath() + File.separator + "Disk1Thumbnail" + File.separator + imgName + ".ori.webp";
+        String downloadPath2 = context.getCacheDir().getAbsolutePath() + File.separator + "Disk2Thumbnail" + File.separator + imgName + ".ori.webp";
         //解密
         Decrypt decrypt = new Decrypt(downloadPath1, downloadPath2, context, true);
         ThreadPoolExecutor threadPoolExecutor3 = new ThreadPoolExecutor(5, 10, 1000, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(16));

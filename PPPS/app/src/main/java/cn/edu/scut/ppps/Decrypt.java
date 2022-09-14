@@ -9,7 +9,6 @@ import android.os.Handler;
 import android.util.Log;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.concurrent.Callable;
 
 /**
