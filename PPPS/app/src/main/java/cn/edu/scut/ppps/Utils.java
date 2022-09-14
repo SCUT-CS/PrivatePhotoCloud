@@ -219,8 +219,8 @@ public class Utils {
                 byte currentByte = bytesArray[i][j];
                 for (int index = 0; index < 8; index++) {
                     if ((currentByte & (1 << index)) != 0) {
-                        // TODO 应该是255 为了防止溢出 权宜之计
-                        result[i][((j << 3) + index) / mappingSize] += 230;
+                        // 应该是255
+                        result[i][((j << 3) + index) / mappingSize] += 250;
                     }
                 }
             }
