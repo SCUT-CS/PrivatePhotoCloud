@@ -531,7 +531,6 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
      * @author Cui Yuxin
      */
     private void multiProcess() {
-        // TODO 多图的处理
         if (listChoosePics.size() == 0) {
             Toast.makeText(context, "请选择图片！", Toast.LENGTH_SHORT).show();
         } else {
