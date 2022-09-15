@@ -46,7 +46,6 @@ public class AliOSS implements CloudService {
      * "type", "accessId", "accessSecret", "endpoint", "bucketName", "filePath".
      * "type" is the type of the cloud service, e.g. "aliyun".
      * "filePath" is the directory in the bucket to store files, e.g. "exampleDir/".
-     * @author Cui Yuxin
      */
     private Map<String, String> token;
     private OSS ossClient;
@@ -169,9 +168,9 @@ public class AliOSS implements CloudService {
                     byte[] buffer = new byte[(int) length];
                     int readCount = 0;
                     while (readCount < length) {
-                        try{
+                        try {
                             readCount += result.getObjectContent().read(buffer, readCount, (int) length - readCount);
-                        }catch (Exception e){
+                        } catch (Exception e) {
                             OSSLog.logInfo(e.toString());
                         }
                     }
@@ -212,8 +211,8 @@ public class AliOSS implements CloudService {
         String localPath = savePath + File.separator + fileName;
         String objectName = token.get("filePath") + fileName;
         GetObjectRequest get = new GetObjectRequest(token.get("bucketName"), objectName);
-        // TODO 修改为合适的缩略图参数。
-        get.setxOssProcess("image/resize,mfit,w_200,h_200");
+        // 修改为合适的缩略图参数。
+        get.setxOssProcess("image/resize,mfit,w_100,h_100");
         OSSAsyncTask task = ossClient.asyncGetObject(get, new OSSCompletedCallback<GetObjectRequest, GetObjectResult>() {
             @Override
             public void onSuccess(GetObjectRequest request, GetObjectResult result) {
@@ -222,9 +221,9 @@ public class AliOSS implements CloudService {
                     byte[] buffer = new byte[(int) length];
                     int readCount = 0;
                     while (readCount < length) {
-                        try{
+                        try {
                             readCount += result.getObjectContent().read(buffer, readCount, (int) length - readCount);
-                        }catch (Exception e){
+                        } catch (Exception e) {
                             OSSLog.logInfo(e.toString());
                         }
                     }

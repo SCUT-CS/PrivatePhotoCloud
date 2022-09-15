@@ -1,7 +1,6 @@
 package cn.edu.scut.ppps;
 
 import android.content.Context;
-import android.os.Handler;
 import android.util.Log;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -23,10 +22,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.LogRecord;
 
 import cn.edu.scut.ppps.cloud.AliOSS;
-import cn.edu.scut.ppps.cloud.CloudService;
 import cn.edu.scut.ppps.cloud.Tokens;
 
 /**
@@ -39,7 +36,7 @@ public class AliOSSTests {
     AliOSS aliOSSTests = null;
     public final String downloadImgFileDir = "/storage/emulated/0/Pictures/WeiXin/图片1.png";
     public final String downloadThumbnailDir = "/storage/emulated/0/Pictures/WeiXin/thumbnail.png";
-    public final String filePath_test = "/storage/emulated/0/Pictures/WeiXin/jpg_small.jpg";
+    public final String filePathTest = "/storage/emulated/0/Pictures/WeiXin/jpg_small.jpg";
 
     /**
      * Grant permissions.
@@ -58,15 +55,15 @@ public class AliOSSTests {
         //构造参数
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         Tokens tokenMaps = new Tokens(appContext);
-        Map<String, String> token_1 = new HashMap<>();
+        Map<String, String> token1 = new HashMap<>();
         //阿里云token赋值
-        token_1.put("type", "aliyun");
-        token_1.put("accessId", "LTAI5t9Wx9ZwYxCuPEGoxoct");
-        token_1.put("accessSecret", "IJWyl2xxwYC1vwaTkw8mZ4hWnKZXxP");
-        token_1.put("endpoint", "https://oss-cn-hangzhou.aliyuncs.com");
-        token_1.put("bucketName", "ppps1");
-        token_1.put("filePath", "test/");
-        tokenMaps.updateToken("test", token_1);
+        token1.put("type", "aliyun");
+        token1.put("accessId", "LTAI5t9Wx9ZwYxCuPEGoxoct");
+        token1.put("accessSecret", "IJWyl2xxwYC1vwaTkw8mZ4hWnKZXxP");
+        token1.put("endpoint", "https://oss-cn-hangzhou.aliyuncs.com");
+        token1.put("bucketName", "ppps1");
+        token1.put("filePath", "test/");
+        tokenMaps.updateToken("test", token1);
         //构造函数
         aliOSSTests = new AliOSS("test", appContext, tokenMaps);
     }
@@ -78,7 +75,7 @@ public class AliOSSTests {
      */
     @Test
     public void uploadTest() {
-        aliOSSTests.upload(filePath_test);
+        aliOSSTests.upload(filePathTest);
     }
 
     /**
@@ -123,10 +120,10 @@ public class AliOSSTests {
      * @author Feng Yucheng
      */
     @Test
-     public void uploadTestCaseByteArray() throws Exception {
-         byte[] file = pictureToByteArray(filePath_test);
-         aliOSSTests.upload(file, "图片4.png");
-     }
+    public void uploadTestCaseByteArray() throws Exception {
+        byte[] file = pictureToByteArray(filePathTest);
+        aliOSSTests.upload(file, "图片4.png");
+    }
 
     /**
      * Test AliOSS download method.
@@ -151,7 +148,7 @@ public class AliOSSTests {
      * @author Feng yucheng
      */
     @Test
-    public void getFileListTest() throws Exception{
+    public void getFileListTest() throws Exception {
         List<String> temp = aliOSSTests.getFileList();
         Log.d("AliOSSTest", temp.toString());
     }
@@ -172,7 +169,7 @@ public class AliOSSTests {
      * @author Huang Zixi
      */
     @Test
-    public void deleteAllTest() throws Exception{
+    public void deleteAllTest() throws Exception {
         aliOSSTests.deleteAll();
     }
 

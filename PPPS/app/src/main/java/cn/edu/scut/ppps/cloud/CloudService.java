@@ -2,10 +2,6 @@ package cn.edu.scut.ppps.cloud;
 
 import android.os.Handler;
 
-import com.alibaba.sdk.android.oss.ClientException;
-import com.alibaba.sdk.android.oss.ServiceException;
-
-import java.io.FileNotFoundException;
 import java.util.List;
 
 /**

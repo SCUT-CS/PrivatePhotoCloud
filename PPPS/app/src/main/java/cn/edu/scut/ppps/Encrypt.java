@@ -11,8 +11,6 @@ import java.io.IOException;
 import java.util.Random;
 import java.util.concurrent.Callable;
 
-import cn.edu.scut.ppps.cloud.CloudService;
-
 /**
  * Encrypt a image.
  * @author Cui Yuxin, Zhao Bowen
@@ -87,11 +85,11 @@ public class Encrypt implements Callable {
             Log.d("Encrypt", "noAlpha");
             overflow = new byte[3][height][(int) Math.ceil(width / 8.0)];
         }
-        // TODO: optimize for the number of threads.
-        int threadNum = height / 3000;
+        /*int threadNum = height / 1000;
         if (threadNum == 0) {
             threadNum = 1;
-        }
+        }*/
+        int threadNum = 2;
         Log.d("Encrypt", "threadNum: " + threadNum);
         Thread[] threads = new EncryptThread[threadNum];
         for (int i = 0; i < threadNum; i++) {

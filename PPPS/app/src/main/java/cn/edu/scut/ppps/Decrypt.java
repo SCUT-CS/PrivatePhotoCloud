@@ -9,7 +9,6 @@ import android.os.Handler;
 import android.util.Log;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.concurrent.Callable;
 
 /**
@@ -109,11 +108,11 @@ public class Decrypt implements Callable {
      * @author Cui Yuxin, Zhao Bowen
      */
     private void decrypt() {
-        // TODO: optimize for the number of threads.
-        int threadNum = height / 1000;
+        /*int threadNum = height / 1000;
         if (threadNum == 0) {
             threadNum = 1;
-        }
+        }*/
+        int threadNum = 2;
         Log.d("Decrypt", "threadNum: " + threadNum);
         Thread[] threads = new Decrypt.DecryptThread[threadNum];
         for (int i = 0; i < threadNum; i++) {

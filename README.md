@@ -10,53 +10,9 @@ Part A是项目代码的相关规范，Part B是项目架构。
 
 ### 2022.9.12-2022.9.18
 
-#### Task1：
+#### Task：
 
-参考Utils时间测试，完成加密算法和解密算法的时间测试。
-
-这里需要运行五次取平均值，使用App提供的相机拍摄的图片（2k resolution）
-
-将相关的数据记录在Readme里面的Evaluation。
-
-**Files you'll edit:**
-
-AlogorithmTimeTests.java
-
-**Files you might want to look at:**
-
-UtilsTimeTests.java
-
-#### Task2：
-
-完成以下文件的Check Code Style
-
-**Files you'll edit:**
-
-*Tests.java（\*代表任意字符串）
-
-#### Task3：
-
-Optimization：寻找在2k分辨率下，加密和解密算法的最优线程数（时间相对较少）。
-
-具体位置为Encrypt.java和Decrypt.java里面的TODO。
-
-时间测试使用Task1提供的时间测试，同时将相关的数据记录在Readme里面的Evaluation。
-
-**Files you'll edit:**
-
-Encrypt.java
-
-Decrypt.java
-
-#### Task4：
-
-测试Decrypt类的save方法保存的文件名和路径是否符合预期。
-
-**Files you'll edit:**
-
-DecryptTest.java
-
-DecryptThumbnail.java
+编写项目申请书。
 
 ### 2022.9.1-2022.9.11
 
@@ -496,6 +452,12 @@ UI的制作。
   M：238ms 200ms 198ms 214ms 205ms
   
   ~~L：614ms 574ms 579ms 589ms 586ms~~
+  
+- 经过测试，使用双线程加密2k分辨率的图片，时间为5.6s（Debug模式下，Release模式会更快一点）
+
+- 经过测试，使用双线程解密2k分辨率的图片，时间为5.4s（Debug模式下，Release模式会更快一点）
+
+- 从云端刷新缩略图的时间基本可以忽略不计
 
 ## TODO：
 

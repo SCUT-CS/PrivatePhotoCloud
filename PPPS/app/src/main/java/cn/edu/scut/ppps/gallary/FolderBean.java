@@ -2,19 +2,19 @@ package cn.edu.scut.ppps.gallary;
 
 public class FolderBean {
     /**
-     * 文件夹路径
+     * 文件夹路径.
      */
     private String dir;
     /**
-     * 第一张图片路径
+     * 第一张图片路径.
      */
     private String firstImgPath;
     /**
-     * 文件夹名称
+     * 文件夹名称.
      */
     private String name;
     /**
-     * 文件数量
+     * 文件数量.
      */
     private int count;
 
@@ -25,7 +25,7 @@ public class FolderBean {
     public void setDir(String dir) {
         this.dir = dir;
         int lastIndexOf = this.dir.lastIndexOf("/");
-        this.name = this.dir.substring(lastIndexOf+1);
+        this.name = this.dir.substring(lastIndexOf + 1);
     }
 
     public String getFirstImgPath() {

@@ -24,10 +24,10 @@ public class ImageAdapter extends BaseAdapter {
     private List<String> mImgPaths;
     private LayoutInflater mInflater;
     private MainActivity albumActivity;
-    private boolean isMutil;//是否是多张
+    private boolean isMutil; //是否是多张
 
 
-    public ImageAdapter(Activity activity, List<String> mDatas, String dirPath){
+    public ImageAdapter(Activity activity, List<String> mDatas, String dirPath) {
         albumActivity = (MainActivity) activity;
         this.mDirPath = dirPath;
         this.mImgPaths = mDatas;
@@ -52,30 +52,30 @@ public class ImageAdapter extends BaseAdapter {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder = null;
-        if (convertView == null){
-            convertView = mInflater.inflate(R.layout.item_album,parent,false);
+        if (convertView == null) {
+            convertView = mInflater.inflate(R.layout.item_album, parent, false);
             viewHolder = new ViewHolder();
             viewHolder.mImg = convertView.findViewById(R.id.id_item_image);
             viewHolder.mSelect = convertView.findViewById(R.id.id_item_select);
             //这里要根据手机尺寸修改一下图片的大小
-            int widthAndHeight = (ScreenUtil.getScreenWidth(albumActivity) - DpUtil.dp2px(albumActivity,9))/4;
+            int widthAndHeight = (ScreenUtil.getScreenWidth(albumActivity) - DpUtil.dp2px(albumActivity, 9)) / 4;
             RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) viewHolder.mImg.getLayoutParams();
             params.width = widthAndHeight;
             params.height = widthAndHeight;
             viewHolder.mImg.setLayoutParams(params);
             convertView.setTag(viewHolder);
-        }else{
+        } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
         //重置状态
         viewHolder.mImg.setImageResource(R.drawable.no_image);
         viewHolder.mSelect.setImageResource(R.drawable.ic_unchoose);
         viewHolder.mImg.setColorFilter(null);
-        if (!isMutil){
+        if (!isMutil) {
             viewHolder.mSelect.setVisibility(View.GONE);
         }
-        ImageLoader.getInstance(3, ImageLoader.Type.LIFO).loadImage(mDirPath+"/"+mImgPaths.get(position),viewHolder.mImg);
-        final String filePath = mDirPath+"/"+mImgPaths.get(position);
+        ImageLoader.getInstance(3, ImageLoader.Type.LIFO).loadImage(mDirPath + "/" + mImgPaths.get(position), viewHolder.mImg);
+        final String filePath = mDirPath + "/" + mImgPaths.get(position);
         final ViewHolder finalViewHolder = viewHolder;
         viewHolder.mImg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,27 +93,27 @@ public class ImageAdapter extends BaseAdapter {
                         finalViewHolder.mImg.setColorFilter(Color.parseColor("#77000000"));
                         finalViewHolder.mSelect.setImageResource(R.drawable.ic_choose);
                     }
-                }else{
+                } else {
                     //单选的处理
                     albumActivity.singleProcess(filePath);
                 }
             }
         });
-        if (albumActivity.getPicList().contains(filePath)){
+        if (albumActivity.getPicList().contains(filePath)) {
             viewHolder.mImg.setColorFilter(Color.parseColor("#77000000"));
             viewHolder.mSelect.setImageResource(R.drawable.ic_choose);
         }
         return convertView;
     }
 
-    private class ViewHolder{
-        ImageView mImg;
-        ImageButton mSelect;
+    private class ViewHolder {
+        private ImageView mImg;
+        private ImageButton mSelect;
     }
 
     /**
-     * 设置是否多张
-     * @param mutil
+     * 设置是否多张.
+     * @param mutil true 多张 false 单张
      */
     public void setMutil(boolean mutil) {
         isMutil = mutil;

@@ -16,14 +16,15 @@ import org.junit.Ignore;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.Callable;
 
 /**
  * Utils class.
@@ -219,8 +220,8 @@ public class Utils {
                 byte currentByte = bytesArray[i][j];
                 for (int index = 0; index < 8; index++) {
                     if ((currentByte & (1 << index)) != 0) {
-                        // TODO 应该是255 为了防止溢出 权宜之计
-                        result[i][((j << 3) + index) / mappingSize] += 230;
+                        // 应该是255
+                        result[i][((j << 3) + index) / mappingSize] += 250;
                     }
                 }
             }
@@ -268,12 +269,12 @@ public class Utils {
         Bitmap bitmap = origin;
         int width = bitmap.getWidth();
         int height = bitmap.getHeight();
-        Bitmap thumbnail = Bitmap.createBitmap(width/size, height/size, Bitmap.Config.ARGB_8888);
-        for(int y = 0; y < height; y += size) {
-            for(int x = 0; x < width; x += size) {
+        Bitmap thumbnail = Bitmap.createBitmap(width / size, height / size, Bitmap.Config.ARGB_8888);
+        for (int y = 0; y < height; y += size) {
+            for (int x = 0; x < width; x += size) {
                 int sumr = 0, sumg = 0, sumb = 0;
-                for(int j = y; j < y + size; j++) {
-                    for(int i = x; i < x + size; i++) {
+                for (int j = y; j < y + size; j++) {
+                    for (int i = x; i < x + size; i++) {
                         int pixel = bitmap.getPixel(i, j);
                         sumr += (pixel & 0xff0000) >> 16; //r
                         sumg += (pixel & 0xff00) >> 8; //g
@@ -284,7 +285,7 @@ public class Utils {
                 sumg /= (size * size);
                 sumb /= (size * size);
                 int pixel1 = Color.rgb(sumr, sumg, sumb);
-                thumbnail.setPixel(x / size, y /size, pixel1);
+                thumbnail.setPixel(x / size, y / size, pixel1);
             }
         }
         Utils.saveImg(thumbnail, newfile);
@@ -302,8 +303,9 @@ public class Utils {
             return null;
         }
         File[] childrenFiles = dir.listFiles();
-        if (Objects.isNull(childrenFiles) || childrenFiles.length == 0)
+        if (Objects.isNull(childrenFiles) || childrenFiles.length == 0) {
             return null;
+        }
         List<String> files = new ArrayList<>();
         for (File childFile : childrenFiles) {
             // 如果是文件，直接添加到结果集合
@@ -324,21 +326,19 @@ public class Utils {
     public static String uri2Path(Uri fileUrl, Context context) {
         String fileName = null;
         if (fileUrl != null) {
-            if (fileUrl.getScheme().toString().compareTo("content") == 0) // content://开头的uri
-            {
+            if (fileUrl.getScheme().toString().compareTo("content") == 0) { // content://开头的uri
                 Cursor cursor = context.getContentResolver().query(fileUrl, null, null, null, null);
                 if (cursor != null && cursor.moveToFirst()) {
                     try {
-                        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-                        fileName = cursor.getString(column_index); // 取出文件路径
+                        int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+                        fileName = cursor.getString(columnIndex); // 取出文件路径
                     } catch (IllegalArgumentException e) {
                         e.printStackTrace();
                     } finally {
                         cursor.close();
                     }
                 }
-            } else if (fileUrl.getScheme().compareTo("file") == 0) // file:///开头的uri
-            {
+            } else if (fileUrl.getScheme().compareTo("file") == 0) { // file:///开头的uri
                 fileName = fileUrl.getPath();
             }
         }
