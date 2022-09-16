@@ -542,4 +542,9 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
             }
         }
     }
+
+    public void callSettings() {
+        Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
+    }
 }

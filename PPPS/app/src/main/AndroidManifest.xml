@@ -24,6 +24,10 @@
         android:theme="@style/Theme.PPPS"
         tools:targetApi="31">
         <activity
+            android:name=".SettingsActivity"
+            android:exported="false"
+            android:label="@string/title_activity_settings" />
+        <activity
             android:name=".CameraActivity"
             android:exported="false" />
         <activity
@@ -33,6 +37,7 @@
             android:theme="@style/Theme.PPPS.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
