@@ -5,13 +5,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import cn.edu.scut.ppps.MainActivity;
 import cn.edu.scut.ppps.databinding.FragmentSettingsBinding;
@@ -42,7 +41,13 @@ public class SettingsFragment extends Fragment {
         settingsViewModel.getCloudName2().observe(getViewLifecycleOwner(), cloudName2::setText);
         settingsViewModel.getCloudProvider2().observe(getViewLifecycleOwner(), cloudProvider2::setText);
         settingsViewModel.getImageNum().observe(getViewLifecycleOwner(), imageNum::setText);
-
+        Button button = (Button) binding.settingsButton;
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mainActivity.callSettings();
+            }
+        });
         return root;
     }
 
