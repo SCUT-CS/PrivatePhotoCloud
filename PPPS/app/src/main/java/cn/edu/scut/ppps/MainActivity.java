@@ -89,6 +89,8 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
     private Pipeline pipeline;
     // Tokens
     private Tokens tokens;
+    private String tokenName1 = null;
+    private String tokenName2 = null;
     // 该参数负责子线程查询图片后通知主线程更新UI
     @SuppressLint("HandlerLeak")
     private Handler uiHandler = new Handler() {
@@ -182,8 +184,10 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
             algorithmHandler.sendEmptyMessage(Utils.ERROR);
         }
         // TODO 在设置中获取
-        CloudService cloudService1 = new AliOSS("aliyun1", context, tokens);
-        CloudService cloudService2 = new AliOSS("aliyun2", context, tokens);
+        tokenName1 = "aliyun1";
+        tokenName2 = "aliyun2";
+        CloudService cloudService1 = new AliOSS(tokenName1, context, tokens);
+        CloudService cloudService2 = new AliOSS(tokenName2, context, tokens);
         pipeline = new Pipeline(algorithmHandler, context, cloudService1, cloudService2);
     }
 
@@ -541,5 +545,56 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
                 pipeline.encryptPipeline(listChoosePics.toArray(new String[0]));
             }
         }
+    }
+
+    /**
+     * Open Settings activity.
+     * @author Cui Yuxin
+     */
+    public void callSettings() {
+        Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
+    }
+
+    /**
+     * Get tokens.
+     * @author Cui Yuxin
+     */
+    public Tokens getTokens() {
+        return tokens;
+    }
+
+    /**
+     * Get tokenName1.
+     * @author Cui Yuxin
+     */
+    public String getTokenName1() {
+        return tokenName1;
+    }
+
+    /**
+     * Get tokenName2.
+     * @author Cui Yuxin
+     */
+    public String getTokenName2() {
+        return tokenName2;
+    }
+
+    /**
+     * Turn on the floating button.
+     * @author Cui Yuxin
+     */
+    public void turnOnFloatingButton() {
+        FloatingActionButton fab = binding.appBarMain.fab;
+        fab.show();
+    }
+
+    /**
+     * Turn off the floating button.
+     * @author Cui Yuxin
+     */
+    public void turnOffFloatingButton() {
+        FloatingActionButton fab = binding.appBarMain.fab;
+        fab.hide();
     }
 }

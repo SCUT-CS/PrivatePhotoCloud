@@ -7,11 +7,34 @@
     <string name="nav_header_desc">Navigation header</string>
 
     <string name="menu_home">相册</string>
-    <string name="menu_slideshow">设置</string>
+    <string name="menu_slideshow">状态和设置</string>
     <string name="take_photo">拍照</string>
 
     <string name="home_button">Take a photo</string>
     <string name="next">下一步</string>
     <string name="muti_select">多选/单选</string>
     <string name="update_from_cloud">从云端刷新缩略图</string>
+    <string name="title_activity_settings">设置</string>
+    <string name="settings">设置</string>
+    <string name="about">关于本软件：</string>
+    <string name="about_content">巴拉巴拉</string>
+    <string name="image_num">云端照片数量</string>
+    <string name="cloud_provider">提供商</string>
+    <string name="cloud2">云存储2</string>
+    <string name="cloud1">云存储1</string>
+
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
 </resources>
