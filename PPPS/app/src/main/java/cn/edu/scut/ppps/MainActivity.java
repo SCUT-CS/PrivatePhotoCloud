@@ -543,6 +543,10 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
         }
     }
 
+    /**
+     * Open Settings activity.
+     * @author Cui Yuxin
+     */
     public void callSettings() {
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
