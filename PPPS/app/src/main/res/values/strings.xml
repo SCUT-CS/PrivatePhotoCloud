@@ -18,7 +18,7 @@
     <string name="settings">设置</string>
     <string name="about">关于本软件：</string>
     <string name="about_content">巴拉巴拉</string>
-    <string name="image_num">云端照片数</string>
+    <string name="image_num">云端照片数量</string>
     <string name="cloud_provider">提供商</string>
     <string name="cloud2">云存储2</string>
     <string name="cloud1">云存储1</string>
