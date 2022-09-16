@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".ui.settings.SettingsFragment">
 
-
     <LinearLayout
         android:id="@+id/label_texts"
         android:layout_width="wrap_content"
