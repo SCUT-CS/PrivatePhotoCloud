@@ -61,6 +61,7 @@ public class SettingsFragment extends Fragment {
     public void onResume() {
         super.onResume();
         mainActivity.turnOffFloatingButton();
+        settingsViewModel.setTexts();
     }
 
     @Override
