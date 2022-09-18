@@ -184,11 +184,16 @@ public class Encrypt implements Callable {
          */
         @Override
         public void run() {
+            int[] encryptedPixels1 = new int[(rowEnd - rowStart) * (colEnd - colStart)];
+            int[] encryptedPixels2 = new int[(rowEnd - rowStart) * (colEnd - colStart)];
+            int[] originalPixels = new int[(rowEnd - rowStart) * (colEnd - colStart)];
+            img.getPixels(originalPixels, 0, width, colStart, rowStart, (colEnd - colStart), (rowEnd - rowStart));
             if (img.hasAlpha()) {
                 int[] argb = new int[4];
                 for (int row = rowStart; row < rowEnd; row++) {
                     for (int col = colStart; col < colEnd; col++) {
-                        int pixel = img.getPixel(col, row);
+                        // int pixel = img.getPixel(col, row);
+                        int pixel = originalPixels[(row - rowStart) * (colEnd - colStart) + (col - colStart)];
                         argb[0] = pixel >>> 24;
                         argb[1] = (pixel >> 16) & 0xFF;
                         argb[2] = (pixel >> 8) & 0xFF;
@@ -200,14 +205,16 @@ public class Encrypt implements Callable {
                         //pixel = Color.argb(a1, r1, g1, b1);
                         // int color = (A & 0xff) << 24 | (R & 0xff) << 16 | (G & 0xff) << 8 | (B & 0xff)
                         pixel = b1 | g1 << 8 | r1 << 16 | a1 << 24;
-                        img1.setPixel(col, row, pixel);
+                        // img1.setPixel(col, row, pixel);
+                        encryptedPixels1[(row - rowStart) * (colEnd - colStart) + (col - colStart)] = pixel;
                         int a2 = (argb[0] - a1) & 0xff;
                         int r2 = (argb[1] - r1) & 0xff;
                         int g2 = (argb[2] - g1) & 0xff;
                         int b2 = (argb[3] - b1) & 0xff;
                         //pixel = Color.argb(a2, r2, g2, b2);
                         pixel = b2 | g2 << 8 | r2 << 16 | a2 << 24;
-                        img2.setPixel(col, row, pixel);
+                        // img2.setPixel(col, row, pixel);
+                        encryptedPixels2[(row - rowStart) * (colEnd - colStart) + (col - colStart)] = pixel;
                         // encrypt the overflow information
                         if (argb[0] < a1) {
                             overflow[0][row][col >> 3] = (byte) (overflow[0][row][col >> 3] | (1 << (col & 0b111)));
@@ -227,7 +234,8 @@ public class Encrypt implements Callable {
                 int[] rgb = new int[3];
                 for (int row = rowStart; row < rowEnd; row++) {
                     for (int col = colStart; col < colEnd; col++) {
-                        int pixel = img.getPixel(col, row);
+                        // int pixel = img.getPixel(col, row);
+                        int pixel = originalPixels[(row - rowStart) * (colEnd - colStart) + (col - colStart)];
                         rgb[0] = (pixel >> 16) & 0xFF;
                         rgb[1] = (pixel >> 8) & 0xFF;
                         rgb[2] = pixel & 0xFF;
@@ -235,12 +243,14 @@ public class Encrypt implements Callable {
                         int g1 = rnd.nextInt(256);
                         int b1 = rnd.nextInt(256);
                         pixel = b1 | g1 << 8 | r1 << 16 | 0xff000000;
-                        img1.setPixel(col, row, pixel);
+                        // img1.setPixel(col, row, pixel);
+                        encryptedPixels1[(row - rowStart) * (colEnd - colStart) + (col - colStart)] = pixel;
                         int r2 = (rgb[0] - r1) & 0xff;
                         int g2 = (rgb[1] - g1) & 0xff;
                         int b2 = (rgb[2] - b1) & 0xff;
                         pixel = b2 | g2 << 8 | r2 << 16 | 0xff000000;
-                        img2.setPixel(col, row, pixel);
+                        // img2.setPixel(col, row, pixel);
+                        encryptedPixels2[(row - rowStart) * (colEnd - colStart) + (col - colStart)] = pixel;
                         // encrypt the overflow information
                         if (rgb[0] < r1) {
                             overflow[0][row][col >> 3] = (byte) (overflow[0][row][col >> 3] | (1 << (col & 0b111)));
@@ -254,6 +264,8 @@ public class Encrypt implements Callable {
                     }
                 }
             }
+            img1.setPixels(encryptedPixels1, 0, width, colStart, rowStart, (colEnd - colStart), (rowEnd - rowStart));
+            img2.setPixels(encryptedPixels2, 0, width, colStart, rowStart, (colEnd - colStart), (rowEnd - rowStart));
             Log.d("EncryptThread", "Thread " + getId() + " finished");
         }
     }
