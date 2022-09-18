@@ -1,6 +1,8 @@
 package cn.edu.scut.ppps.ui.settings;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Environment;
 
 import androidx.lifecycle.MutableLiveData;
@@ -20,6 +22,7 @@ public class SettingsViewModel extends ViewModel {
     private final MutableLiveData<String> cloudName2;
     private final MutableLiveData<String> cloudProvider2;
     private final MutableLiveData<String> imageNum;
+    private final MutableLiveData<String> cameraResolution;
     private MainActivity mainActivity;
 
 
@@ -29,6 +32,7 @@ public class SettingsViewModel extends ViewModel {
         cloudName2 = new MutableLiveData<>();
         cloudProvider2 = new MutableLiveData<>();
         imageNum = new MutableLiveData<>();
+        cameraResolution = new MutableLiveData<>();
     }
 
     public void setMainActivity(MainActivity activity) {
@@ -66,6 +70,8 @@ public class SettingsViewModel extends ViewModel {
         } catch (Exception e) {
             imageNum.setValue("0");
         }
+        SharedPreferences sharedPreferences = mainActivity.getSharedPreferences("cn.edu.scut.ppps_preferences", Context.MODE_PRIVATE);
+        cameraResolution.setValue(sharedPreferences.getString("camera_resolution", "2K"));
     }
 
     public MutableLiveData<String> getCloudName1() {
@@ -86,5 +92,9 @@ public class SettingsViewModel extends ViewModel {
 
     public MutableLiveData<String> getImageNum() {
         return imageNum;
+    }
+
+    public MutableLiveData<String> getCameraResolution() {
+        return cameraResolution;
     }
 }

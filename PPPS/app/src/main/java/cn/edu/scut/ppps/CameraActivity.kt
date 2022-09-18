@@ -5,13 +5,13 @@ import android.content.ContentValues
 import android.content.pm.PackageManager
 import android.icu.text.SimpleDateFormat
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.util.Size
 import android.view.Surface
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
@@ -114,15 +114,24 @@ class CameraActivity : AppCompatActivity() {
                         it.setSurfaceProvider(viewBinding.viewFinder.surfaceProvider)
                     }
             // 这里使用了2k像素的标准大小
+            val sharedPreferences =
+                getSharedPreferences("cn.edu.scut.ppps_preferences", MODE_PRIVATE)
+            var resolution1 = Size(1080, 1920)
+            var resolution2 = Size(1920, 1080)
+            if (sharedPreferences.getString("camera_resolution", "2K").equals("2K")) {
+                resolution1 = Size(1440, 2560)
+                resolution2 = Size(2560, 1440)
+            }
+            val resolution = sharedPreferences.getString("cloud_name1", null)
             if (viewBinding.viewFinder.display.rotation == Surface.ROTATION_0 || viewBinding.viewFinder.display.rotation == Surface.ROTATION_180) {
                 imageCapture = ImageCapture.Builder()
                     .setTargetRotation(viewBinding.viewFinder.display.rotation)
-                    .setTargetResolution(Size(1440, 2560))
+                    .setTargetResolution(resolution1)
                     .build()
             } else {
                 imageCapture = ImageCapture.Builder()
                     .setTargetRotation(viewBinding.viewFinder.display.rotation)
-                    .setTargetResolution(Size(2560, 1440))
+                    .setTargetResolution(resolution2)
                     .build()
             }
             // Select back camera as a default

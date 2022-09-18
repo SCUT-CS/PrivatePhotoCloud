@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
@@ -71,6 +72,13 @@ public class Pipeline {
                     mainHandler.sendEmptyMessage(Utils.FINISH_CLOUD);
                     mainHandler.sendEmptyMessage(Utils.SUCCESS);
                 }
+            } else if (msg.what == Utils.CLOUD_FAILURE) {
+                Toast.makeText(context, "上传失败!", Toast.LENGTH_SHORT).show();
+                cloudTotalCount--;
+                if (cloudTotalCount <= 0) {
+                    mainHandler.sendEmptyMessage(Utils.FINISH_CLOUD);
+                    mainHandler.sendEmptyMessage(Utils.SUCCESS);
+                }
             }
         }
     };
@@ -103,6 +111,9 @@ public class Pipeline {
                     mainHandler.sendEmptyMessage(Utils.FINISH_ALGORITHM);
                     mainHandler.sendEmptyMessage(Utils.SUCCESS);
                 }
+            } else if (msg.what == Utils.CLOUD_FAILURE) {
+                mainHandler.sendEmptyMessage(Utils.ERROR);
+                cloud2Path.clear();
             }
         }
     };
@@ -135,6 +146,9 @@ public class Pipeline {
                     mainHandler.sendEmptyMessage(Utils.FINISH_ALGORITHM);
                     mainHandler.sendEmptyMessage(Utils.SUCCESS);
                 }
+            } else if (msg.what == Utils.CLOUD_FAILURE) {
+                mainHandler.sendEmptyMessage(Utils.ERROR);
+                cloud1Path.clear();
             }
         }
     };

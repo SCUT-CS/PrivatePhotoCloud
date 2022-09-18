@@ -87,4 +87,17 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory
+        app:title="应用设置">
+
+        <ListPreference
+            app:key="camera_resolution"
+            app:title="拍照分辨率"
+            app:entries="@array/cam_resolution"
+            app:entryValues="@array/cam_resolution"
+            app:defaultValue="2K"
+            app:useSimpleSummaryProvider="true"/>
+
+    </PreferenceCategory>
+
 </PreferenceScreen>

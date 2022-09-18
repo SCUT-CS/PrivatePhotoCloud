@@ -36,11 +36,13 @@ public class SettingsFragment extends Fragment {
         final TextView cloudName2 = binding.cloudName2;
         final TextView cloudProvider2 = binding.cloudProvider2;
         final TextView imageNum = binding.imageNum;
+        final TextView cameraResolution = binding.camResolution;
         settingsViewModel.getCloudName1().observe(getViewLifecycleOwner(), cloudName1::setText);
         settingsViewModel.getCloudProvider1().observe(getViewLifecycleOwner(), cloudProvider1::setText);
         settingsViewModel.getCloudName2().observe(getViewLifecycleOwner(), cloudName2::setText);
         settingsViewModel.getCloudProvider2().observe(getViewLifecycleOwner(), cloudProvider2::setText);
         settingsViewModel.getImageNum().observe(getViewLifecycleOwner(), imageNum::setText);
+        settingsViewModel.getCameraResolution().observe(getViewLifecycleOwner(), cameraResolution::setText);
         Button button = (Button) binding.settingsButton;
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,6 +63,7 @@ public class SettingsFragment extends Fragment {
     public void onResume() {
         super.onResume();
         mainActivity.turnOffFloatingButton();
+        settingsViewModel.setTexts();
     }
 
     @Override
