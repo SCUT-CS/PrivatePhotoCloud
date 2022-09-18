@@ -2,36 +2,88 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <PreferenceCategory
-        app:title="@string/messages_header">
+        app:title="@string/cloud_storage1">
 
         <EditTextPreference
-            app:key="signature"
-            app:title="@string/signature_title"
+            app:key="cloud_name1"
+            app:title="名称"
             app:useSimpleSummaryProvider="true"/>
 
         <ListPreference
-            app:key="reply"
-            app:title="@string/reply_title"
-            app:entries="@array/reply_entries"
-            app:entryValues="@array/reply_values"
-            app:defaultValue="reply"
+            app:key="cloud_provider1"
+            app:title="云存储提供商"
+            app:entries="@array/cloud_providers"
+            app:entryValues="@array/cloud_providers_key"
+            app:defaultValue="aliyun"
+            app:useSimpleSummaryProvider="true"/>
+
+        <EditTextPreference
+            app:key="cloud_id1"
+            app:title="Access ID"
+            app:useSimpleSummaryProvider="true"/>
+
+        <EditTextPreference
+            app:key="cloud_key1"
+            app:title="Access Key"
+            app:useSimpleSummaryProvider="true"/>
+
+        <EditTextPreference
+            app:key="cloud_endpoint1"
+            app:title="地域节点"
+            app:useSimpleSummaryProvider="true"/>
+
+        <EditTextPreference
+            app:key="cloud_bucket1"
+            app:title="存储桶"
+            app:useSimpleSummaryProvider="true"/>
+
+        <EditTextPreference
+            app:key="cloud_path1"
+            app:title="云端存储路径"
             app:useSimpleSummaryProvider="true"/>
 
     </PreferenceCategory>
 
     <PreferenceCategory
-        app:title="@string/sync_header">
+        app:title="@string/cloud_storage2">
 
-        <SwitchPreferenceCompat
-            app:key="sync"
-            app:title="@string/sync_title"/>
+        <EditTextPreference
+            app:key="cloud_name2"
+            app:title="名称"
+            app:useSimpleSummaryProvider="true"/>
 
-        <SwitchPreferenceCompat
-            app:key="attachment"
-            app:title="@string/attachment_title"
-            app:summaryOn="@string/attachment_summary_on"
-            app:summaryOff="@string/attachment_summary_off"
-            app:dependency="sync"/>
+        <ListPreference
+            app:key="cloud_provider2"
+            app:title="云存储提供商"
+            app:entries="@array/cloud_providers"
+            app:entryValues="@array/cloud_providers_key"
+            app:defaultValue="aliyun"
+            app:useSimpleSummaryProvider="true"/>
+
+        <EditTextPreference
+            app:key="cloud_id2"
+            app:title="Access ID"
+            app:useSimpleSummaryProvider="true"/>
+
+        <EditTextPreference
+            app:key="cloud_key2"
+            app:title="Access Key"
+            app:useSimpleSummaryProvider="true"/>
+
+        <EditTextPreference
+            app:key="cloud_endpoint2"
+            app:title="地域节点"
+            app:useSimpleSummaryProvider="true"/>
+
+        <EditTextPreference
+            app:key="cloud_bucket2"
+            app:title="存储桶"
+            app:useSimpleSummaryProvider="true"/>
+
+        <EditTextPreference
+            app:key="cloud_path2"
+            app:title="云端存储路径"
+            app:useSimpleSummaryProvider="true"/>
 
     </PreferenceCategory>
 
