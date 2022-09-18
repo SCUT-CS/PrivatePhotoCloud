@@ -6,4 +6,9 @@
     <string-array name="cloud_providers_key">
         <item>aliyun</item>
     </string-array>
+
+    <string-array name="cam_resolution">
+        <item>2K</item>
+        <item>1080p</item>
+    </string-array>
 </resources>
