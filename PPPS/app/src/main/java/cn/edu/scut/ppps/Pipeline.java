@@ -135,6 +135,9 @@ public class Pipeline {
                     mainHandler.sendEmptyMessage(Utils.FINISH_ALGORITHM);
                     mainHandler.sendEmptyMessage(Utils.SUCCESS);
                 }
+            } else if (msg.what == Utils.CLOUD_FAILURE) {
+                mainHandler.sendEmptyMessage(Utils.ERROR);
+                cloud1Path.clear();
             }
         }
     };
