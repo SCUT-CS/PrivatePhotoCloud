@@ -195,10 +195,9 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
      * @author Cui Yuxin
      */
     private void updateCloud() {
-        SharedPreferences sharedPreferences1 = getSharedPreferences("云存储1登录口令", Context.MODE_PRIVATE);
-        SharedPreferences sharedPreferences2 = getSharedPreferences("云存储2登录口令", Context.MODE_PRIVATE);
-        tokenName1 = sharedPreferences1.getString("cloud_name1", null);
-        tokenName2 = sharedPreferences2.getString("cloud_name2", null);
+        SharedPreferences sharedPreferences = getSharedPreferences("cn.edu.scut.ppps_preferences", Context.MODE_PRIVATE);
+        tokenName1 = sharedPreferences.getString("cloud_name1", null);
+        tokenName2 = sharedPreferences.getString("cloud_name2", null);
         if (tokenName1 == null || tokenName2 == null ||
                 tokenName1.equals("") || tokenName2.equals("") || tokenName1.equals(tokenName2)) {
             Toast.makeText(context, "请先设置云存储登录口令!", Toast.LENGTH_SHORT).show();
@@ -206,18 +205,18 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
         }
         Map<String, String> token1 = new HashMap<>();
         Map<String, String> token2 = new HashMap<>();
-        token1.put("type", sharedPreferences1.getString("cloud_provider1", null));
-        token1.put("accessId", sharedPreferences1.getString("cloud_id1", null));
-        token1.put("accessSecret", sharedPreferences1.getString("cloud_key1", null));
-        token1.put("endpoint", sharedPreferences1.getString("cloud_endpoint1", null));
-        token1.put("bucketName", sharedPreferences1.getString("cloud_bucket1", null));
-        token1.put("filePath", sharedPreferences1.getString("cloud_path1", null));
-        token2.put("type", sharedPreferences2.getString("cloud_provider2", null));
-        token2.put("accessId", sharedPreferences2.getString("cloud_id2", null));
-        token2.put("accessSecret", sharedPreferences2.getString("cloud_key2", null));
-        token2.put("endpoint", sharedPreferences2.getString("cloud_endpoint2", null));
-        token2.put("bucketName", sharedPreferences2.getString("cloud_bucket2", null));
-        token2.put("filePath", sharedPreferences2.getString("cloud_path2", null));
+        token1.put("type", sharedPreferences.getString("cloud_provider1", null));
+        token1.put("accessId", sharedPreferences.getString("cloud_id1", null));
+        token1.put("accessSecret", sharedPreferences.getString("cloud_key1", null));
+        token1.put("endpoint", sharedPreferences.getString("cloud_endpoint1", null));
+        token1.put("bucketName", sharedPreferences.getString("cloud_bucket1", null));
+        token1.put("filePath", sharedPreferences.getString("cloud_path1", null));
+        token2.put("type", sharedPreferences.getString("cloud_provider2", null));
+        token2.put("accessId", sharedPreferences.getString("cloud_id2", null));
+        token2.put("accessSecret", sharedPreferences.getString("cloud_key2", null));
+        token2.put("endpoint", sharedPreferences.getString("cloud_endpoint2", null));
+        token2.put("bucketName", sharedPreferences.getString("cloud_bucket2", null));
+        token2.put("filePath", sharedPreferences.getString("cloud_path2", null));
         try {
             tokens.updateToken(tokenName1, token1);
             tokens.updateToken(tokenName2, token2);
