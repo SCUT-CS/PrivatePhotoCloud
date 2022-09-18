@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -35,10 +36,13 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
@@ -183,9 +187,43 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
             e.printStackTrace();
             algorithmHandler.sendEmptyMessage(Utils.ERROR);
         }
-        // TODO 在设置中获取
-        tokenName1 = "aliyun1";
-        tokenName2 = "aliyun2";
+        updateCloud();
+    }
+
+    /**
+     * Update cloud and tokens.
+     * @author Cui Yuxin
+     */
+    private void updateCloud() {
+        SharedPreferences sharedPreferences = getSharedPreferences("cn.edu.scut.ppps_preferences", Context.MODE_PRIVATE);
+        tokenName1 = sharedPreferences.getString("cloud_name1", null);
+        tokenName2 = sharedPreferences.getString("cloud_name2", null);
+        if (tokenName1 == null || tokenName2 == null ||
+                tokenName1.equals("") || tokenName2.equals("") || tokenName1.equals(tokenName2)) {
+            Toast.makeText(context, "请先设置云存储登录口令!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        Map<String, String> token1 = new HashMap<>();
+        Map<String, String> token2 = new HashMap<>();
+        token1.put("type", sharedPreferences.getString("cloud_provider1", null));
+        token1.put("accessId", sharedPreferences.getString("cloud_id1", null));
+        token1.put("accessSecret", sharedPreferences.getString("cloud_key1", null));
+        token1.put("endpoint", sharedPreferences.getString("cloud_endpoint1", null));
+        token1.put("bucketName", sharedPreferences.getString("cloud_bucket1", null));
+        token1.put("filePath", sharedPreferences.getString("cloud_path1", null));
+        token2.put("type", sharedPreferences.getString("cloud_provider2", null));
+        token2.put("accessId", sharedPreferences.getString("cloud_id2", null));
+        token2.put("accessSecret", sharedPreferences.getString("cloud_key2", null));
+        token2.put("endpoint", sharedPreferences.getString("cloud_endpoint2", null));
+        token2.put("bucketName", sharedPreferences.getString("cloud_bucket2", null));
+        token2.put("filePath", sharedPreferences.getString("cloud_path2", null));
+        try {
+            tokens.updateToken(tokenName1, token1);
+            tokens.updateToken(tokenName2, token2);
+        } catch (IOException e) {
+            e.printStackTrace();
+            algorithmHandler.sendEmptyMessage(Utils.ERROR);
+        }
         CloudService cloudService1 = new AliOSS(tokenName1, context, tokens);
         CloudService cloudService2 = new AliOSS(tokenName2, context, tokens);
         pipeline = new Pipeline(algorithmHandler, context, cloudService1, cloudService2);
@@ -215,6 +253,8 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
         if (requestCode == Utils.CAMERA_RESULT && resultCode == RESULT_OK) {
             Uri imgUri = Uri.parse(data.getStringExtra("uri"));
             singleProcess(Utils.uri2Path(imgUri, context));
+        } else if (requestCode == Utils.SETTINGS_UPDATE) {
+            updateCloud();
         }
     }
 
@@ -236,7 +276,11 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
             }
             refresh();
         } else if (item.getItemId() == R.id.action_update) {
-            pipeline.thumbnailPipeline();
+            if (pipeline == null) {
+                updateCloud();
+            } else {
+                pipeline.thumbnailPipeline();
+            }
             refresh();
         }
         return super.onOptionsItemSelected(item);
@@ -504,6 +548,10 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
      * @author Cui Yuxin
      */
     public void singleProcess(String path) {
+        if (pipeline == null) {
+            updateCloud();
+            return;
+        }
         if (path.contains("Thumbnail")) {
             pipeline.decryptPipeline(new String[]{path});
         } else {
@@ -539,6 +587,10 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
             Toast.makeText(context, "请选择图片！", Toast.LENGTH_SHORT).show();
         } else {
             String path = listChoosePics.get(0);
+            if (pipeline == null) {
+                updateCloud();
+                return;
+            }
             if (path.contains("Thumbnail")) {
                 pipeline.decryptPipeline(listChoosePics.toArray(new String[0]));
             } else {
@@ -553,7 +605,7 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
      */
     public void callSettings() {
         Intent intent = new Intent(this, SettingsActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent, Utils.SETTINGS_UPDATE);
     }
 
     /**

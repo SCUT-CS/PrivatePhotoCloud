@@ -133,30 +133,42 @@ public class Decrypt implements Callable {
      * @author Cui Yuxin, Zhao Bowen
      */
     private void decryptThumbnail() {
+        int[] encryptedPixels1 = new int[width * height];
+        int[] encryptedPixels2 = new int[width * height];
+        int[] originalPixels = new int[width * height];
+        img1.getPixels(encryptedPixels1, 0, width, 0, 0, width, height);
+        img2.getPixels(encryptedPixels2, 0, width, 0, 0, width, height);
         if (img1.hasAlpha() && overflow.length == 4 ) {
             for (int row = 0; row < height; row++) {
                 for (int col = 0; col < width; col++) {
-                    int pixel1 = img1.getPixel(col, row);
-                    int pixel2 = img2.getPixel(col, row);
+                    // int pixel1 = img1.getPixel(col, row);
+                    // int pixel2 = img2.getPixel(col, row);
+                    int pixel1 = encryptedPixels1[row * width + col];
+                    int pixel2 = encryptedPixels2[row * width + col];
                     int alpha = (pixel1 >>> 24 + pixel2 >>> 24 - overflow[3][row][col]) & 0xff;
                     int red = ((pixel1 >> 16) & 0xFF + (pixel2 >> 16) & 0xFF - overflow[0][row][col]) & 0xff;
                     int green =((pixel1 >> 8) & 0xFF + (pixel2 >> 8) & 0xFF - overflow[1][row][col]) & 0xff;
                     int blue = (pixel1 & 0xFF + pixel2 & 0xFF - overflow[2][row][col]) & 0xff;
-                    img.setPixel(col, row, blue | green << 8 | red << 16 | alpha << 24);
+                    // img.setPixel(col, row, blue | green << 8 | red << 16 | alpha << 24);
+                    originalPixels[row * width + col] = blue | green << 8 | red << 16 | alpha << 24;
                 }
             }
         } else {
             for (int row = 0; row < height; row++) {
                 for (int col = 0; col < width; col++) {
-                    int pixel1 = img1.getPixel(col, row);
-                    int pixel2 = img2.getPixel(col, row);
+                    // int pixel1 = img1.getPixel(col, row);
+                    // int pixel2 = img2.getPixel(col, row);
+                    int pixel1 = encryptedPixels1[row * width + col];
+                    int pixel2 = encryptedPixels2[row * width + col];
                     int red = (((pixel1 >> 16) & 0xFF) + ((pixel2 >> 16) & 0xFF) - (overflow[0][row][col]) & 0xff);
                     int green =(((pixel1 >> 8) & 0xFF) + ((pixel2 >> 8) & 0xFF) - (overflow[1][row][col]) & 0xff);
                     int blue = ((pixel1 & 0xFF) + (pixel2 & 0xFF) - (overflow[2][row][col]) & 0xff);
-                    img.setPixel(col, row, blue | green << 8 | red << 16 | 0xff000000);
+                    // img.setPixel(col, row, blue | green << 8 | red << 16 | 0xff000000);
+                    originalPixels[row * width + col] = blue | green << 8 | red << 16 | 0xff000000;
                 }
             }
         }
+        img.setPixels(originalPixels, 0, width, 0, 0, width, height);
     }
 
     /**
@@ -239,32 +251,44 @@ public class Decrypt implements Callable {
          */
         @Override
         public void run() {
+            int[] encryptedPixels1 = new int[(rowEnd - rowStart) * (colEnd - colStart)];
+            int[] encryptedPixels2 = new int[(rowEnd - rowStart) * (colEnd - colStart)];
+            int[] originalPixels = new int[(rowEnd - rowStart) * (colEnd - colStart)];
+            img1.getPixels(encryptedPixels1, 0, width, colStart, rowStart, (colEnd - colStart), (rowEnd - rowStart));
+            img2.getPixels(encryptedPixels2, 0, width, colStart, rowStart, (colEnd - colStart), (rowEnd - rowStart));
             if (img1.hasAlpha()) {
                 Log.d("Decrypt", "图片有透明度通道");
                 for (int row = rowStart; row < rowEnd; row++) {
                     for (int col = colStart; col < colEnd; col++) {
-                        int pixel1 = img1.getPixel(col, row);
-                        int pixel2 = img2.getPixel(col, row);
+                        // int pixel1 = img1.getPixel(col, row);
+                        // int pixel2 = img2.getPixel(col, row);
+                        int pixel1 = encryptedPixels1[(row - rowStart) * (colEnd - colStart) + (col - colStart)];
+                        int pixel2 = encryptedPixels2[(row - rowStart) * (colEnd - colStart) + (col - colStart)];
                         int pixel = Color.argb(((pixel1 >>> 24) + (pixel2 >>> 24)) & 0xff,
                                 (((pixel1 >> 16) & 0xFF) + ((pixel2 >> 16) & 0xFF)) & 0xff,
                                 (((pixel1 >> 8) & 0xFF) + ((pixel2 >> 8) & 0xFF)) & 0xff,
                                 ((pixel1 & 0xFF) + (pixel2 & 0xFF)) & 0xff);
-                        img.setPixel(col, row, pixel);
+                        // img.setPixel(col, row, pixel);
+                        originalPixels[(row - rowStart) * (colEnd - colStart) + (col - colStart)] = pixel;
                     }
                 }
             } else {
                 Log.d("Decrypt", "图片没有透明度通道");
                 for (int row = rowStart; row < rowEnd; row++) {
                     for (int col = colStart; col < colEnd; col++) {
-                        int pixel1 = img1.getPixel(col, row);
-                        int pixel2 = img2.getPixel(col, row);
+                        // int pixel1 = img1.getPixel(col, row);
+                        // int pixel2 = img2.getPixel(col, row);
+                        int pixel1 = encryptedPixels1[(row - rowStart) * (colEnd - colStart) + (col - colStart)];
+                        int pixel2 = encryptedPixels2[(row - rowStart) * (colEnd - colStart) + (col - colStart)];
                         int pixel = Color.rgb((((pixel1 >> 16) & 0xFF) + ((pixel2 >> 16) & 0xFF)) & 0xff,
                                 (((pixel1 >> 8) & 0xFF) + ((pixel2 >> 8) & 0xFF)) & 0xff,
                                 ((pixel1 & 0xFF) + (pixel2 & 0xFF)) & 0xff);
-                        img.setPixel(col, row, pixel);
+                        // img.setPixel(col, row, pixel);
+                        originalPixels[(row - rowStart) * (colEnd - colStart) + (col - colStart)] = pixel;
                     }
                 }
             }
+            img.setPixels(originalPixels, 0, width, colStart, rowStart, (colEnd - colStart), (rowEnd - rowStart));
         }
     }
 }
