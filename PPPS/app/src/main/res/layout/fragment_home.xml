@@ -22,11 +22,12 @@
             android:stretchMode="columnWidth"
             android:verticalSpacing="3dp" />
 
+        <!-- TODO 底部框颜色 -->
         <RelativeLayout
             android:id="@+id/mBottomly"
             android:layout_width="match_parent"
             android:layout_height="45dp"
-            android:background="#286CAA">
+            android:background="#479AE3">
 
             <TextView
                 android:id="@+id/mDirName"

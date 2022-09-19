@@ -14,16 +14,19 @@
         <entry key="..\:/PPPS/Privacy-preserving-photos-sharing/PPPS/app/src/main/res/layout/activity_main.xml" value="0.22780797101449277" />
         <entry key="..\:/PPPS/Privacy-preserving-photos-sharing/PPPS/app/src/main/res/layout/app_bar_main.xml" value="0.22780797101449277" />
         <entry key="..\:/PPPS/Privacy-preserving-photos-sharing/PPPS/app/src/main/res/layout/content_main.xml" value="0.22780797101449277" />
-        <entry key="..\:/PPPS/Privacy-preserving-photos-sharing/PPPS/app/src/main/res/layout/fragment_home.xml" value="0.22780797101449277" />
+        <entry key="..\:/PPPS/Privacy-preserving-photos-sharing/PPPS/app/src/main/res/layout/fragment_home.xml" value="0.176" />
+        <entry key="..\:/PPPS/Privacy-preserving-photos-sharing/PPPS/app/src/main/res/layout/fragment_settings.xml" value="0.253125" />
         <entry key="..\:/PPPS/Privacy-preserving-photos-sharing/PPPS/app/src/main/res/layout/fragment_slideshow.xml" value="0.22780797101449277" />
         <entry key="..\:/PPPS/Privacy-preserving-photos-sharing/PPPS/app/src/main/res/layout/item_album.xml" value="0.22780797101449277" />
         <entry key="..\:/PPPS/Privacy-preserving-photos-sharing/PPPS/app/src/main/res/layout/item_popup_main.xml" value="0.22780797101449277" />
         <entry key="..\:/PPPS/Privacy-preserving-photos-sharing/PPPS/app/src/main/res/layout/nav_header_main.xml" value="0.22780797101449277" />
         <entry key="..\:/PPPS/Privacy-preserving-photos-sharing/PPPS/app/src/main/res/layout/popup_main.xml" value="0.22780797101449277" />
+        <entry key="..\:/PPPS/Privacy-preserving-photos-sharing/PPPS/app/src/main/res/layout/settings_activity.xml" value="0.253125" />
         <entry key="..\:/PPPS/Privacy-preserving-photos-sharing/PPPS/app/src/main/res/menu/activity_main_drawer.xml" value="0.253125" />
         <entry key="..\:/PPPS/Privacy-preserving-photos-sharing/PPPS/app/src/main/res/menu/main.xml" value="0.253125" />
         <entry key="..\:/PPPS/Privacy-preserving-photos-sharing/PPPS/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.226" />
         <entry key="..\:/PPPS/Privacy-preserving-photos-sharing/PPPS/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.226" />
+        <entry key="..\:/PPPS/Privacy-preserving-photos-sharing/PPPS/app/src/main/res/xml/root_preferences.xml" value="0.1234375" />
         <entry key="..\:/Users/12695/Videos/Privacy-preserving-photos-sharing/PPPS/app/libs/hzh_android/baselib/src/main/res/layout/dialog_common.xml" value="0.2265625" />
         <entry key="..\:/Users/12695/Videos/Privacy-preserving-photos-sharing/PPPS/app/libs/hzh_android/baselib/src/main/res/layout/dialog_loading.xml" value="0.2265625" />
         <entry key="..\:/Users/12695/Videos/Privacy-preserving-photos-sharing/PPPS/app/libs/hzh_android/baselib/src/main/res/layout/dialog_progress_download.xml" value="0.2265625" />
