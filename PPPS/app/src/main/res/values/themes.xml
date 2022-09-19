@@ -4,14 +4,14 @@
     <style name="Theme.PPPS" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">#479AE3</item>  <!--上方主题条-->
-        <item name="colorPrimaryVariant">#000000</item> <!--拍照上方任务栏-->
-        <item name="colorOnPrimary">#FF0000</item>
+        <item name="colorPrimaryVariant">#479AE3</item> <!--拍照上方任务栏-->
+        <item name="colorOnPrimary">#FFFFFF</item> <!-- 拍照字体颜色 -->
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">#4F89EC</item>  <!--右下相机底色 -->
-        <item name="colorSecondaryVariant">#000000</item>
-        <item name="colorOnSecondary">#FFFAFA</item> <!--相机图标-->
+        <item name="colorSecondary">#479AE3</item>  <!--右下相机底色 -->
+        <item name="colorSecondaryVariant">#479AE3</item>
+        <item name="colorOnSecondary">#FFFFFF</item> <!--相机图标-->
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <item name="android:statusBarColor" tools:targetApi="l">#479AE3</item>
         <!-- Customize your theme here. -->
     </style>
 
