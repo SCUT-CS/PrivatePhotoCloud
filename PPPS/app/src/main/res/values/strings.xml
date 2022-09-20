@@ -15,7 +15,6 @@
     <string name="title_activity_settings">设置</string>
     <string name="settings">设置</string>
     <string name="about">关于本软件：</string>
-    <!-- TODO -->
     <string name="about_content">
         \t\t\t\t本软件实现了图像数据安全且高效的云存储系统。
         在赵搏文老师和冼允廷老师的指导下，由来自华南理工大学的崔钰薪、黄梓熙、冯裕城、左晓乐开发。\n

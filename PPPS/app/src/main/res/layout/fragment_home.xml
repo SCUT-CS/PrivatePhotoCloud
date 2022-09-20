@@ -22,7 +22,6 @@
             android:stretchMode="columnWidth"
             android:verticalSpacing="3dp" />
 
-        <!-- TODO 底部框颜色 -->
         <RelativeLayout
             android:id="@+id/mBottomly"
             android:layout_width="match_parent"

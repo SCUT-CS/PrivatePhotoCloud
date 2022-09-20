@@ -481,7 +481,6 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
      * @author Cui Yuxin
      */
     private void lightOn() {
-        // TODO 修改颜色
         WindowManager.LayoutParams lp = getWindow().getAttributes();
         lp.alpha = 1.0f;
         getWindow().setAttributes(lp);
@@ -492,7 +491,6 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
      * @author Cui Yuxin
      */
     private void lightOff() {
-        // TODO 修改颜色
         WindowManager.LayoutParams lp = getWindow().getAttributes();
         lp.alpha = 0.3f;
         getWindow().setAttributes(lp);
