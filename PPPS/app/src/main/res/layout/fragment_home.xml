@@ -26,7 +26,7 @@
             android:id="@+id/mBottomly"
             android:layout_width="match_parent"
             android:layout_height="45dp"
-            android:background="#286CAA">
+            android:background="#479AE3">
 
             <TextView
                 android:id="@+id/mDirName"
@@ -46,7 +46,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginRight="15dp"
                 android:text="图片数量"
-                android:textColor="#fff"
+                android:textColor="#FFFFFF"
                 android:textSize="14sp" />
         </RelativeLayout>
     </LinearLayout>

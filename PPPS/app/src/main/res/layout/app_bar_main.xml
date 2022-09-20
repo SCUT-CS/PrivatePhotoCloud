@@ -30,7 +30,7 @@
         android:layout_marginEnd="@dimen/fab_margin"
         android:layout_marginBottom="70dp"
         android:contentDescription="@string/home_button"
-        app:srcCompat="@android:drawable/ic_menu_camera"
+        app:srcCompat="@drawable/ic_menu_camera"
         tools:ignore="SpeakableTextPresentCheck" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
