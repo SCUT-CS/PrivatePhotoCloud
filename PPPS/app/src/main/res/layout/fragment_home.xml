@@ -47,7 +47,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginRight="15dp"
                 android:text="图片数量"
-                android:textColor="#fff"
+                android:textColor="#FFFFFF"
                 android:textSize="14sp" />
         </RelativeLayout>
     </LinearLayout>
