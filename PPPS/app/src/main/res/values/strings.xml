@@ -16,7 +16,20 @@
     <string name="settings">设置</string>
     <string name="about">关于本软件：</string>
     <!-- TODO -->
-    <string name="about_content">巴拉巴拉</string>
+    <string name="about_content">
+        \t\t\t\t本软件实现了图像数据安全且高效的云存储系统。
+        在赵搏文老师和冼允廷老师的指导下，由来自华南理工大学的崔钰薪、黄梓熙、冯裕城、左晓乐开发。\n
+        团队名称：\n
+        华南小小萌新 https://github.com/orgs/SCUT-CS/teams/crypt \n
+        指导教师：\n
+        赵搏文老师 https://faculty.xidian.edu.cn/zhaobowen/zh_CN/index.htm \n
+        冼允廷老师 xianyt@scut.edu.cn \n
+        队员：\n
+        崔钰薪 https://github.com/liukanshan1\n
+        黄梓熙 https://github.com/johnson-cc\n
+        冯裕城 https://github.com/FutabaRio965\n
+        左晓乐 https://github.com/josuke7777
+    </string>
     <string name="image_num">云端照片数量</string>
     <string name="cloud_provider">提供商</string>
     <string name="cloud2">云存储2</string>
