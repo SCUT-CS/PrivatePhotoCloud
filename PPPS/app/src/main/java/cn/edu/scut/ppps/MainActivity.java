@@ -259,13 +259,13 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
 
         //PreviewActivity callback
         if(requestCode == Utils.PREVIEW_RESULT && resultCode == RESULT_OK){
-            Intent intent = new Intent();
             String path = data.getStringExtra("path");
             pipeline.encryptPipeline(new String[]{path});
+            Intent intent = new Intent();
             intent.putExtra("imgPath", path);
             String cachePath = context.getCacheDir().getAbsolutePath();
             intent.putExtra("cachePath", cachePath);
-            intent.setClass(getApplicationContext(), singleEncryptActivity.class);
+            intent.setClass(getApplicationContext(), SingleEncryptActivity.class);
             startActivity(intent);
         }
     }

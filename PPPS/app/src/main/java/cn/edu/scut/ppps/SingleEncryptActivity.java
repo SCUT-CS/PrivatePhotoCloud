@@ -1,5 +1,7 @@
 package cn.edu.scut.ppps;
 
+import static java.lang.Thread.sleep;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.Bitmap;
@@ -10,7 +12,11 @@ import android.widget.ImageView;
 import java.io.File;
 import java.io.IOException;
 
-public class singleEncryptActivity extends AppCompatActivity {
+/**
+ * Single Encrypt Activity
+ * @author Huang Zixi
+ */
+public class SingleEncryptActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -24,6 +30,12 @@ public class singleEncryptActivity extends AppCompatActivity {
         ImageView originalImage = findViewById(R.id.originalImage);
         ImageView encrypt1 = findViewById(R.id.encryptedImage1);
         ImageView encrypt2 = findViewById(R.id.encryptedImage2);
+
+        try {
+            sleep(800);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         String encryptPath1 = null;
         try {

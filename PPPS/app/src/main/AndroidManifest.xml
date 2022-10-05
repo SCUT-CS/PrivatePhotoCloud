@@ -27,7 +27,7 @@
             android:name=".PreviewActivity"
             android:exported="false" />
         <activity
-            android:name=".singleEncryptActivity"
+            android:name=".SingleEncryptActivity"
             android:exported="false" />
         <activity
             android:name=".TestActivity"
