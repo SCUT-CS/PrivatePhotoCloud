@@ -37,4 +37,5 @@
     <string name="cloud_storage1">云存储1登录口令</string>
     <string name="cloud_storage2">云存储2登录口令</string>
     <string name="cam_res">拍照分辨率</string>
+    <string name="next_step">下一步</string>
 </resources>

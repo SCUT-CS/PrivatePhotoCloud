@@ -1,7 +1,5 @@
 package cn.edu.scut.ppps;
 
-import static java.lang.Thread.sleep;
-
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.Bitmap;
@@ -30,13 +28,7 @@ public class SingleEncryptActivity extends AppCompatActivity {
         ImageView originalImage = findViewById(R.id.originalImage);
         ImageView encrypt1 = findViewById(R.id.encryptedImage1);
         ImageView encrypt2 = findViewById(R.id.encryptedImage2);
-
-        try {
-            sleep(800);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
+        
         String encryptPath1 = null;
         try {
             encryptPath1 = cachePath + File.separator + "Disk1" + File.separator+ Utils.getFileName(path) + ".ori.webp";
@@ -51,8 +43,8 @@ public class SingleEncryptActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        Bitmap bitmapOrigin = BitmapFactory.decodeFile(path);//从路径加载出图片bitmap
-        originalImage.setImageBitmap(bitmapOrigin);//ImageView显示图片
+        Bitmap bitmapOrigin = BitmapFactory.decodeFile(path); //从路径加载出图片bitmap
+        originalImage.setImageBitmap(bitmapOrigin); //ImageView显示图片
         Bitmap bitmapencrypt1 = BitmapFactory.decodeFile(encryptPath1);
         encrypt1.setImageBitmap(bitmapencrypt1);
         Bitmap bitmapencrypt2 = BitmapFactory.decodeFile(encryptPath2);

@@ -2,6 +2,7 @@ package cn.edu.scut.ppps;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
@@ -58,6 +59,14 @@ public class Pipeline {
                 encryptAlgoHandlerCount--;
                 if (encryptAlgoHandlerCount <= 0) {
                     mainHandler.sendEmptyMessage(Utils.FINISH_ALGORITHM);
+                    if (isSingle) {
+                        Intent intent = new Intent();
+                        intent.putExtra("imgPath", path);
+                        String cachePath = context.getCacheDir().getAbsolutePath();
+                        intent.putExtra("cachePath", cachePath);
+                        intent.setClass(context, SingleEncryptActivity.class);
+                        context.startActivity(intent);
+                    }
                     mainHandler.sendEmptyMessage(Utils.START_CLOUD);
                     int length = cloud1Path.size();
                     cloudTotalCount = length * 2;
@@ -110,6 +119,15 @@ public class Pipeline {
                 if (decryptAlgoHandlerCount <= 0) {
                     mainHandler.sendEmptyMessage(Utils.FINISH_ALGORITHM);
                     mainHandler.sendEmptyMessage(Utils.SUCCESS);
+                    if (isSingle) {
+                        // TODO
+                        Intent intent = new Intent();
+                        intent.putExtra("imgPath", path);
+                        String cachePath = context.getCacheDir().getAbsolutePath();
+                        intent.putExtra("cachePath", cachePath);
+                        intent.setClass(context, SingleEncryptActivity.class);
+                        context.startActivity(intent);
+                    }
                 }
             } else if (msg.what == Utils.CLOUD_FAILURE) {
                 mainHandler.sendEmptyMessage(Utils.ERROR);
@@ -134,6 +152,7 @@ public class Pipeline {
                         for (int i = 0; i < cloud1Path.size(); i++) {
                             String path1 = savePath1 + cloud1Path.get(i);
                             String path2 = savePath2 + cloud1Path.get(i);
+                            // TODO
                             thumbnailThreadPool.submit(new Decrypt(path1, path2, context, true, thumbnailAlgoHandler));
                         }
                     } catch (Exception e) {
@@ -141,6 +160,11 @@ public class Pipeline {
                     }
                 }
             } else if (msg.what == Utils.THUMBNAIL_SUCCESS) {
+
+                // TODO 只展示第一个，后续不展示，路径怎么处理
+                // 展示三张缩略图
+
+
                 thumbnailAlgoHandlerCount--;
                 if (thumbnailAlgoHandlerCount <= 0) {
                     mainHandler.sendEmptyMessage(Utils.FINISH_ALGORITHM);
@@ -152,6 +176,8 @@ public class Pipeline {
             }
         }
     };
+    boolean isSingle = false;
+    String path;
 
     /**
      * Constructor.
@@ -184,6 +210,8 @@ public class Pipeline {
      * @param path Paths of the file.
      */
     public void encryptPipeline(String[] path) {
+        isSingle = (path.length == 1);
+        this.path = path[0];
         mainHandler.sendEmptyMessage(Utils.START_ALGORITHM);
         init();
         int length = path.length;
@@ -217,6 +245,8 @@ public class Pipeline {
      * @param path Paths of the file.
      */
     public void decryptPipeline(String[] path) {
+        isSingle = (path.length == 1);
+        this.path = path[0];
         mainHandler.sendEmptyMessage(Utils.START_CLOUD);
         init();
         cloud1Path = new ArrayList<>();

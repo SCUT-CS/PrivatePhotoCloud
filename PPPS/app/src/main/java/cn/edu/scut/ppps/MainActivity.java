@@ -255,18 +255,13 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
             singleProcess(Utils.uri2Path(imgUri, context));
         } else if (requestCode == Utils.SETTINGS_UPDATE) {
             updateCloud();
-        }
-
-        //PreviewActivity callback
-        if(requestCode == Utils.PREVIEW_RESULT && resultCode == RESULT_OK){
+        } else if(requestCode == Utils.PREVIEW_RESULT && resultCode == RESULT_OK){
             String path = data.getStringExtra("path");
-            pipeline.encryptPipeline(new String[]{path});
-            Intent intent = new Intent();
-            intent.putExtra("imgPath", path);
-            String cachePath = context.getCacheDir().getAbsolutePath();
-            intent.putExtra("cachePath", cachePath);
-            intent.setClass(getApplicationContext(), SingleEncryptActivity.class);
-            startActivity(intent);
+            if (path.contains("Thumbnail")) {
+                pipeline.decryptPipeline(new String[]{path});
+            } else {
+                pipeline.encryptPipeline(new String[]{path});
+            }
         }
     }
 
@@ -562,19 +557,12 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
             updateCloud();
             return;
         }
-        if (path.contains("Thumbnail")) {
-            pipeline.decryptPipeline(new String[]{path});
-        } else {
-            //pipeline.encryptPipeline(new String[]{path});
-            Intent intent = new Intent();
-            intent.putExtra("imgPath", path);
-            String cachePath = context.getCacheDir().getAbsolutePath();
-            intent.putExtra("cachePath", cachePath);
-            intent.setClass(getApplicationContext(), PreviewActivity.class);
-            startActivityForResult(intent,Utils.PREVIEW_RESULT);
-
-
-        }
+        Intent intent = new Intent();
+        intent.putExtra("imgPath", path);
+        String cachePath = context.getCacheDir().getAbsolutePath();
+        intent.putExtra("cachePath", cachePath);
+        intent.setClass(getApplicationContext(), PreviewActivity.class);
+        startActivityForResult(intent,Utils.PREVIEW_RESULT);
     }
 
 

@@ -20,7 +20,7 @@
         android:layout_width="148dp"
         android:layout_height="55dp"
         android:layout_marginBottom="56dp"
-        android:text="加密/上传"
+        android:text="@string/next_step"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
