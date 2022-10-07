@@ -52,6 +52,8 @@ public class Utils {
     public static final int THUMBNAIL_SUCCESS = 7;
     // CameraActivity result value
     public static final int CAMERA_RESULT = 1;
+    // PreviewActivity result value
+    public static final int PREVIEW_RESULT = 11;
 
     /**
      * Open an image and return.

@@ -34,9 +34,9 @@ import cn.edu.scut.ppps.cloud.Tokens;
 public class AliOSSTests {
 
     AliOSS aliOSSTests = null;
-    public final String downloadImgFileDir = "/storage/emulated/0/Pictures/WeiXin/图片1.png";
-    public final String downloadThumbnailDir = "/storage/emulated/0/Pictures/WeiXin/thumbnail.png";
-    public final String filePathTest = "/storage/emulated/0/Pictures/WeiXin/jpg_small.jpg";
+    public final String downloadImgFileDir = "/storage/emulated/0/Pictures/PPPS/图片1.png";
+    public final String downloadThumbnailDir = "/storage/emulated/0/Pictures/PPPS/thumbnail.png";
+    public final String filePathTest = "/storage/emulated/0/Pictures/WeiXin/mmexport1664344085929.jpg";
 
     /**
      * Grant permissions.
