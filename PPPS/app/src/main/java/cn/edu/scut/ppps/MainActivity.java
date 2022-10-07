@@ -241,11 +241,11 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
     }
 
     /**
-     * Callback from CameraActivity
+     * Callback from CameraActivity and PreviewActivity.
      * @param requestCode request code.
      * @param resultCode result code.
      * @param data data.
-     * @author Cui Yuxin
+     * @author Cui Yuxin , Huang Zixi
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -255,6 +255,13 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
             singleProcess(Utils.uri2Path(imgUri, context));
         } else if (requestCode == Utils.SETTINGS_UPDATE) {
             updateCloud();
+        } else if(requestCode == Utils.PREVIEW_RESULT && resultCode == RESULT_OK){
+            String path = data.getStringExtra("path");
+            if (path.contains("Thumbnail")) {
+                pipeline.decryptPipeline(new String[]{path});
+            } else {
+                pipeline.encryptPipeline(new String[]{path});
+            }
         }
     }
 
@@ -543,19 +550,22 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
     /**
      * Single choice processing
      * @param path The path of the picture to be selected.
-     * @author Cui Yuxin
+     * @author Cui Yuxin , Huang Zixi
      */
     public void singleProcess(String path) {
         if (pipeline == null) {
             updateCloud();
             return;
         }
-        if (path.contains("Thumbnail")) {
-            pipeline.decryptPipeline(new String[]{path});
-        } else {
-            pipeline.encryptPipeline(new String[]{path});
-        }
+        Intent intent = new Intent();
+        intent.putExtra("imgPath", path);
+        String cachePath = context.getCacheDir().getAbsolutePath();
+        intent.putExtra("cachePath", cachePath);
+        intent.setClass(getApplicationContext(), PreviewActivity.class);
+        startActivityForResult(intent,Utils.PREVIEW_RESULT);
     }
+
+
 
     /**
      * Refresh the screen.
