@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SingleDecryptActivity">
+
+    <ImageView
+        android:id="@+id/originalImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:adjustViewBounds="true"
+        android:maxWidth="350dp"
+        android:maxHeight="300dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@drawable/sample" />
+
+    <ImageView
+        android:id="@+id/decryptedImage1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:maxWidth="180dp"
+        android:maxHeight="230dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/guideline2"
+        app:layout_constraintHorizontal_bias="0.595"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/originalImage"
+        app:layout_constraintVertical_bias="0.413"
+        tools:srcCompat="@drawable/sample" />
+
+    <ImageView
+        android:id="@+id/decryptedImage2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:maxWidth="180dp"
+        android:maxHeight="230dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.397"
+        app:layout_constraintStart_toStartOf="@+id/guideline2"
+        app:layout_constraintTop_toTopOf="@+id/decryptedImage1"
+        app:layout_constraintVertical_bias="0.0"
+        tools:srcCompat="@drawable/sample" />
+
+    <TextView
+        android:id="@+id/textViewOriginal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="原图"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/originalImage" />
+
+    <TextView
+        android:id="@+id/textViewDecrypted1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:text="加密图1"
+        app:layout_constraintEnd_toEndOf="@+id/decryptedImage1"
+        app:layout_constraintStart_toStartOf="@+id/decryptedImage1"
+        app:layout_constraintTop_toBottomOf="@+id/decryptedImage1" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="206dp" />
+
+    <TextView
+        android:id="@+id/textViewDecrypted2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:text="加密图2"
+        app:layout_constraintEnd_toEndOf="@+id/decryptedImage2"
+        app:layout_constraintStart_toStartOf="@+id/decryptedImage2"
+        app:layout_constraintTop_toBottomOf="@+id/decryptedImage2" />
+
+
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

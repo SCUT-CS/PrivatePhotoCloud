@@ -120,12 +120,23 @@ public class Pipeline {
                     mainHandler.sendEmptyMessage(Utils.FINISH_ALGORITHM);
                     mainHandler.sendEmptyMessage(Utils.SUCCESS);
                     if (isSingle) {
-                        // TODO
                         Intent intent = new Intent();
-                        intent.putExtra("imgPath", path);
+                        String path1 = null;
+                        String path2 = null;
                         String cachePath = context.getCacheDir().getAbsolutePath();
-                        intent.putExtra("cachePath", cachePath);
-                        intent.setClass(context, SingleEncryptActivity.class);
+                        String savePath1 = cachePath + File.separator + "Disk1" + File.separator;
+                        String savePath2 = cachePath + File.separator + "Disk2" + File.separator;
+                        try {
+                            for (int i = 0; i < cloud2Path.size(); i++) {
+                                path1 = savePath1 + Utils.getFileName(cloud2Path.get(i));
+                                path2 = savePath2 + Utils.getFileName(cloud2Path.get(i));
+                            }
+                        } catch (Exception e) {
+                            mainHandler.sendEmptyMessage(Utils.ERROR);
+                        }
+                        intent.putExtra("imgPath1", path1);
+                        intent.putExtra("imgPath2", path2);
+                        intent.setClass(context, SingleDecryptActivity.class);
                         context.startActivity(intent);
                     }
                 }
@@ -139,6 +150,8 @@ public class Pipeline {
     private Handler thumbnailAlgoHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
+            String imgPath1 = "";
+            String imgPath2 = null;
             if (msg.what == Utils.CLOUD_SUCCESS) {
                 cloudTotalCount--;
                 if (cloudTotalCount <= 0) {
@@ -153,6 +166,10 @@ public class Pipeline {
                             String path1 = savePath1 + cloud1Path.get(i);
                             String path2 = savePath2 + cloud1Path.get(i);
                             // TODO
+                            if(i==0){
+                                imgPath1 = path1;
+                                imgPath2 = path2;
+                            }
                             thumbnailThreadPool.submit(new Decrypt(path1, path2, context, true, thumbnailAlgoHandler));
                         }
                     } catch (Exception e) {
@@ -164,9 +181,14 @@ public class Pipeline {
                 // TODO 只展示第一个，后续不展示，路径怎么处理
                 // 展示三张缩略图
 
-
                 thumbnailAlgoHandlerCount--;
                 if (thumbnailAlgoHandlerCount <= 0) {
+                    Intent intent = new Intent();
+                    intent.putExtra("imgPath1", imgPath1);
+                    intent.putExtra("imgPath2", imgPath2);
+                    intent.setClass(context, SingleThumbnailActivity.class);
+                    context.startActivity(intent);
+
                     mainHandler.sendEmptyMessage(Utils.FINISH_ALGORITHM);
                     mainHandler.sendEmptyMessage(Utils.SUCCESS);
                 }
