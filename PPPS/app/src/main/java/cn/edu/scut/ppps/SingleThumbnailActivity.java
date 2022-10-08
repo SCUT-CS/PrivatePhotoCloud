@@ -23,17 +23,25 @@ public class SingleThumbnailActivity extends AppCompatActivity {
         String imgPath2 = bundle.getString("imgPath2");
 
         ImageView originalImage = findViewById(R.id.originalImage);
-        ImageView encrypt1 = findViewById(R.id.encryptedImage1);
-        //ImageView decrypt2 = findViewById(R.id.decryptedImage2);
+        ImageView thumbnail1 = findViewById(R.id.thumbnailImage1);
+        ImageView thumbnail2 = findViewById(R.id.thumbnailImage2);
 
+        String imgName = null;
+        try {
+            imgName = Utils.getFileName(imgPath1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String imgPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
+                + File.separator + "Thumbnail"
+                + File.separator + imgName;
 
-
-       // Bitmap bitmapOrigin = BitmapFactory.decodeFile(imgPath); //从路径加载出图片bitmap
-       // originalImage.setImageBitmap(bitmapOrigin); //ImageView显示图片
+       Bitmap bitmapOrigin = BitmapFactory.decodeFile(imgPath); //从路径加载出图片bitmap
+       originalImage.setImageBitmap(bitmapOrigin); //ImageView显示图片
         Bitmap bitmapdecrypt1 = BitmapFactory.decodeFile(imgPath1);
-        encrypt1.setImageBitmap(bitmapdecrypt1);
-        //Bitmap bitmapdecrypt2 = BitmapFactory.decodeFile(imgPath2);
-       // decrypt2.setImageBitmap(bitmapdecrypt2);
+        thumbnail1.setImageBitmap(bitmapdecrypt1);
+        Bitmap bitmapdecrypt2 = BitmapFactory.decodeFile(imgPath2);
+       thumbnail2.setImageBitmap(bitmapdecrypt2);
 
 
     }
