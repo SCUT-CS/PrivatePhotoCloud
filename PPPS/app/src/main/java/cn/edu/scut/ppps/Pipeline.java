@@ -150,7 +150,6 @@ public class Pipeline {
     private Handler thumbnailAlgoHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-
             if (msg.what == Utils.CLOUD_SUCCESS) {
                 cloudTotalCount--;
                 if (cloudTotalCount <= 0) {
@@ -164,17 +163,16 @@ public class Pipeline {
                         for (int i = 0; i < cloud1Path.size(); i++) {
                             String path1 = savePath1 + cloud1Path.get(i);
                             String path2 = savePath2 + cloud1Path.get(i);
-                            // TODO
-
                             thumbnailThreadPool.submit(new Decrypt(path1, path2, context, true, thumbnailAlgoHandler));
                         }
+                        path = cloud1Path.get(0);
                     } catch (Exception e) {
                         mainHandler.sendEmptyMessage(Utils.ERROR);
                     }
                 }
             } else if (msg.what == Utils.THUMBNAIL_SUCCESS) {
 
-                // TODO 只展示第一个，后续不展示，路径怎么处理
+                /*// TODO 只展示第一个，后续不展示，路径怎么处理
                 // 展示三张缩略图
                 String imgPath1 = null;
                 String imgPath2 = null;
@@ -196,13 +194,21 @@ public class Pipeline {
                     intent.putExtra("imgPath2", imgPath2);
                     intent.setClass(context, SingleThumbnailActivity.class);
                     context.startActivity(intent);
-                }
+                }*/
                 thumbnailAlgoHandlerCount--;
                 if (thumbnailAlgoHandlerCount <= 0) {
-
-
                     mainHandler.sendEmptyMessage(Utils.FINISH_ALGORITHM);
                     mainHandler.sendEmptyMessage(Utils.SUCCESS);
+                    String cachePath = context.getCacheDir().getAbsolutePath();
+                    String savePath1 = cachePath + File.separator + "Disk1Thumbnail" + File.separator;
+                    String savePath2 = cachePath + File.separator + "Disk2Thumbnail" + File.separator;
+                    String imgPath1 = savePath1 + path;
+                    String imgPath2 = savePath2 + path;
+                    Intent intent = new Intent();
+                    intent.putExtra("imgPath1", imgPath1);
+                    intent.putExtra("imgPath2", imgPath2);
+                    intent.setClass(context, SingleThumbnailActivity.class);
+                    context.startActivity(intent);
                 }
             } else if (msg.what == Utils.CLOUD_FAILURE) {
                 mainHandler.sendEmptyMessage(Utils.ERROR);
