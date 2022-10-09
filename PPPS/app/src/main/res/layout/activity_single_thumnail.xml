@@ -4,14 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SingleEncryptActivity">
+    tools:context=".SingleThumbnailActivity">
 
     <ImageView
         android:id="@+id/originalImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="350dp"
+        android:layout_height="300dp"
         android:layout_marginTop="40dp"
         android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
         android:maxWidth="350dp"
         android:maxHeight="300dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -20,10 +21,11 @@
         tools:srcCompat="@drawable/no_image" />
 
     <ImageView
-        android:id="@+id/encryptedImage1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/thumbnailImage1"
+        android:layout_width="180dp"
+        android:layout_height="230dp"
         android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
         android:maxWidth="180dp"
         android:maxHeight="230dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -35,17 +37,18 @@
         tools:srcCompat="@drawable/no_image" />
 
     <ImageView
-        android:id="@+id/encryptedImage2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/thumbnailImage2"
+        android:layout_width="180dp"
+        android:layout_height="230dp"
         android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
         android:maxWidth="180dp"
         android:maxHeight="230dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.397"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
-        app:layout_constraintTop_toTopOf="@+id/encryptedImage1"
+        app:layout_constraintTop_toTopOf="@+id/thumbnailImage1"
         app:layout_constraintVertical_bias="0.0"
         tools:srcCompat="@drawable/no_image" />
 
@@ -54,7 +57,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="原图"
+        android:text="加密缩略图"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -66,10 +69,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
-        android:text="加密图1"
-        app:layout_constraintEnd_toEndOf="@+id/encryptedImage1"
-        app:layout_constraintStart_toStartOf="@+id/encryptedImage1"
-        app:layout_constraintTop_toBottomOf="@+id/encryptedImage1" />
+        android:text="密文缩略图1"
+        app:layout_constraintEnd_toEndOf="@+id/thumbnailImage1"
+        app:layout_constraintStart_toStartOf="@+id/thumbnailImage1"
+        app:layout_constraintTop_toBottomOf="@+id/thumbnailImage1" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"
@@ -83,10 +86,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
-        android:text="加密图2"
-        app:layout_constraintEnd_toEndOf="@+id/encryptedImage2"
-        app:layout_constraintStart_toStartOf="@+id/encryptedImage2"
-        app:layout_constraintTop_toBottomOf="@+id/encryptedImage2" />
-
-
+        android:text="密文缩略图2"
+        app:layout_constraintEnd_toEndOf="@+id/thumbnailImage2"
+        app:layout_constraintStart_toStartOf="@+id/thumbnailImage2"
+        app:layout_constraintTop_toBottomOf="@+id/thumbnailImage2" />
 </androidx.constraintlayout.widget.ConstraintLayout>

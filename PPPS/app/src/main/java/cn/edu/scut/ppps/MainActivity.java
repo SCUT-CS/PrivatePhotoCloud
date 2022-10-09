@@ -257,6 +257,7 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
             updateCloud();
         } else if(requestCode == Utils.PREVIEW_RESULT && resultCode == RESULT_OK){
             String path = data.getStringExtra("path");
+
             if (path.contains("Thumbnail")) {
                 pipeline.decryptPipeline(new String[]{path});
             } else {

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SingleEncryptActivity">
+    tools:context=".SingleDecryptActivity">
 
     <ImageView
         android:id="@+id/originalImage"
@@ -20,7 +20,7 @@
         tools:srcCompat="@drawable/no_image" />
 
     <ImageView
-        android:id="@+id/encryptedImage1"
+        android:id="@+id/decryptedImage1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
@@ -35,7 +35,7 @@
         tools:srcCompat="@drawable/no_image" />
 
     <ImageView
-        android:id="@+id/encryptedImage2"
+        android:id="@+id/decryptedImage2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
@@ -45,7 +45,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.397"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
-        app:layout_constraintTop_toTopOf="@+id/encryptedImage1"
+        app:layout_constraintTop_toTopOf="@+id/decryptedImage1"
         app:layout_constraintVertical_bias="0.0"
         tools:srcCompat="@drawable/no_image" />
 
@@ -62,14 +62,14 @@
         app:layout_constraintTop_toBottomOf="@+id/originalImage" />
 
     <TextView
-        android:id="@+id/textViewEncrypted1"
+        android:id="@+id/textViewDecrypted1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
-        android:text="加密图1"
-        app:layout_constraintEnd_toEndOf="@+id/encryptedImage1"
-        app:layout_constraintStart_toStartOf="@+id/encryptedImage1"
-        app:layout_constraintTop_toBottomOf="@+id/encryptedImage1" />
+        android:text="云端密文图像1"
+        app:layout_constraintEnd_toEndOf="@+id/decryptedImage1"
+        app:layout_constraintStart_toStartOf="@+id/decryptedImage1"
+        app:layout_constraintTop_toBottomOf="@+id/decryptedImage1" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"
@@ -79,14 +79,18 @@
         app:layout_constraintGuide_end="206dp" />
 
     <TextView
-        android:id="@+id/textViewEncrypted2"
+        android:id="@+id/textViewDecrypted2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
-        android:text="加密图2"
-        app:layout_constraintEnd_toEndOf="@+id/encryptedImage2"
-        app:layout_constraintStart_toStartOf="@+id/encryptedImage2"
-        app:layout_constraintTop_toBottomOf="@+id/encryptedImage2" />
+        android:text="云端密文图像2"
+        app:layout_constraintEnd_toEndOf="@+id/decryptedImage2"
+        app:layout_constraintStart_toStartOf="@+id/decryptedImage2"
+        app:layout_constraintTop_toBottomOf="@+id/decryptedImage2" />
+
+
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
