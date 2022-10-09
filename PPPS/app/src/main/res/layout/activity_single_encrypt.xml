@@ -17,7 +17,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@drawable/sample" />
+        tools:srcCompat="@drawable/no_image" />
 
     <ImageView
         android:id="@+id/encryptedImage1"
@@ -32,7 +32,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/originalImage"
         app:layout_constraintVertical_bias="0.413"
-        tools:srcCompat="@drawable/sample" />
+        tools:srcCompat="@drawable/no_image" />
 
     <ImageView
         android:id="@+id/encryptedImage2"
@@ -47,7 +47,7 @@
         app:layout_constraintStart_toStartOf="@+id/guideline2"
         app:layout_constraintTop_toTopOf="@+id/encryptedImage1"
         app:layout_constraintVertical_bias="0.0"
-        tools:srcCompat="@drawable/sample" />
+        tools:srcCompat="@drawable/no_image" />
 
     <TextView
         android:id="@+id/textViewOriginal"

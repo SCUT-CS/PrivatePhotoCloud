@@ -191,14 +191,15 @@ public class Pipeline {
                     } catch (Exception e) {
                         mainHandler.sendEmptyMessage(Utils.ERROR);
                     }
-                }
-                thumbnailAlgoHandlerCount--;
-                if (thumbnailAlgoHandlerCount <= 0) {
                     Intent intent = new Intent();
                     intent.putExtra("imgPath1", imgPath1);
                     intent.putExtra("imgPath2", imgPath2);
                     intent.setClass(context, SingleThumbnailActivity.class);
                     context.startActivity(intent);
+                }
+                thumbnailAlgoHandlerCount--;
+                if (thumbnailAlgoHandlerCount <= 0) {
+
 
                     mainHandler.sendEmptyMessage(Utils.FINISH_ALGORITHM);
                     mainHandler.sendEmptyMessage(Utils.SUCCESS);

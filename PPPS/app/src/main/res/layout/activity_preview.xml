@@ -13,7 +13,7 @@
         app:layout_constraintBottom_toTopOf="@+id/encryptButton"
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="26dp"
-        tools:srcCompat="@drawable/sample" />
+        tools:srcCompat="@drawable/no_image" />
 
     <Button
         android:id="@+id/encryptButton"
