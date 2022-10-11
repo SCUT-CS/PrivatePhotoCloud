@@ -38,4 +38,6 @@
     <string name="cloud_storage2">云存储2登录口令</string>
     <string name="cam_res">拍照分辨率</string>
     <string name="next_step">下一步</string>
+    <string name="openCloud">进入云服务</string>
+    <string name="Uri_服务器">https://oss.console.aliyun.com/bucket/oss-cn-hangzhou</string>
 </resources>
