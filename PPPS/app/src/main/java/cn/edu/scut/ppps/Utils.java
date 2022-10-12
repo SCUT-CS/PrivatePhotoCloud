@@ -54,6 +54,8 @@ public class Utils {
     public static final int CAMERA_RESULT = 1;
     // PreviewActivity result value
     public static final int PREVIEW_RESULT = 11;
+    //Thumbnail Handler value
+    public static final int THUMBNAIL_START = 12;
 
     /**
      * Open an image and return.

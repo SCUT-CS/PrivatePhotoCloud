@@ -199,6 +199,7 @@ public class Pipeline {
                 if (thumbnailAlgoHandlerCount <= 0) {
                     mainHandler.sendEmptyMessage(Utils.FINISH_ALGORITHM);
                     mainHandler.sendEmptyMessage(Utils.SUCCESS);
+                    mainHandler.sendEmptyMessage(Utils.THUMBNAIL_START);
                     String cachePath = context.getCacheDir().getAbsolutePath();
                     String savePath1 = cachePath + File.separator + "Disk1Thumbnail" + File.separator;
                     String savePath2 = cachePath + File.separator + "Disk2Thumbnail" + File.separator;
@@ -318,6 +319,7 @@ public class Pipeline {
 
     public void thumbnailPipeline() {
         mainHandler.sendEmptyMessage(Utils.START_CLOUD);
+
         init();
         String imgPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
                 + File.separator + "Thumbnail" + File.separator;
@@ -343,7 +345,9 @@ public class Pipeline {
             cloudStorage2.getThumbnail(s, "Disk2Thumbnail");
         }
         if (cloud1Path.size() == 0) {
+
             mainHandler.sendEmptyMessage(Utils.SUCCESS);
+            mainHandler.sendEmptyMessage(Utils.THUMBNAIL_START);
         }
     }
 }
