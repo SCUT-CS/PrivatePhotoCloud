@@ -1,6 +1,8 @@
 package cn.edu.scut.ppps.ui.settings;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +15,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import cn.edu.scut.ppps.MainActivity;
+import cn.edu.scut.ppps.R;
 import cn.edu.scut.ppps.databinding.FragmentSettingsBinding;
 
 public class SettingsFragment extends Fragment {
@@ -48,6 +51,16 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 mainActivity.callSettings();
+            }
+        });
+
+        Button button2 = (Button) binding.openCloudButton;
+        button2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Uri uri = Uri.parse(getString(R.string.Uri_服务器));
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
             }
         });
         return root;

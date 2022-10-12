@@ -131,6 +131,10 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
                 mediaScanIntent.setData(contentUri);
                 context.sendBroadcast(mediaScanIntent);
                 deepRefresh();
+            } else if (msg.what == Utils.THUMBNAIL_START) {
+                mCurrentDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
+                        + File.separator + "Thumbnail");
+                refresh();
             }
         }
     };
