@@ -23,10 +23,12 @@ public class Encrypt implements Callable {
     private Bitmap img;
     private Bitmap img1;
     private Bitmap img2;
+    private Bitmap img3;
+    private int[] encryptedPixels3;
     private Random rnd = new Random();
     private int width;
     private int height;
-    private byte[][][] overflow;
+    //private byte[][][] overflow;
     private Handler handler;
 
     /**
@@ -70,6 +72,14 @@ public class Encrypt implements Callable {
     private void encrypt() {
         width = img.getWidth();
         height = img.getHeight();
+        double scale = Math.min(200.0 / height, 200.0 / width);
+        int scaledHeight = (int) (height * scale);
+        int scaledWidth = (int) (width * scale);
+        // If this is true then bilinear filtering will be used when
+        // scaling which has better image quality at the cost of worse performance.
+        img3 = Bitmap.createScaledBitmap(img, scaledWidth, scaledHeight, false);
+        encryptedPixels3 = new int[scaledWidth * scaledHeight];
+        img3.getPixels(encryptedPixels3, 0, scaledWidth, 0, 0, scaledWidth, scaledHeight);
         img1 = Bitmap.createBitmap(width, height,
                 Bitmap.Config.ARGB_8888,
                 img.hasAlpha(),
@@ -80,10 +90,10 @@ public class Encrypt implements Callable {
                 ColorSpace.get(ColorSpace.Named.SRGB));
         if (img.hasAlpha()) {
             Log.d("Encrypt", "hasAlpha");
-            overflow = new byte[4][height][(int) Math.ceil(width / 8.0)];
+            //overflow = new byte[4][height][(int) Math.ceil(width / 8.0)];
         } else {
             Log.d("Encrypt", "noAlpha");
-            overflow = new byte[3][height][(int) Math.ceil(width / 8.0)];
+            //overflow = new byte[3][height][(int) Math.ceil(width / 8.0)];
         }
         /*int threadNum = height / 1000;
         if (threadNum == 0) {
@@ -115,10 +125,12 @@ public class Encrypt implements Callable {
         String cachePath = context.getCacheDir().getAbsolutePath();
         String savePath1 = cachePath + File.separator + "Disk1" + File.separator + fileName + ".ori";
         String savePath2 = cachePath + File.separator + "Disk2" + File.separator + fileName +  ".ori";
+        String savePath3 = context.getDataDir().getAbsolutePath() + File.separator + "overflow" + File.separator + fileName;
         Utils.saveImg(img1, savePath1);
         Utils.saveImg(img2, savePath2);
-        String savePath = context.getDataDir().getAbsolutePath() + File.separator + "overflow" + File.separator + fileName;
-        Utils.saveBytesArray(overflow, savePath, width);
+        Utils.saveImg(img3, savePath3);
+//        String savePath = context.getDataDir().getAbsolutePath() + File.separator + "overflow" + File.separator + fileName;
+//        Utils.saveBytesArray(overflow, savePath, width);
     }
 
     /**
@@ -187,6 +199,8 @@ public class Encrypt implements Callable {
             int[] encryptedPixels1 = new int[(rowEnd - rowStart) * (colEnd - colStart)];
             int[] encryptedPixels2 = new int[(rowEnd - rowStart) * (colEnd - colStart)];
             int[] originalPixels = new int[(rowEnd - rowStart) * (colEnd - colStart)];
+            double scaledHeight = img3.getHeight();
+            double scale = scaledHeight / height;
             img.getPixels(originalPixels, 0, width, colStart, rowStart, (colEnd - colStart), (rowEnd - rowStart));
             if (img.hasAlpha()) {
                 int[] argb = new int[4];
@@ -207,27 +221,35 @@ public class Encrypt implements Callable {
                         pixel = b1 | g1 << 8 | r1 << 16 | a1 << 24;
                         // img1.setPixel(col, row, pixel);
                         encryptedPixels1[(row - rowStart) * (colEnd - colStart) + (col - colStart)] = pixel;
-                        int a2 = (argb[0] - a1) & 0xff;
-                        int r2 = (argb[1] - r1) & 0xff;
-                        int g2 = (argb[2] - g1) & 0xff;
-                        int b2 = (argb[3] - b1) & 0xff;
+                        // TODO 只支持横向分割！
+                        int rowIndex = (int) ((row - rowStart) * scale);
+                        int colIndex = (int) ((col - colStart) * scale);
+                        int pixel3 = encryptedPixels3[rowIndex * img3.getWidth() + colIndex];
+                        int a3 = pixel3 >>> 24;
+                        int r3 = (pixel3 >> 16) & 0xFF;
+                        int g3 = (pixel3 >> 8) & 0xFF;
+                        int b3 = pixel3 & 0xFF;
+                        int a2 = (argb[0] - a1 - a3) & 0xff;
+                        int r2 = (argb[1] - r1 - r3) & 0xff;
+                        int g2 = (argb[2] - g1 - g3) & 0xff;
+                        int b2 = (argb[3] - b1 - b3) & 0xff;
                         //pixel = Color.argb(a2, r2, g2, b2);
                         pixel = b2 | g2 << 8 | r2 << 16 | a2 << 24;
                         // img2.setPixel(col, row, pixel);
                         encryptedPixels2[(row - rowStart) * (colEnd - colStart) + (col - colStart)] = pixel;
                         // encrypt the overflow information
-                        if (argb[0] < a1) {
-                            overflow[0][row][col >> 3] = (byte) (overflow[0][row][col >> 3] | (1 << (col & 0b111)));
-                        }
-                        if (argb[1] < r1) {
-                            overflow[1][row][col >> 3] = (byte) (overflow[1][row][col >> 3] | (1 << (col & 0b111)));
-                        }
-                        if (argb[2] < g1) {
-                            overflow[2][row][col >> 3] = (byte) (overflow[2][row][col >> 3] | (1 << (col & 0b111)));
-                        }
-                        if (argb[3] < b1) {
-                            overflow[3][row][col >> 3] = (byte) (overflow[3][row][col >> 3] | (1 << (col & 0b111)));
-                        }
+//                        if (argb[0] < a1) {
+//                            overflow[0][row][col >> 3] = (byte) (overflow[0][row][col >> 3] | (1 << (col & 0b111)));
+//                        }
+//                        if (argb[1] < r1) {
+//                            overflow[1][row][col >> 3] = (byte) (overflow[1][row][col >> 3] | (1 << (col & 0b111)));
+//                        }
+//                        if (argb[2] < g1) {
+//                            overflow[2][row][col >> 3] = (byte) (overflow[2][row][col >> 3] | (1 << (col & 0b111)));
+//                        }
+//                        if (argb[3] < b1) {
+//                            overflow[3][row][col >> 3] = (byte) (overflow[3][row][col >> 3] | (1 << (col & 0b111)));
+//                        }
                     }
                 }
             } else {
@@ -245,22 +267,29 @@ public class Encrypt implements Callable {
                         pixel = b1 | g1 << 8 | r1 << 16 | 0xff000000;
                         // img1.setPixel(col, row, pixel);
                         encryptedPixels1[(row - rowStart) * (colEnd - colStart) + (col - colStart)] = pixel;
-                        int r2 = (rgb[0] - r1) & 0xff;
-                        int g2 = (rgb[1] - g1) & 0xff;
-                        int b2 = (rgb[2] - b1) & 0xff;
+                        // TODO 只支持横向分割！
+                        int rowIndex = (int) ((row - rowStart) * scale);
+                        int colIndex = (int) ((col - colStart) * scale);
+                        int pixel3 = encryptedPixels3[rowIndex * img3.getWidth() + colIndex];
+                        int r3 = (pixel3 >> 16) & 0xFF;
+                        int g3 = (pixel3 >> 8) & 0xFF;
+                        int b3 = pixel3 & 0xFF;
+                        int r2 = (rgb[0] - r1 - r3) & 0xff;
+                        int g2 = (rgb[1] - g1 - g3) & 0xff;
+                        int b2 = (rgb[2] - b1 - b3) & 0xff;
                         pixel = b2 | g2 << 8 | r2 << 16 | 0xff000000;
                         // img2.setPixel(col, row, pixel);
                         encryptedPixels2[(row - rowStart) * (colEnd - colStart) + (col - colStart)] = pixel;
                         // encrypt the overflow information
-                        if (rgb[0] < r1) {
-                            overflow[0][row][col >> 3] = (byte) (overflow[0][row][col >> 3] | (1 << (col & 0b111)));
-                        }
-                        if (rgb[1] < g1) {
-                            overflow[1][row][col >> 3] = (byte) (overflow[1][row][col >> 3] | (1 << (col & 0b111)));
-                        }
-                        if (rgb[2] < b1) {
-                            overflow[2][row][col >> 3] = (byte) (overflow[2][row][col >> 3] | (1 << (col & 0b111)));
-                        }
+//                        if (rgb[0] < r1) {
+//                            overflow[0][row][col >> 3] = (byte) (overflow[0][row][col >> 3] | (1 << (col & 0b111)));
+//                        }
+//                        if (rgb[1] < g1) {
+//                            overflow[1][row][col >> 3] = (byte) (overflow[1][row][col >> 3] | (1 << (col & 0b111)));
+//                        }
+//                        if (rgb[2] < b1) {
+//                            overflow[2][row][col >> 3] = (byte) (overflow[2][row][col >> 3] | (1 << (col & 0b111)));
+//                        }
                     }
                 }
             }
