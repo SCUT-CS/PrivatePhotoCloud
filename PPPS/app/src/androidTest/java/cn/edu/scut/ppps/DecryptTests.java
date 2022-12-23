@@ -230,10 +230,13 @@ public class DecryptTests {
         // 构造函数参数
         String imgPath1 = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
                 + File.separator + "WeiXin"
-                + File.separator + "encrypted1.png";
+                + File.separator + "e11.jpg";
         String imgPath2 = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
                 + File.separator + "WeiXin"
-                + File.separator + "encrypted2.png";
+                + File.separator + "e22.jpg";
+        String imgPath3 = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
+                + File.separator + "WeiXin"
+                + File.separator + "e";
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         Decrypt decrypt = new Decrypt(imgPath1, imgPath2, appContext);
         ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(5, 10, 1000, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(16));
@@ -241,6 +244,7 @@ public class DecryptTests {
         Bitmap img = null;
         Bitmap originalImg = null;
         img = results.get();
+        Utils.saveJpgImg(img, imgPath3);
         String imgPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
                 + File.separator + "WeiXin"
                 + File.separator + "ZHAO.jpg";

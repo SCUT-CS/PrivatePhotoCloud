@@ -55,7 +55,7 @@ public class EncryptTests {
         // 构造函数参数
         String imgPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
                 + File.separator + "WeiXin"
-                + File.separator + "jpg_medium.jpg";
+                + File.separator + "jpg_small.jpg";
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         // 通过反射创造Encrypt类
         Class encryptClass = null;
