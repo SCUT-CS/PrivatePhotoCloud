@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.util.Log;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.concurrent.Callable;
 
 /**
@@ -20,6 +21,9 @@ public class Decrypt implements Callable {
     private Bitmap img;
     private Bitmap img1;
     private Bitmap img2;
+    private int[] encryptedPixels3;
+    private int scaledHeight;
+    private int scaledWidth;
     private String imgFilePath1;
     private String imgFilePath2;
     private int width;
@@ -108,6 +112,20 @@ public class Decrypt implements Callable {
      * @author Cui Yuxin, Zhao Bowen
      */
     private void decrypt() {
+        String imgName = null;
+        try {
+            imgName = Utils.getFileName(imgFilePath1);
+            String originalImgName = imgName.substring(0, imgName.lastIndexOf(".ori"));
+            String filePath = context.getDataDir().getAbsolutePath() + File.separator + "overflow" +
+                    File.separator + originalImgName + ".webp";
+            Bitmap img3 = Utils.openImg(filePath);
+            scaledHeight = img3.getHeight();
+            scaledWidth = img3.getWidth();
+            encryptedPixels3 = new int[scaledWidth * scaledHeight];
+            img3.getPixels(encryptedPixels3, 0, scaledWidth, 0, 0, scaledWidth, scaledHeight);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         /*int threadNum = height / 1000;
         if (threadNum == 0) {
             threadNum = 1;
@@ -254,6 +272,7 @@ public class Decrypt implements Callable {
             int[] encryptedPixels1 = new int[(rowEnd - rowStart) * (colEnd - colStart)];
             int[] encryptedPixels2 = new int[(rowEnd - rowStart) * (colEnd - colStart)];
             int[] originalPixels = new int[(rowEnd - rowStart) * (colEnd - colStart)];
+            double scale = scaledHeight / height;
             img1.getPixels(encryptedPixels1, 0, width, colStart, rowStart, (colEnd - colStart), (rowEnd - rowStart));
             img2.getPixels(encryptedPixels2, 0, width, colStart, rowStart, (colEnd - colStart), (rowEnd - rowStart));
             if (img1.hasAlpha()) {
@@ -264,10 +283,13 @@ public class Decrypt implements Callable {
                         // int pixel2 = img2.getPixel(col, row);
                         int pixel1 = encryptedPixels1[(row - rowStart) * (colEnd - colStart) + (col - colStart)];
                         int pixel2 = encryptedPixels2[(row - rowStart) * (colEnd - colStart) + (col - colStart)];
-                        int pixel = Color.argb(((pixel1 >>> 24) + (pixel2 >>> 24)) & 0xff,
-                                (((pixel1 >> 16) & 0xFF) + ((pixel2 >> 16) & 0xFF)) & 0xff,
-                                (((pixel1 >> 8) & 0xFF) + ((pixel2 >> 8) & 0xFF)) & 0xff,
-                                ((pixel1 & 0xFF) + (pixel2 & 0xFF)) & 0xff);
+                        int rowIndex = (int) ((row - rowStart) * scale);
+                        int colIndex = (int) ((col - colStart) * scale);
+                        int pixel3 = encryptedPixels3[rowIndex * scaledWidth + colIndex];
+                        int pixel = Color.argb(((pixel1 >>> 24) + (pixel2 >>> 24) + (pixel3 >>> 24)) & 0xff,
+                                (((pixel1 >> 16) & 0xFF) + ((pixel2 >> 16) & 0xFF) + ((pixel3 >> 16) & 0xFF)) & 0xff,
+                                (((pixel1 >> 8) & 0xFF) + ((pixel2 >> 8) & 0xFF) + ((pixel3 >> 8) & 0xFF)) & 0xff,
+                                ((pixel1 & 0xFF) + (pixel2 & 0xFF) + (pixel3 & 0xFF)) & 0xff);
                         // img.setPixel(col, row, pixel);
                         originalPixels[(row - rowStart) * (colEnd - colStart) + (col - colStart)] = pixel;
                     }
@@ -280,9 +302,12 @@ public class Decrypt implements Callable {
                         // int pixel2 = img2.getPixel(col, row);
                         int pixel1 = encryptedPixels1[(row - rowStart) * (colEnd - colStart) + (col - colStart)];
                         int pixel2 = encryptedPixels2[(row - rowStart) * (colEnd - colStart) + (col - colStart)];
-                        int pixel = Color.rgb((((pixel1 >> 16) & 0xFF) + ((pixel2 >> 16) & 0xFF)) & 0xff,
-                                (((pixel1 >> 8) & 0xFF) + ((pixel2 >> 8) & 0xFF)) & 0xff,
-                                ((pixel1 & 0xFF) + (pixel2 & 0xFF)) & 0xff);
+                        int rowIndex = (int) ((row - rowStart) * scale);
+                        int colIndex = (int) ((col - colStart) * scale);
+                        int pixel3 = encryptedPixels3[rowIndex * scaledWidth + colIndex];
+                        int pixel = Color.rgb((((pixel1 >> 16) & 0xFF) + ((pixel2 >> 16) & 0xFF) + ((pixel3 >> 16) & 0xFF)) & 0xff,
+                                (((pixel1 >> 8) & 0xFF) + ((pixel2 >> 8) & 0xFF) + ((pixel3 >> 8) & 0xFF)) & 0xff,
+                                ((pixel1 & 0xFF) + (pixel2 & 0xFF) + (pixel3 & 0xFF)) & 0xff);
                         // img.setPixel(col, row, pixel);
                         originalPixels[(row - rowStart) * (colEnd - colStart) + (col - colStart)] = pixel;
                     }

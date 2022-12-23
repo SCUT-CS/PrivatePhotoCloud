@@ -228,17 +228,14 @@ public class DecryptTests {
     @Test
     public void callTest() throws Exception {
         // 构造函数参数
-        String imgPath1 = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
-                + File.separator + "WeiXin"
-                + File.separator + "e11.jpg";
-        String imgPath2 = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
-                + File.separator + "WeiXin"
-                + File.separator + "e22.jpg";
+        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        String cachePath = context.getCacheDir().getAbsolutePath();
+        String imgPath1 = cachePath + File.separator + "Disk1" + File.separator + "jpg_small.jpg.ori.webp";
+        String imgPath2 = cachePath + File.separator + "Disk2" + File.separator + "jpg_small.jpg.ori.webp";
         String imgPath3 = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
                 + File.separator + "WeiXin"
-                + File.separator + "e";
-        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        Decrypt decrypt = new Decrypt(imgPath1, imgPath2, appContext);
+                + File.separator + "plain";
+        Decrypt decrypt = new Decrypt(imgPath1, imgPath2, context);
         ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(5, 10, 1000, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(16));
         Future<Bitmap> results = threadPoolExecutor.submit(decrypt);
         Bitmap img = null;
