@@ -283,8 +283,8 @@ public class Decrypt implements Callable {
                         // int pixel2 = img2.getPixel(col, row);
                         int pixel1 = encryptedPixels1[(row - rowStart) * (colEnd - colStart) + (col - colStart)];
                         int pixel2 = encryptedPixels2[(row - rowStart) * (colEnd - colStart) + (col - colStart)];
-                        int rowIndex = (int) ((row - rowStart) * scale);
-                        int colIndex = (int) ((col - colStart) * scale);
+                        int rowIndex = (int) (row * scale);
+                        int colIndex = (int) (col * scale);
                         int pixel3 = encryptedPixels3[rowIndex * scaledWidth + colIndex];
                         int pixel = Color.argb(((pixel1 >>> 24) + (pixel2 >>> 24) + (pixel3 >>> 24)) & 0xff,
                                 (((pixel1 >> 16) & 0xFF) + ((pixel2 >> 16) & 0xFF) + ((pixel3 >> 16) & 0xFF)) & 0xff,
@@ -302,8 +302,8 @@ public class Decrypt implements Callable {
                         // int pixel2 = img2.getPixel(col, row);
                         int pixel1 = encryptedPixels1[(row - rowStart) * (colEnd - colStart) + (col - colStart)];
                         int pixel2 = encryptedPixels2[(row - rowStart) * (colEnd - colStart) + (col - colStart)];
-                        int rowIndex = (int) ((row - rowStart) * scale);
-                        int colIndex = (int) ((col - colStart) * scale);
+                        int rowIndex = (int) (row * scale);
+                        int colIndex = (int) (col * scale);
                         int pixel3 = encryptedPixels3[rowIndex * scaledWidth + colIndex];
                         int pixel = Color.rgb((((pixel1 >> 16) & 0xFF) + ((pixel2 >> 16) & 0xFF) + ((pixel3 >> 16) & 0xFF)) & 0xff,
                                 (((pixel1 >> 8) & 0xFF) + ((pixel2 >> 8) & 0xFF) + ((pixel3 >> 8) & 0xFF)) & 0xff,
