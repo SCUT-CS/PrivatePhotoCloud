@@ -158,6 +158,7 @@ public class Encrypt implements Callable {
         private int rowEnd;
         private int colStart;
         private int colEnd;
+        private int scaledWidth;
 
         /**
          * Constructor.
@@ -168,6 +169,7 @@ public class Encrypt implements Callable {
         EncryptThread(int id, int threadNum) {
             colStart = 0;
             colEnd = width;
+            scaledWidth = img3.getWidth();
             if (id == threadNum - 1) {
                 rowStart = (height / threadNum) * id;
                 rowEnd = height;
@@ -224,7 +226,7 @@ public class Encrypt implements Callable {
                         // TODO 只支持横向分割！
                         int rowIndex = (int) (row * scale);
                         int colIndex = (int) (col * scale);
-                        int pixel3 = encryptedPixels3[rowIndex * img3.getWidth() + colIndex];
+                        int pixel3 = encryptedPixels3[rowIndex * scaledWidth + colIndex];
                         int a3 = pixel3 >>> 24;
                         int r3 = (pixel3 >> 16) & 0xFF;
                         int g3 = (pixel3 >> 8) & 0xFF;
@@ -270,16 +272,13 @@ public class Encrypt implements Callable {
                         // TODO 只支持横向分割！
                         int rowIndex = (int) (row * scale);
                         int colIndex = (int) (col * scale);
-                        int pixel3 = encryptedPixels3[rowIndex * img3.getWidth() + colIndex];
+                        int pixel3 = encryptedPixels3[rowIndex * scaledWidth + colIndex];
                         int r3 = (pixel3 >> 16) & 0xFF;
                         int g3 = (pixel3 >> 8) & 0xFF;
                         int b3 = pixel3 & 0xFF;
-                        int r2 = (rgb[0] - r1) & 0xff;
-                        r2 = (r2 - r3) & 0xff;
-                        int g2 = (rgb[1] - g1) & 0xff;
-                        g2 = (g2 - g3) & 0xff;
-                        int b2 = (rgb[2] - b1) & 0xff;
-                        b2 = (b2 - b3) & 0xff;
+                        int r2 = (rgb[0] - r1 - r3) & 0xff;
+                        int g2 = (rgb[1] - g1 - g3) & 0xff;
+                        int b2 = (rgb[2] - b1 - b3) & 0xff;
                         pixel = b2 | g2 << 8 | r2 << 16 | 0xff000000;
                         // img2.setPixel(col, row, pixel);
                         encryptedPixels2[(row - rowStart) * (colEnd - colStart) + (col - colStart)] = pixel;

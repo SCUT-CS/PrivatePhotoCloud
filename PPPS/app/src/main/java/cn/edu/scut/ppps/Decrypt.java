@@ -272,7 +272,8 @@ public class Decrypt implements Callable {
             int[] encryptedPixels1 = new int[(rowEnd - rowStart) * (colEnd - colStart)];
             int[] encryptedPixels2 = new int[(rowEnd - rowStart) * (colEnd - colStart)];
             int[] originalPixels = new int[(rowEnd - rowStart) * (colEnd - colStart)];
-            double scale = scaledHeight / height;
+            double dScaledHeight = scaledHeight;
+            double scale = dScaledHeight / height;
             img1.getPixels(encryptedPixels1, 0, width, colStart, rowStart, (colEnd - colStart), (rowEnd - rowStart));
             img2.getPixels(encryptedPixels2, 0, width, colStart, rowStart, (colEnd - colStart), (rowEnd - rowStart));
             if (img1.hasAlpha()) {
