@@ -230,8 +230,8 @@ public class DecryptTests {
         // 构造函数参数
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         String cachePath = context.getCacheDir().getAbsolutePath();
-        String imgPath1 = cachePath + File.separator + "Disk1" + File.separator + "jpg_small.jpg.ori.webp";
-        String imgPath2 = cachePath + File.separator + "Disk2" + File.separator + "jpg_small.jpg.ori.webp";
+        String imgPath1 = cachePath + File.separator + "Disk1" + File.separator + "jpg_medium.jpg.ori.webp";
+        String imgPath2 = cachePath + File.separator + "Disk2" + File.separator + "jpg_medium.jpg.ori.webp";
         String imgPath3 = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
                 + File.separator + "WeiXin"
                 + File.separator + "plain";

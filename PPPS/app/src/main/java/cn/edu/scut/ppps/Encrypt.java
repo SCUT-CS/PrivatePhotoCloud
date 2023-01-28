@@ -2,6 +2,7 @@ package cn.edu.scut.ppps;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.ColorSpace;
 import android.os.Handler;
 import android.util.Log;
@@ -72,7 +73,8 @@ public class Encrypt implements Callable {
     private void encrypt() {
         width = img.getWidth();
         height = img.getHeight();
-        double scale = Math.min(200.0 / height, 200.0 / width);
+        double scale = Math.min(400.0 / height, 400.0 / width);
+        scale = 0.5;
         int scaledHeight = (int) (height * scale);
         int scaledWidth = (int) (width * scale);
         // If this is true then bilinear filtering will be used when

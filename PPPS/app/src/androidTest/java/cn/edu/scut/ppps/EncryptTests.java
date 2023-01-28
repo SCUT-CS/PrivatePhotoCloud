@@ -280,7 +280,7 @@ public class EncryptTests {
     public void callTest() throws Exception {
         String imgPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
                 + File.separator + "WeiXin"
-                + File.separator + "jpg_medium.jpg";
+                + File.separator + "c3.png";
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         Encrypt encrypt = new Encrypt(imgPath, context);
         ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(5, 10, 1000, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(16));
