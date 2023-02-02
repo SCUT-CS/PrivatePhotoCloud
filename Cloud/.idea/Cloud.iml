@@ -4,6 +4,7 @@
     <content url="file://$MODULE_DIR$">
       <excludeFolder url="file://$MODULE_DIR$/venv" />
     </content>
+    <content url="file://$MODULE_DIR$/../SOCI-3.0/SOCI 3.0" />
     <orderEntry type="jdk" jdkName="Python 3.10 (Cloud)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
