@@ -1,11 +1,3 @@
-########手写数字数据集##########
-###########保存模型############
-########1层隐含层（全连接层）##########
-# 60000条训练数据和10000条测试数据，28x28像素的灰度图像
-# 隐含层激活函数：ReLU函数
-# 输出层激活函数：softmax函数（实现多分类）
-# 损失函数：稀疏交叉熵损失函数
-# 输入层有784个节点，隐含层有128个神经元，输出层有10个节点
 import tensorflow as tf
 import matplotlib.pyplot as plt
 import numpy as np
@@ -33,8 +25,8 @@ def flatten(array):
     return temp1
 
 
-train_x = flatten(train_x) / 255.0
-test_x = flatten(test_x) / 255.0
+train_x = flatten(train_x)
+test_x = flatten(test_x)
 
 X_train, X_test = tf.cast(train_x, tf.float32), tf.cast(test_x, tf.float32)
 y_train, y_test = tf.cast(train_y, tf.int16), tf.cast(test_y, tf.int16)
@@ -51,8 +43,8 @@ print('\n', model.summary())  # 查看网络结构和参数信息
 model.compile(optimizer='adam',loss='sparse_categorical_crossentropy',metrics=['sparse_categorical_accuracy'])
 # #训练模型
 # #批量训练大小为64，迭代5次，测试集比例0.2（48000条训练集数据，12000条测试集数据）
-# history = model.fit(X_train,y_train,batch_size=64,epochs=10,validation_split=0.2)
-# model.save('mnist_weights.h5')
+history = model.fit(X_train,y_train,batch_size=64,epochs=10,validation_split=0.2)
+model.save('mnist_weights.h5')
 
 # 保存整个模型
 model.load_weights('mnist_weights.h5')
@@ -68,31 +60,31 @@ t = model.get_weights()
 #         correct += 1
 # print('准确率：', correct / test_x.shape[0])
 
-a1 = np.empty(t[0].shape, dtype=Float)
-a2 = np.empty(t[1].shape, dtype=Float)
-a3 = np.empty(t[2].shape, dtype=Float)
-a4 = np.empty(t[3].shape, dtype=Float)
-for i in range(t[0].shape[0]):
-    for j in range(t[0].shape[1]):
-        a1[i][j] = Float.float((t[0][i][j]))
-for i in range(t[1].shape[0]):
-    a2[i] = Float.float(t[1][i])
-for i in range(t[2].shape[0]):
-    for j in range(t[2].shape[1]):
-        a3[i][j] = Float.float(t[2][i][j])
-for i in range(t[3].shape[0]):
-    a4[i] = Float.float(t[3][i])
-layer1 = Dense(128, a1, a2, relu)
-layer2 = OutputLayer(10, a3, a4, soft_max)
-correct = 0
-case = test_x.shape[0]
-case = 10
-for i in range(case):
-    l1 = layer1.forward(test_x[i])
-    l2 = layer2.forward(l1)
-    if np.argmax(l2) == test_y[i]:
-        correct += 1
-print('准确率：', correct / case)
+# a1 = np.empty(t[0].shape, dtype=Float)
+# a2 = np.empty(t[1].shape, dtype=Float)
+# a3 = np.empty(t[2].shape, dtype=Float)
+# a4 = np.empty(t[3].shape, dtype=Float)
+# for i in range(t[0].shape[0]):
+#     for j in range(t[0].shape[1]):
+#         a1[i][j] = Float.float((t[0][i][j]))
+# for i in range(t[1].shape[0]):
+#     a2[i] = Float.float(t[1][i])
+# for i in range(t[2].shape[0]):
+#     for j in range(t[2].shape[1]):
+#         a3[i][j] = Float.float(t[2][i][j])
+# for i in range(t[3].shape[0]):
+#     a4[i] = Float.float(t[3][i])
+# layer1 = Dense(128, a1, a2, relu)
+# layer2 = OutputLayer(10, a3, a4, soft_max)
+# correct = 0
+# case = test_x.shape[0]
+# case = 10
+# for i in range(case):
+#     l1 = layer1.forward(test_x[i])
+#     l2 = layer2.forward(l1)
+#     if np.argmax(l2) == test_y[i]:
+#         correct += 1
+# print('准确率：', correct / case)
 
 # 评估模型
 model.evaluate(X_test, y_test, verbose=2)  # 每次迭代输出一条记录，来评价该模型是否有比较好的泛化能力
