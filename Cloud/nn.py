@@ -12,6 +12,8 @@ import numpy as np
 
 import time
 
+from Dense import Dense, relu, OutputLayer, soft_max
+
 # 初始化
 plt.rcParams['font.sans-serif'] = ['SimHei']
 
@@ -45,7 +47,7 @@ print('\n', model.summary())  # 查看网络结构和参数信息
 
 # #配置模型训练方法
 # #adam算法参数采用keras默认的公开参数，损失函数采用稀疏交叉熵损失函数，准确率采用稀疏分类准确率函数
-# model.compile(optimizer='adam',loss='sparse_categorical_crossentropy',metrics=['sparse_categorical_accuracy'])
+model.compile(optimizer='adam',loss='sparse_categorical_crossentropy',metrics=['sparse_categorical_accuracy'])
 # #训练模型
 # #批量训练大小为64，迭代5次，测试集比例0.2（48000条训练集数据，12000条测试集数据）
 # history = model.fit(X_train,y_train,batch_size=64,epochs=10,validation_split=0.2)
@@ -54,6 +56,22 @@ print('\n', model.summary())  # 查看网络结构和参数信息
 # 保存整个模型
 model.load_weights('mnist_weights.h5')
 t = model.get_weights()
+a1 = np.array(t[0])
+a2 = np.array(t[1])
+a3 = np.array(t[2])
+a4 = np.array(t[3])
+
+layer1 = Dense(128, t[0], t[1], relu)
+layer2 = OutputLayer(10, t[2], t[3], soft_max)
+correct = 0
+for i in range(test_x.shape[0]):
+    l1 = layer1.forward(test_x[i])
+    l2 = layer2.forward(l1)
+    if np.argmax(l2) == test_y[i]:
+        correct += 1
+
+print('准确率：', correct / test_x.shape[0])
+
 # 评估模型
 model.evaluate(X_test, y_test, verbose=2)  # 每次迭代输出一条记录，来评价该模型是否有比较好的泛化能力
 

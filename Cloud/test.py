@@ -1,23 +1,14 @@
-import array
-
 import tensorflow as tf
-import matplotlib.pyplot as plt
 import numpy as np
-from keras.layers import Flatten
-from tensorflow.python import tf_export
-input_data1 = np.arange(20).reshape(2,2,5)
-print(input_data1)
-
-x2 = array([[[ 0,  1,  2,  3,  4],
-        [ 5,  6,  7,  8,  9]],
-
-       [[10, 11, 12, 13, 14],
-        [15, 16, 17, 18, 19]]])
-
-x2_f = tf.keras.layers.Flatten()(x2)
-print(x2_f)
-'''
-<tf.Tensor: shape=(2, 10), dtype=int32, numpy=
-array([[ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9],
-       [10, 11, 12, 13, 14, 15, 16, 17, 18, 19]])>
-'''
+x = tf.Variable(tf.constant([[1, 2, 3], [4, 5, 6]], dtype=tf.float32))
+weight = np.array([1, 1, 1, 0, 2, 1.]).reshape(3, 2)
+fc = tf.keras.layers.Dense(x, units=2, activation=tf.nn.relu,
+                     kernel_initializer=tf.constant_initializer(value=weight),
+                     kernel_regularizer=tf.keras.regularizers.l2(0.1))
+with tf.Session() as sess:
+    sess.run(tf.global_variables_initializer())
+    f = sess.run(fc)
+    print(f)
+# #结果
+# [[ 9.  4.]
+#  [21. 10.]]
