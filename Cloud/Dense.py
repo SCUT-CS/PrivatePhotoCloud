@@ -9,7 +9,7 @@ class Dense:
             self.neurons.append(Neuron(weights[:, i], bias[i], func))
 
     def forward(self, x):
-        res = np.empty(self.n)
+        res = np.empty(self.n, self.neurons[0].w.dtype)
         for i in range(self.n):
             res[i] = self.neurons[i].forward(x)
         return res
@@ -45,4 +45,10 @@ def same(x):
 
 
 def soft_max(x):
-    return np.exp(x) / np.sum(np.exp(x))
+    if not isinstance(x[0], float):
+        t = np.empty(x.shape)
+        for i in range(x.shape[0]):
+            t[i] = np.exp(x[i].recover())
+    else:
+        t = x
+    return np.exp(t) / np.sum(np.exp(t))

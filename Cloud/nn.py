@@ -13,6 +13,7 @@ import numpy as np
 import time
 
 from Dense import Dense, relu, OutputLayer, soft_max
+from ss.encoded_float import Float
 
 # 初始化
 plt.rcParams['font.sans-serif'] = ['SimHei']
@@ -56,69 +57,42 @@ model.compile(optimizer='adam',loss='sparse_categorical_crossentropy',metrics=['
 # 保存整个模型
 model.load_weights('mnist_weights.h5')
 t = model.get_weights()
-a1 = np.array(t[0])
-a2 = np.array(t[1])
-a3 = np.array(t[2])
-a4 = np.array(t[3])
 
-layer1 = Dense(128, t[0], t[1], relu)
-layer2 = OutputLayer(10, t[2], t[3], soft_max)
+# layer1 = Dense(128, t[0], t[1], relu)
+# layer2 = OutputLayer(10, t[2], t[3], soft_max)
+# correct = 0
+# for i in range(test_x.shape[0]):
+#     l1 = layer1.forward(test_x[i])
+#     l2 = layer2.forward(l1)
+#     if np.argmax(l2) == test_y[i]:
+#         correct += 1
+# print('准确率：', correct / test_x.shape[0])
+
+a1 = np.empty(t[0].shape, dtype=Float)
+a2 = np.empty(t[1].shape, dtype=Float)
+a3 = np.empty(t[2].shape, dtype=Float)
+a4 = np.empty(t[3].shape, dtype=Float)
+for i in range(t[0].shape[0]):
+    for j in range(t[0].shape[1]):
+        a1[i][j] = Float.float((t[0][i][j]))
+for i in range(t[1].shape[0]):
+    a2[i] = Float.float(t[1][i])
+for i in range(t[2].shape[0]):
+    for j in range(t[2].shape[1]):
+        a3[i][j] = Float.float(t[2][i][j])
+for i in range(t[3].shape[0]):
+    a4[i] = Float.float(t[3][i])
+layer1 = Dense(128, a1, a2, relu)
+layer2 = OutputLayer(10, a3, a4, soft_max)
 correct = 0
-for i in range(test_x.shape[0]):
+case = test_x.shape[0]
+case = 10
+for i in range(case):
     l1 = layer1.forward(test_x[i])
     l2 = layer2.forward(l1)
     if np.argmax(l2) == test_y[i]:
         correct += 1
-
-print('准确率：', correct / test_x.shape[0])
+print('准确率：', correct / case)
 
 # 评估模型
 model.evaluate(X_test, y_test, verbose=2)  # 每次迭代输出一条记录，来评价该模型是否有比较好的泛化能力
-
-# #结果可视化
-# print(history.history)
-# loss = history.history['loss']          #训练集损失
-# val_loss = history.history['val_loss']  #测试集损失
-# acc = history.history['sparse_categorical_accuracy']            #训练集准确率
-# val_acc = history.history['val_sparse_categorical_accuracy']    #测试集准确率
-#
-# plt.figure(figsize=(10,3))
-#
-# plt.subplot(121)
-# plt.plot(loss,color='b',label='train')
-# plt.plot(val_loss,color='r',label='test')
-# plt.ylabel('loss')
-# plt.legend()
-#
-# plt.subplot(122)
-# plt.plot(acc,color='b',label='train')
-# plt.plot(val_acc,color='r',label='test')
-# plt.ylabel('Accuracy')
-# plt.legend()
-#
-# #暂停5秒关闭画布，否则画布一直打开的同时，会持续占用GPU内存
-# #根据需要自行选择
-# #plt.ion()       #打开交互式操作模式
-# #plt.show()
-# #plt.pause(5)
-# #plt.close()
-#
-# #使用模型
-# plt.figure()
-# for i in range(10):
-#     num = np.random.randint(1,10000)
-#
-#     plt.subplot(2,5,i+1)
-#     plt.axis('off')
-#     plt.imshow(test_x[num],cmap='gray')
-#     demo = tf.reshape(X_test[num],(1,28,28))
-#     y_pred = np.argmax(model.predict(demo))
-#     plt.title('标签值：'+str(test_y[num])+'\n预测值：'+str(y_pred))
-# #y_pred = np.argmax(model.predict(X_test[0:5]),axis=1)
-# #print('X_test[0:5]: %s'%(X_test[0:5].shape))
-# #print('y_pred: %s'%(y_pred))
-#
-# #plt.ion()       #打开交互式操作模式
-# plt.show()
-# #plt.pause(5)
-# #plt.close()
