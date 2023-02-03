@@ -48,7 +48,7 @@ def soft_max(x):
     if not isinstance(x[0], float):
         t = np.empty(x.shape)
         for i in range(x.shape[0]):
-            t[i] = np.exp(x[i].recover())
+            t[i] = x[i].recover()
     else:
         t = x
     return np.exp(t) / np.sum(np.exp(t))

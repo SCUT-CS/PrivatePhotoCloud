@@ -86,7 +86,6 @@ layer1 = Dense(128, a1, a2, relu)
 layer2 = OutputLayer(10, a3, a4, soft_max)
 correct = 0
 case = test_x.shape[0]
-case = 10
 for i in range(case):
     l1 = layer1.forward(test_x[i])
     l2 = layer2.forward(l1)
