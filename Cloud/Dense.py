@@ -45,10 +45,11 @@ def same(x):
 
 
 def soft_max(x):
-    if not isinstance(x[0], float):
-        t = np.empty(x.shape)
+    t = np.empty(x.shape, dtype=np.float64)
+    if not isinstance(x[0], np.float32):
         for i in range(x.shape[0]):
-            t[i] = np.exp(x[i].recover())
+            t[i] = x[i].recover()
     else:
-        t = x
+        for i in range(x.shape[0]):
+            t[i] = x[i]
     return np.exp(t) / np.sum(np.exp(t))
