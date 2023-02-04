@@ -1,8 +1,7 @@
+import multiprocessing
 import tensorflow as tf
 import matplotlib.pyplot as plt
 import numpy as np
-
-import time
 
 from Dense import Dense, relu, OutputLayer, soft_max
 from ss.encoded_float import Float

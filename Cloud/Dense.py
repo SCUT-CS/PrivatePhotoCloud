@@ -36,7 +36,10 @@ class OutputLayer:
 
 
 def relu(x):
-    t = FloatSecret.share_float_secret(0)
+    if isinstance(x, FloatSecret):
+        t = FloatSecret.share_float_secret(0)
+    else:
+        t = 0
     if x > t:
         return x
     return t
