@@ -45,7 +45,7 @@ def same(x):
 
 
 def soft_max(x):
-    if not isinstance(x[0], float):
+    if not isinstance(x[0], np.float32):
         t = np.empty(x.shape)
         for i in range(x.shape[0]):
             t[i] = x[i].recover()
