@@ -1,3 +1,4 @@
+import gc
 import multiprocessing
 import tensorflow as tf
 import matplotlib.pyplot as plt
@@ -104,24 +105,40 @@ if __name__ == '__main__':
             a1[i][j] = Float.float((t[0][i][j]))
     for i in range(t[1].shape[0]):
         a2[i] = Float.float(t[1][i])
+    layer1 = Dense(128, a1, a2, relu)
+    del a1
+    del a2
+    a1 = None
+    a2 = None
+    gc.collect()
+    print("layer1")
     for i in range(t[2].shape[0]):
         for j in range(t[2].shape[1]):
             a3[i][j] = Float.float(t[2][i][j])
     for i in range(t[3].shape[0]):
         a4[i] = Float.float(t[3][i])
+    layer2 = OutputLayer(10, a3, a4, soft_max)
+    del a3
+    del a4
+    a3 = None
+    a4 = None
+    gc.collect()
+    print("layer2")
     for i in range(test_x.shape[0]):
         for j in range(test_x.shape[1]):
             a5[i][j] = FloatSecret.share_float_secret(test_x[i][j])
-    layer1 = Dense(128, a1, a2, relu)
-    layer2 = OutputLayer(10, a3, a4, soft_max)
+    print("input layer")
     case = test_x.shape[0]
     case = 100
     pool = multiprocessing.Pool(12)
     queue = multiprocessing.Manager().Queue()
     for i in range(case):
-        pool.apply_async(worker, a5[i], test_y[i], layer1, layer2, queue)
+        pool.apply_async(worker, (a5[i], test_y[i], layer1, layer2, queue))
     pool.close()
     pool.join()
+    del a5
+    a5 = None
+    gc.collect()
     correct = 0
     while not queue.empty():
         correct += queue.get()
