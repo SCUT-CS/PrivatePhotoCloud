@@ -1,4 +1,5 @@
 import numpy as np
+from ss.float_secret import FloatSecret
 
 
 class Dense:
@@ -35,9 +36,10 @@ class OutputLayer:
 
 
 def relu(x):
-    if x > 0:
+    t = FloatSecret.share_float_secret(0)
+    if x > t:
         return x
-    return 0
+    return t
 
 
 def same(x):
