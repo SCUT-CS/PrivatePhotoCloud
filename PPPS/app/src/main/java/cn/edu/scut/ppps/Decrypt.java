@@ -306,9 +306,39 @@ public class Decrypt implements Callable {
                         int rowIndex = (int) (row * scale);
                         int colIndex = (int) (col * scale);
                         int pixel3 = encryptedPixels3[rowIndex * scaledWidth + colIndex];
-                        int pixel = Color.rgb((((pixel1 >> 16) & 0xFF) + ((pixel2 >> 16) & 0xFF) + ((pixel3 >> 16) & 0xFF)) & 0xff,
-                                (((pixel1 >> 8) & 0xFF) + ((pixel2 >> 8) & 0xFF) + ((pixel3 >> 8) & 0xFF)) & 0xff,
-                                ((pixel1 & 0xFF) + (pixel2 & 0xFF) + (pixel3 & 0xFF)) & 0xff);
+                        int tred = ((pixel3 >> 16) & 0xFF);
+                        int tgreen = ((pixel3 >> 8) & 0xFF);
+                        int tblue = (pixel3 & 0xFF);
+//                        // 提升亮度
+//                        tred+=40;
+//                        if (tred > 255) {
+//                            tred = 255;
+//                        }
+//                        tgreen+=40;
+//                        if (tgreen > 255) {
+//                            tgreen = 255;
+//                        }
+//                        tblue+=40;
+//                        if (tblue > 255) {
+//                            tblue = 255;
+//                        }
+                        int red = (((pixel1 >> 16) & 0xFF) + ((pixel2 >> 16) & 0xFF) + tred) & 0xff;
+                        int green = (((pixel1 >> 8) & 0xFF) + ((pixel2 >> 8) & 0xFF) + tgreen) & 0xff;
+                        int blue = ((pixel1 & 0xFF) + (pixel2 & 0xFF) + tblue) & 0xff;
+//                        //亮度处理溢出
+//                        if (Math.abs(red - tred) > 100) {
+//                            red = tred;
+//                            red = 255;
+//                        }
+//                        if (Math.abs(green - tgreen) > 100) {
+//                            green = tgreen;
+//                            green = 255;
+//                        }
+//                        if (Math.abs(blue - tblue) > 100) {
+//                            blue = tblue;
+//                            blue = 255;
+//                        }
+                        int pixel = Color.rgb(red,green,blue);
                         // img.setPixel(col, row, pixel);
                         originalPixels[(row - rowStart) * (colEnd - colStart) + (col - colStart)] = pixel;
                     }
