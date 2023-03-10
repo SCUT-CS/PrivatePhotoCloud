@@ -345,6 +345,11 @@ public class Decrypt implements Callable {
 //                            tblue = 0;
 //                        }
 
+//                        // 无缩略图解密
+//                        tred = 0;
+//                        tgreen = 0;
+//                        tblue = 0;
+
                         int red = (((pixel1 >> 16) & 0xFF) + ((pixel2 >> 16) & 0xFF) + tred) & 0xff;
                         int green = (((pixel1 >> 8) & 0xFF) + ((pixel2 >> 8) & 0xFF) + tgreen) & 0xff;
                         int blue = ((pixel1 & 0xFF) + (pixel2 & 0xFF) + tblue) & 0xff;
