@@ -322,22 +322,54 @@ public class Decrypt implements Callable {
 //                        if (tblue > 255) {
 //                            tblue = 255;
 //                        }
+
+//                        // 提升对比度
+//                        tred = (int) ((tred - 127.5) * 2 + 127.5);
+//                        if (tred > 255) {
+//                            tred = 255;
+//                        } else if (tred < 0) {
+//                            tred = 0;
+//                        }
+//                        tgreen = (int) ((tgreen - 127.5) * 2 + 127.5);
+//                        if (tgreen > 255) {
+//                            tgreen = 255;
+//                        } else if (tgreen < 0) {
+//                            tgreen = 0;
+//                        }
+//                        tblue = (int) ((tblue - 127.5) * 2 + 127.5);
+//                        if (tblue > 255) {
+//                            tblue = 255;
+//                        } else if (tblue < 0) {
+//                            tblue = 0;
+//                        }
+
                         int red = (((pixel1 >> 16) & 0xFF) + ((pixel2 >> 16) & 0xFF) + tred) & 0xff;
                         int green = (((pixel1 >> 8) & 0xFF) + ((pixel2 >> 8) & 0xFF) + tgreen) & 0xff;
                         int blue = ((pixel1 & 0xFF) + (pixel2 & 0xFF) + tblue) & 0xff;
-//                        //亮度处理溢出
+
+//                        // 上下溢处理
 //                        if (Math.abs(red - tred) > 100) {
-//                            red = tred;
-//                            red = 255;
+//                            if(tred<127) {
+//                                red = 0;
+//                            } else {
+//                                red = 255;
+//                            }
 //                        }
 //                        if (Math.abs(green - tgreen) > 100) {
-//                            green = tgreen;
-//                            green = 255;
+//                            if(tgreen<127) {
+//                                green = 0;
+//                            } else {
+//                                green = 255;
+//                            }
 //                        }
 //                        if (Math.abs(blue - tblue) > 100) {
-//                            blue = tblue;
-//                            blue = 255;
+//                            if(tblue<127) {
+//                                blue = 0;
+//                            } else {
+//                                blue = 255;
+//                            }
 //                        }
+
                         int pixel = Color.rgb(red,green,blue);
                         // img.setPixel(col, row, pixel);
                         originalPixels[(row - rowStart) * (colEnd - colStart) + (col - colStart)] = pixel;
