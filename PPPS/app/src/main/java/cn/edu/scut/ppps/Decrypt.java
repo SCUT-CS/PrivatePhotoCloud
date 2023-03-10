@@ -119,6 +119,8 @@ public class Decrypt implements Callable {
             String filePath = context.getDataDir().getAbsolutePath() + File.separator + "overflow" +
                     File.separator + originalImgName + ".webp";
             Bitmap img3 = Utils.openImg(filePath);
+//            // 高斯模糊
+//            img3 = FastBlur.doBlur(img3, 10, true);
             scaledHeight = img3.getHeight();
             scaledWidth = img3.getWidth();
             encryptedPixels3 = new int[scaledWidth * scaledHeight];
@@ -369,6 +371,22 @@ public class Decrypt implements Callable {
 //                                blue = 255;
 //                            }
 //                        }
+
+//                        // 上下溢处理
+//                        if (Math.abs(red - tred) > 100) {
+//                            red = tred;
+//                        }
+//                        if (Math.abs(green - tgreen) > 100) {
+//                            green = tgreen;
+//                        }
+//                        if (Math.abs(blue - tblue) > 100) {
+//                            blue = tblue;
+//                        }
+
+//                        //直接输出缩略图
+//                        red = tred;
+//                        green = tgreen;
+//                        blue = tblue;
 
                         int pixel = Color.rgb(red,green,blue);
                         // img.setPixel(col, row, pixel);
