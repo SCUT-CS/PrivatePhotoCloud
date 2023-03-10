@@ -278,6 +278,14 @@ public class Encrypt implements Callable {
                         int r3 = (pixel3 >> 16) & 0xFF;
                         int g3 = (pixel3 >> 8) & 0xFF;
                         int b3 = pixel3 & 0xFF;
+
+//                        // 在Key上添加图片/水印，未授权解密显示水印/文字 水印文字填充随机值
+//                        if (row > 50 && row < 100 && col > 50 && col < 100) {
+//                            r3 = rnd.nextInt(256);
+//                            g3 = rnd.nextInt(256);
+//                            b3 = rnd.nextInt(256);
+//                        }
+
                         int r2 = (rgb[0] - r1 - r3) & 0xff;
                         int g2 = (rgb[1] - g1 - g3) & 0xff;
                         int b2 = (rgb[2] - b1 - b3) & 0xff;
