@@ -1,4 +1,4 @@
-package cn.edu.scut.ppps;
+package cn.edu.scut.ppps.old;
 
 import android.graphics.Bitmap;
 import android.os.Environment;
@@ -13,6 +13,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.File;
+
+import cn.edu.scut.ppps.Utils;
 
 /**
  * Android Time Tests

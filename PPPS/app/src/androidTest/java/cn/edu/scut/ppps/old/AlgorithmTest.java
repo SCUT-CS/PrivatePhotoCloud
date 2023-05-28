@@ -1,4 +1,4 @@
-package cn.edu.scut.ppps;
+package cn.edu.scut.ppps.old;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -22,6 +22,9 @@ import java.util.concurrent.Future;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import cn.edu.scut.ppps.Decrypt;
+import cn.edu.scut.ppps.Encrypt;
+import cn.edu.scut.ppps.Utils;
 import cn.edu.scut.ppps.cloud.AliOSS;
 import cn.edu.scut.ppps.cloud.Tokens;
 

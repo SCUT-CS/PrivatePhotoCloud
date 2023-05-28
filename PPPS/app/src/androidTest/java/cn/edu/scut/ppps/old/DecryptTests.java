@@ -1,4 +1,4 @@
-package cn.edu.scut.ppps;
+package cn.edu.scut.ppps.old;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -24,6 +24,9 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.Future;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+
+import cn.edu.scut.ppps.Decrypt;
+import cn.edu.scut.ppps.Utils;
 
 /**
  * Decrypt Unit Tests
