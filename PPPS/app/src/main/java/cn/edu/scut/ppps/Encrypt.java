@@ -265,7 +265,7 @@ public class Encrypt implements Callable {
                         rgb[0] = (pixel >> 16) & 0xFF;
                         rgb[1] = (pixel >> 8) & 0xFF;
                         rgb[2] = pixel & 0xFF;
-                        int r1 = rnd.nextInt(256);
+                        int r1 = rnd.nextInt(256); // TODO 预生成
                         int g1 = rnd.nextInt(256);
                         int b1 = rnd.nextInt(256);
                         pixel = b1 | g1 << 8 | r1 << 16 | 0xff000000;
