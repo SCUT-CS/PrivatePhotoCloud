@@ -251,17 +251,11 @@ public class Utils {
         return bmp;
     }
 
-    //        switch (flag) {
-//            case FLAG_HUE: // 需要改变色相
-//                mHueMatrix.reset();
-//                mHueMatrix.setScale(mHueValue, mHueValue, mHueValue, 1); // 红、绿、蓝三分量按相同的比例,最后一个参数1表示透明度不做变化，此函数详细说明参考
-//                // // android
-//                // doc
-//                break;
 //            case FLAG_SATURATION: // 需要改变饱和度
 //                // saturation 饱和度值，最小可设为0，此时对应的是灰度图(也就是俗话的“黑白图”)，
 //                // 为1表示饱和度不变，设置大于1，就显示过饱和
 //                mSaturationMatrix.reset();
 //                mSaturationMatrix.setSaturation(mSaturationValue);
 //                break;
+    //裁剪 旋转
 }
