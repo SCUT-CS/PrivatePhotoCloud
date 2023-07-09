@@ -108,7 +108,7 @@ public class Pipeline {
                         for (int i = 0; i < cloud2Path.size(); i++) {
                             String path1 = savePath1 + Utils.getFileName(cloud2Path.get(i));
                             String path2 = savePath2 + Utils.getFileName(cloud2Path.get(i));
-                            cryptThreadPool.submit(new Decrypt(path1, path2, context, false, decryptAlgoHandler));
+                            cryptThreadPool.submit(new Decrypt(path1, path2, context, decryptAlgoHandler));
                         }
                     } catch (Exception e) {
                         mainHandler.sendEmptyMessage(Utils.ERROR);
@@ -163,7 +163,7 @@ public class Pipeline {
                         for (int i = 0; i < cloud1Path.size(); i++) {
                             String path1 = savePath1 + cloud1Path.get(i);
                             String path2 = savePath2 + cloud1Path.get(i);
-                            thumbnailThreadPool.submit(new Decrypt(path1, path2, context, true, thumbnailAlgoHandler));
+                            thumbnailThreadPool.submit(new Decrypt(path1, path2, context, thumbnailAlgoHandler));
                         }
                         path = cloud1Path.get(0);
                     } catch (Exception e) {
