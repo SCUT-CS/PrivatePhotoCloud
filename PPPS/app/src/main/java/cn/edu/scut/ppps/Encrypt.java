@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.ColorSpace;
+import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
 
@@ -121,7 +122,9 @@ public class Encrypt implements Callable {
         String cachePath = context.getCacheDir().getAbsolutePath();
         String savePath1 = cachePath + File.separator + "Disk1" + File.separator + fileName + ".ori";
         String savePath2 = cachePath + File.separator + "Disk2" + File.separator + fileName +  ".ori";
-        String savePath3 = context.getDataDir().getAbsolutePath() + File.separator + "thumbnail" + File.separator + fileName;
+        String savePath3 = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
+                + File.separator + "PPPS-Thumbnail"
+                + File.separator + fileName;
         Utils.saveImg(img1, savePath1);
         Utils.saveImg(img2, savePath2);
         Utils.saveImg(img3, savePath3);

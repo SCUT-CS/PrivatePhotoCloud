@@ -79,8 +79,9 @@ public class Decrypt implements Callable {
                 img1.hasAlpha(),
                 ColorSpace.get(ColorSpace.Named.SRGB));
         imgName = Utils.getFileName(imgFilePath1).substring(0, imgName.lastIndexOf(".ori"));
-        String filePath = context.getDataDir().getAbsolutePath() + File.separator + "overflow" +
-                File.separator + imgName + ".webp";
+        String filePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
+                + File.separator + "PPPS-Thumbnail"
+                + File.separator + imgName + ".webp";
         Bitmap img3 = Utils.openImg(filePath);
 //            // 高斯模糊
 //            img3 = FastBlur.doBlur(img3, 10, true);
@@ -122,7 +123,7 @@ public class Decrypt implements Callable {
      */
     private void saveFile() throws Exception {
         String imgPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
-                + File.separator + "PPPS"
+                + File.separator + "PPPS-Download"
                 + File.separator + imgName;
         Utils.saveJpgImg(img, imgPath);
     }
