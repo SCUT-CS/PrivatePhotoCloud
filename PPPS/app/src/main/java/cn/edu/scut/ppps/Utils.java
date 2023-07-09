@@ -109,19 +109,6 @@ public class Utils {
                 dir.mkdirs();
             }
         }
-        /*if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && format.equals("heif")) {
-            HeifWriter.Builder heifBuilder = new HeifWriter.Builder(imgPath + ".HEIC", img.getWidth(),
-                    img.getHeight(),
-                    HeifWriter.INPUT_MODE_BITMAP);
-            HeifWriter heifWriter = heifBuilder.build();
-            heifWriter.start();
-            heifWriter.addBitmap(img);
-            if (exifData != null) {
-                heifWriter.addExifData(0, exifData, 0, exifData.length);
-            }
-            heifWriter.stop(0);
-            heifWriter.close();
-        } else */
         if (format.equals("jpeg")) {
             file = new File(imgPath + ".jpg");
             BufferedOutputStream outStream = new BufferedOutputStream(new FileOutputStream(file));

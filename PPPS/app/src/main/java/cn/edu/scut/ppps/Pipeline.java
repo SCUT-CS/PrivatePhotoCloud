@@ -19,6 +19,8 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import cn.edu.scut.ppps.cloud.CloudService;
+import cn.edu.scut.ppps.crypto.Decrypt;
+import cn.edu.scut.ppps.crypto.Encrypt;
 
 /**
  * Pipeline for processing.

@@ -22,8 +22,8 @@ import java.util.concurrent.Future;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import cn.edu.scut.ppps.Decrypt;
-import cn.edu.scut.ppps.Encrypt;
+import cn.edu.scut.ppps.crypto.Decrypt;
+import cn.edu.scut.ppps.crypto.Encrypt;
 import cn.edu.scut.ppps.Utils;
 import cn.edu.scut.ppps.cloud.AliOSS;
 import cn.edu.scut.ppps.cloud.Tokens;

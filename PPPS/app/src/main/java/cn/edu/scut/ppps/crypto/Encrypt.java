@@ -1,4 +1,4 @@
-package cn.edu.scut.ppps;
+package cn.edu.scut.ppps.crypto;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -12,6 +12,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 import java.util.concurrent.Callable;
+
+import cn.edu.scut.ppps.Utils;
 
 /**
  * Encrypt a image.

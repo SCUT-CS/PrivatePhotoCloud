@@ -26,7 +26,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import cn.edu.scut.ppps.Encrypt;
+import cn.edu.scut.ppps.crypto.Encrypt;
 import cn.edu.scut.ppps.Utils;
 
 /**
@@ -62,7 +62,7 @@ public class EncryptTests {
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         // 通过反射创造Encrypt类
         Class encryptClass = null;
-        encryptClass = Class.forName("cn.edu.scut.ppps.Encrypt");
+        encryptClass = Class.forName("cn.edu.scut.ppps.crypto.Encrypt");
         Constructor constructor = null;
         constructor = encryptClass.getConstructor(String.class, Context.class);
         encrypt = (Encrypt) constructor.newInstance(imgPath, appContext);

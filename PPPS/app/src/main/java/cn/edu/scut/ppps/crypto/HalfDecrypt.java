@@ -1,4 +1,4 @@
-package cn.edu.scut.ppps;
+package cn.edu.scut.ppps.crypto;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -10,6 +10,8 @@ import android.util.Log;
 
 import java.io.File;
 import java.util.concurrent.Callable;
+
+import cn.edu.scut.ppps.Utils;
 
 /**
  * Decrypt a image.

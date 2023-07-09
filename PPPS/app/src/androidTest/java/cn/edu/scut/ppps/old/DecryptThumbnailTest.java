@@ -22,7 +22,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import cn.edu.scut.ppps.Decrypt;
+import cn.edu.scut.ppps.crypto.Decrypt;
 import cn.edu.scut.ppps.Utils;
 
 /**
@@ -57,7 +57,7 @@ public class DecryptThumbnailTest {
         String imgPath2 = context.getCacheDir().getAbsolutePath() + File.separator + "Disk2" + File.separator + fileName + ".ori.webp";
         // 通过反射创造Encrypt类
         Class decryptClass = null;
-        decryptClass = Class.forName("cn.edu.scut.ppps.Decrypt");
+        decryptClass = Class.forName("cn.edu.scut.ppps.crypto.Decrypt");
         Constructor constructor = null;
         constructor = decryptClass.getConstructor(String.class, String.class, Context.class, boolean.class);
         decrypt = (Decrypt) constructor.newInstance(imgPath1, imgPath2, context, true);
