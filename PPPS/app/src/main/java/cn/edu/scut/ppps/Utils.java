@@ -3,8 +3,12 @@ package cn.edu.scut.ppps;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
 import android.graphics.ImageDecoder;
+import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
@@ -189,7 +193,7 @@ public class Utils {
      * @param fileUrl The uri of the file.
      * @param context The context of the activity.
      * @author Cui Yuxin
-     * @source http://t.zoukankan.com/androidxiaoyang-p-4968663.html
+     * @source a href="<a href="http://t.zoukankan.com/androidxiaoyang-p-4968663.html">Source Blog</a>"
      */
     public static String uri2Path(Uri fileUrl, Context context) {
         String fileName = null;
@@ -212,4 +216,65 @@ public class Utils {
         }
         return fileName;
     }
+
+    /**
+     * 调整亮度
+     * @param bm 原图
+     * @param val 亮度值 0-255 默认127
+     * @author Cui Yuxin
+     * @source <a href="https://www.cnblogs.com/java315/archive/2011/11/28/2397404.html">Source Blog</a>
+     */
+    public static Bitmap modifyBrightness(Bitmap bm, int val) {
+        Bitmap bmp = Bitmap.createBitmap(bm.getWidth(), bm.getHeight(),
+                Bitmap.Config.ARGB_8888);
+        int brightness = val - 127;
+        ColorMatrix cMatrix = new ColorMatrix();
+        cMatrix.set(new float[] { 1, 0, 0, 0, brightness, 0, 1,
+                0, 0, brightness,// 改变亮度
+                0, 0, 1, 0, brightness, 0, 0, 0, 1, 0 });
+        Paint paint = new Paint();
+        paint.setColorFilter(new ColorMatrixColorFilter(cMatrix));
+
+        Canvas canvas = new Canvas(bmp);
+        // 在Canvas上绘制一个已经存在的Bitmap。这样，dstBitmap就和srcBitmap一摸一样了
+        canvas.drawBitmap(bm, 0, 0, paint);
+        return bmp;
+    }
+
+    /**
+     * 调整对比度
+     * @param bm 原图
+     * @param val 对比度值 0-127 默认63
+     * @author Cui Yuxin
+     * @source <a href="https://www.cnblogs.com/java315/archive/2011/11/28/2397404.html">Source Blog</a>
+     */
+    public static Bitmap modifyContrast(Bitmap bm, int val) {
+        Bitmap bmp = Bitmap.createBitmap(bm.getWidth(), bm.getHeight(),
+                Bitmap.Config.ARGB_8888);
+        float contrast = (float) ((val + 64) / 128.0);
+        ColorMatrix cMatrix = new ColorMatrix();
+        cMatrix.set(new float[] { contrast, 0, 0, 0, 0, 0,
+                contrast, 0, 0, 0,// 改变对比度
+                0, 0, contrast, 0, 0, 0, 0, 0, 1, 0 });
+        Paint paint = new Paint();
+        paint.setColorFilter(new ColorMatrixColorFilter(cMatrix));
+        Canvas canvas = new Canvas(bmp);
+        // 在Canvas上绘制一个已经存在的Bitmap。这样，dstBitmap就和srcBitmap一摸一样了
+        canvas.drawBitmap(bm, 0, 0, paint);
+        return bmp;
+    }
+
+    //        switch (flag) {
+//            case FLAG_HUE: // 需要改变色相
+//                mHueMatrix.reset();
+//                mHueMatrix.setScale(mHueValue, mHueValue, mHueValue, 1); // 红、绿、蓝三分量按相同的比例,最后一个参数1表示透明度不做变化，此函数详细说明参考
+//                // // android
+//                // doc
+//                break;
+//            case FLAG_SATURATION: // 需要改变饱和度
+//                // saturation 饱和度值，最小可设为0，此时对应的是灰度图(也就是俗话的“黑白图”)，
+//                // 为1表示饱和度不变，设置大于1，就显示过饱和
+//                mSaturationMatrix.reset();
+//                mSaturationMatrix.setSaturation(mSaturationValue);
+//                break;
 }

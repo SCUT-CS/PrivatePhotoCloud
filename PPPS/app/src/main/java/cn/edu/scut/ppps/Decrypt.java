@@ -243,39 +243,6 @@ public class Decrypt implements Callable {
                         int tred = ((pixel3 >> 16) & 0xFF);
                         int tgreen = ((pixel3 >> 8) & 0xFF);
                         int tblue = (pixel3 & 0xFF);
-//                        // 提升亮度
-//                        tred+=40;
-//                        if (tred > 255) {
-//                            tred = 255;
-//                        }
-//                        tgreen+=40;
-//                        if (tgreen > 255) {
-//                            tgreen = 255;
-//                        }
-//                        tblue+=40;
-//                        if (tblue > 255) {
-//                            tblue = 255;
-//                        }
-
-//                        // 提升对比度
-//                        tred = (int) ((tred - 127.5) * 2 + 127.5);
-//                        if (tred > 255) {
-//                            tred = 255;
-//                        } else if (tred < 0) {
-//                            tred = 0;
-//                        }
-//                        tgreen = (int) ((tgreen - 127.5) * 2 + 127.5);
-//                        if (tgreen > 255) {
-//                            tgreen = 255;
-//                        } else if (tgreen < 0) {
-//                            tgreen = 0;
-//                        }
-//                        tblue = (int) ((tblue - 127.5) * 2 + 127.5);
-//                        if (tblue > 255) {
-//                            tblue = 255;
-//                        } else if (tblue < 0) {
-//                            tblue = 0;
-//                        }
 
 //                        // 无缩略图解密
 //                        tred = 0;
@@ -288,10 +255,6 @@ public class Decrypt implements Callable {
                         red = fixOverflow1(red, tred);
                         green = fixOverflow1(green, tgreen);
                         blue = fixOverflow1(blue, tblue);
-//                        //直接输出缩略图
-//                        red = tred;
-//                        green = tgreen;
-//                        blue = tblue;
                         int pixel = Color.rgb(red,green,blue);
                         originalPixels[index] = pixel;
                     }
