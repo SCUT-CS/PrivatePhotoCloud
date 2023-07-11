@@ -288,12 +288,12 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
             }
             refresh();
         } else if (item.getItemId() == R.id.action_update) {
-            if (pipeline == null) {
-                updateCloud();
-            } else {
-                pipeline.thumbnailPipeline();
-            }
-            refresh();
+//            if (pipeline == null) {
+//                updateCloud();
+//            } else {
+//                pipeline.thumbnailPipeline();
+//            }
+//            refresh();
         }
         return super.onOptionsItemSelected(item);
     }

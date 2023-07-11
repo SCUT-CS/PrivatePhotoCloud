@@ -148,77 +148,7 @@ public class Pipeline {
             }
         }
     };
-    @SuppressLint("HandlerLeak")
-    private Handler thumbnailAlgoHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            if (msg.what == Utils.CLOUD_SUCCESS) {
-                cloudTotalCount--;
-                if (cloudTotalCount <= 0) {
-                    mainHandler.sendEmptyMessage(Utils.FINISH_CLOUD);
-                    mainHandler.sendEmptyMessage(Utils.START_ALGORITHM);
-                    String cachePath = context.getCacheDir().getAbsolutePath();
-                    String savePath1 = cachePath + File.separator + "Disk1Thumbnail" + File.separator;
-                    String savePath2 = cachePath + File.separator + "Disk2Thumbnail" + File.separator;
-                    thumbnailAlgoHandlerCount = cloud1Path.size();
-                    try {
-                        for (int i = 0; i < cloud1Path.size(); i++) {
-                            String path1 = savePath1 + cloud1Path.get(i);
-                            String path2 = savePath2 + cloud1Path.get(i);
-                            thumbnailThreadPool.submit(new Decrypt(path1, path2, context, thumbnailAlgoHandler));
-                        }
-                        path = cloud1Path.get(0);
-                    } catch (Exception e) {
-                        mainHandler.sendEmptyMessage(Utils.ERROR);
-                    }
-                }
-            } else if (msg.what == Utils.THUMBNAIL_SUCCESS) {
 
-                /*// TODO 只展示第一个，后续不展示，路径怎么处理
-                // 展示三张缩略图
-                String imgPath1 = null;
-                String imgPath2 = null;
-                if(thumbnailAlgoHandlerCount == cloud1Path.size())
-                {
-                    String cachePath = context.getCacheDir().getAbsolutePath();
-                    String savePath1 = cachePath + File.separator + "Disk1Thumbnail" + File.separator;
-                    String savePath2 = cachePath + File.separator + "Disk2Thumbnail" + File.separator;
-                    try {
-                        for (int i = 0; i < cloud1Path.size(); i++) {
-                            imgPath1 = savePath1 + cloud1Path.get(i);
-                            imgPath2= savePath2 + cloud1Path.get(i);
-                        }
-                    } catch (Exception e) {
-                        mainHandler.sendEmptyMessage(Utils.ERROR);
-                    }
-                    Intent intent = new Intent();
-                    intent.putExtra("imgPath1", imgPath1);
-                    intent.putExtra("imgPath2", imgPath2);
-                    intent.setClass(context, SingleThumbnailActivity.class);
-                    context.startActivity(intent);
-                }*/
-                thumbnailAlgoHandlerCount--;
-                if (thumbnailAlgoHandlerCount <= 0) {
-                    mainHandler.sendEmptyMessage(Utils.FINISH_ALGORITHM);
-                    mainHandler.sendEmptyMessage(Utils.SUCCESS);
-                    mainHandler.sendEmptyMessage(Utils.THUMBNAIL_START);
-                    String cachePath = context.getCacheDir().getAbsolutePath();
-                    String savePath1 = cachePath + File.separator + "Disk1Thumbnail" + File.separator;
-                    String savePath2 = cachePath + File.separator + "Disk2Thumbnail" + File.separator;
-                    String imgPath1 = savePath1 + path;
-                    String imgPath2 = savePath2 + path;
-                    Intent intent = new Intent();
-                    intent.putExtra("imgPath1", imgPath1);
-                    intent.putExtra("imgPath2", imgPath2);
-                    intent.setClass(context, SingleThumbnailActivity.class);
-                    context.startActivity(intent);
-                }
-            } else if (msg.what == Utils.CLOUD_FAILURE) {
-                mainHandler.sendEmptyMessage(Utils.ERROR);
-                cloud1Path.clear();
-            }
-        }
-    };
     boolean isSingle = false;
     String path;
 
@@ -316,40 +246,6 @@ public class Pipeline {
         }
         if (cloud1Path.size() == 0) {
             decryptAlgoHandler.sendEmptyMessage(Utils.CLOUD_SUCCESS);
-        }
-    }
-
-    public void thumbnailPipeline() {
-        mainHandler.sendEmptyMessage(Utils.START_CLOUD);
-
-        init();
-        String imgPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
-                + File.separator + "Thumbnail" + File.separator;
-        cloudStorage1.setHandler(thumbnailAlgoHandler);
-        cloudStorage2.setHandler(thumbnailAlgoHandler);
-        cloud1Path = new ArrayList<>();
-        List<String> existFiles = Utils.getAllFile(imgPath);
-        List<String> cloudFiles = null;
-        try {
-            cloudFiles = cloudStorage1.getFileList();
-        } catch (Exception e) {
-            e.printStackTrace();
-            mainHandler.sendEmptyMessage(Utils.ERROR);
-        }
-        for (String s : cloudFiles) {
-            if (Objects.isNull(existFiles) || !Objects.requireNonNull(existFiles).contains(s)) {
-                cloud1Path.add(s);
-            }
-        }
-        cloudTotalCount = cloud1Path.size() * 2;
-        for (String s : cloud1Path) {
-            cloudStorage1.getThumbnail(s, "Disk1Thumbnail");
-            cloudStorage2.getThumbnail(s, "Disk2Thumbnail");
-        }
-        if (cloud1Path.size() == 0) {
-
-            mainHandler.sendEmptyMessage(Utils.SUCCESS);
-            mainHandler.sendEmptyMessage(Utils.THUMBNAIL_START);
         }
     }
 }
