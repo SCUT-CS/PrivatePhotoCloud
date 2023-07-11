@@ -33,8 +33,8 @@ public class SingleDecryptActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         String imgPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
-                + File.separator + "PPPS"
-                + File.separator + imgName.substring(0, imgName.lastIndexOf(".ori"))
+                + File.separator + "PPPS-Download"
+                + File.separator + imgName
                 + ".jpg";
 
         Bitmap bitmapOrigin = BitmapFactory.decodeFile(imgPath); //从路径加载出图片bitmap

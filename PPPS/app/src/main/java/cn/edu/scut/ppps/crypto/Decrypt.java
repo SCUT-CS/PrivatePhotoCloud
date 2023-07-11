@@ -79,10 +79,10 @@ public class Decrypt implements Callable {
                 Bitmap.Config.ARGB_8888,
                 img1.hasAlpha(),
                 ColorSpace.get(ColorSpace.Named.SRGB));
-        imgName = Utils.getFileName(imgFilePath1).substring(0, imgName.lastIndexOf(".ori"));
+        imgName = Utils.getFileName(imgFilePath1);
         String filePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
                 + File.separator + "PPPS-Thumbnail"
-                + File.separator + imgName + ".webp";
+                + File.separator + imgName;
         Bitmap img3 = Utils.openImg(filePath);
 //            // 高斯模糊
 //            img3 = FastBlur.doBlur(img3, 10, true);

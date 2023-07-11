@@ -121,12 +121,12 @@ public class Encrypt implements Callable {
      * @author Cui Yuxin
      */
     private void saveFile() throws Exception {
-        String cachePath = context.getCacheDir().getAbsolutePath();
-        String savePath1 = cachePath + File.separator + "Disk1" + File.separator + fileName + ".ori";
-        String savePath2 = cachePath + File.separator + "Disk2" + File.separator + fileName +  ".ori";
+        String cachePath = context.getCacheDir().getAbsolutePath() + File.separator;
+        String savePath1 = cachePath + "Disk1" + File.separator + fileName + ".ori";
+        String savePath2 = cachePath + "Disk2" + File.separator + fileName +  ".ori";
         String savePath3 = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
                 + File.separator + "PPPS-Thumbnail"
-                + File.separator + fileName;
+                + File.separator + fileName + ".ori";
         Utils.saveImg(img1, savePath1);
         Utils.saveImg(img2, savePath2);
         Utils.saveImg(img3, savePath3);
