@@ -59,10 +59,6 @@ private boolean encrypt(Bitmap img) {
 }
 ```
 
-#### Check Style
-
-安装CS61B插件后，在源代码文件上右键会出现Check Style。
-
 ## Part B
 
 ### 算法部分
@@ -117,19 +113,9 @@ private boolean encrypt(Bitmap img) {
   - [云存储API](https://help.aliyun.com/document_detail/32007.html)
   - [图像处理API](https://help.aliyun.com/document_detail/101260.html)
   
-- 为了方便云服务的开发和调试，分配了以下阿里云子账户，并赋予了管理对象存储服务(OSS)权限，如果需要其他权限请联系我。
-
-  请各位使用自己的账号通过阿里云RAM登录并修改密码，**账号泄露会带来极大的安全风险！**
-
-  zxl@1059439782476091.onaliyun.com 0b|U8Ejds&8e?xGDcPED$CwiHeL3kCgB
-
-  fyc@1059439782476091.onaliyun.com duSQQoVx#&X!oR6VIo}7oUhYxc7StzB9
-
-  hzx@1059439782476091.onaliyun.com DiCN{(zJvoBzy3IA0BmU45rdPOYk$sq$
-
 - OSS存储桶已创建(ppps1和ppps2)
 
-  **Bucket 域名：ppps1.oss-cn-hangzhou.aliyuncs.com  ppps2.oss-cn-hangzhou.aliyuncs.com**
+  **Bucket 域名：ppps1.oss-cn-hangzhou.aliyuncs.com**
 
   地域节点： oss-cn-hangzhou.aliyuncs.com
 
