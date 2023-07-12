@@ -10,13 +10,26 @@
         android:id="@+id/originalImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="100dp"
         android:adjustViewBounds="true"
-        android:maxWidth="350dp"
-        android:maxHeight="300dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:maxWidth="180dp"
+        android:maxHeight="230dp"
+        app:layout_constraintEnd_toStartOf="@+id/guideline2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@drawable/no_image" />
+
+    <ImageView
+        android:id="@+id/thumbnailImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:maxWidth="150dp"
+        android:maxHeight="200dp"
+        app:layout_constraintBottom_toBottomOf="@+id/originalImage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline2"
+        app:layout_constraintTop_toTopOf="@+id/originalImage"
         tools:srcCompat="@drawable/no_image" />
 
     <ImageView
@@ -56,9 +69,20 @@
         android:layout_marginTop="8dp"
         android:text="原图"
         android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/originalImage"
         app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/originalImage"
+        app:layout_constraintTop_toBottomOf="@+id/originalImage" />
+
+    <TextView
+        android:id="@+id/textViewThumbnail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="缩略图"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="@+id/thumbnailImage"
+        app:layout_constraintStart_toStartOf="@+id/thumbnailImage"
         app:layout_constraintTop_toBottomOf="@+id/originalImage" />
 
     <TextView
@@ -87,10 +111,6 @@
         app:layout_constraintEnd_toEndOf="@+id/decryptedImage2"
         app:layout_constraintStart_toStartOf="@+id/decryptedImage2"
         app:layout_constraintTop_toBottomOf="@+id/decryptedImage2" />
-
-
-
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

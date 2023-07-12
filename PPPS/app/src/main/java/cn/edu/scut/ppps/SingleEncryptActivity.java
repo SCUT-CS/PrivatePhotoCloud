@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Environment;
 import android.widget.ImageView;
 
 import java.io.File;
@@ -26,16 +27,26 @@ public class SingleEncryptActivity extends AppCompatActivity {
         String cachePath = bundle.getString("cachePath");
 
         ImageView originalImage = findViewById(R.id.originalImage);
+        ImageView thumbnailImage = findViewById(R.id.thumbnailImage);
         ImageView encrypt1 = findViewById(R.id.encryptedImage1);
         ImageView encrypt2 = findViewById(R.id.encryptedImage2);
-        
+
+        String imgName = null;
+        try {
+            imgName = Utils.getFileName(path);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String thumPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
+                + File.separator + "PPPS-Thumbnail"
+                + File.separator + imgName
+                + ".ori.webp";
         String encryptPath1 = null;
         try {
             encryptPath1 = cachePath + File.separator + "Disk1" + File.separator+ Utils.getFileName(path) + ".ori.webp";
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         String encryptPath2 = null;
         try {
             encryptPath2 = cachePath + File.separator + "Disk2" + File.separator+ Utils.getFileName(path) + ".ori.webp";
@@ -45,6 +56,8 @@ public class SingleEncryptActivity extends AppCompatActivity {
 
         Bitmap bitmapOrigin = BitmapFactory.decodeFile(path); //从路径加载出图片bitmap
         originalImage.setImageBitmap(bitmapOrigin); //ImageView显示图片
+        Bitmap bitmapThumbnail = BitmapFactory.decodeFile(thumPath);
+        thumbnailImage.setImageBitmap(bitmapThumbnail);
         Bitmap bitmapencrypt1 = BitmapFactory.decodeFile(encryptPath1);
         encrypt1.setImageBitmap(bitmapencrypt1);
         Bitmap bitmapencrypt2 = BitmapFactory.decodeFile(encryptPath2);

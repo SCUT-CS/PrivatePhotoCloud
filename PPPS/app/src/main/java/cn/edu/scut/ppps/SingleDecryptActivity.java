@@ -22,7 +22,9 @@ public class SingleDecryptActivity extends AppCompatActivity {
         String imgPath1 = bundle.getString("imgPath1");
         String imgPath2 = bundle.getString("imgPath2");
 
+
         ImageView originalImage = findViewById(R.id.originalImage);
+        ImageView thumbnailImage = findViewById(R.id.thumbnailImage);
         ImageView decrypt1 = findViewById(R.id.decryptedImage1);
         ImageView decrypt2 = findViewById(R.id.decryptedImage2);
 
@@ -36,9 +38,15 @@ public class SingleDecryptActivity extends AppCompatActivity {
                 + File.separator + "PPPS-Download"
                 + File.separator + imgName
                 + ".jpg";
+        String thumPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
+                + File.separator + "PPPS-Thumbnail"
+                + File.separator + imgName;
+
 
         Bitmap bitmapOrigin = BitmapFactory.decodeFile(imgPath); //从路径加载出图片bitmap
         originalImage.setImageBitmap(bitmapOrigin); //ImageView显示图片
+        Bitmap bitmapThumbnail = BitmapFactory.decodeFile(thumPath);
+        thumbnailImage.setImageBitmap(bitmapThumbnail);
         Bitmap bitmapdecrypt1 = BitmapFactory.decodeFile(imgPath1);
         decrypt1.setImageBitmap(bitmapdecrypt1);
         Bitmap bitmapdecrypt2 = BitmapFactory.decodeFile(imgPath2);
