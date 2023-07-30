@@ -20,6 +20,8 @@ import com.alibaba.sdk.android.oss.model.DeleteObjectRequest;
 import com.alibaba.sdk.android.oss.model.DeleteObjectResult;
 import com.alibaba.sdk.android.oss.model.GetObjectRequest;
 import com.alibaba.sdk.android.oss.model.GetObjectResult;
+import com.alibaba.sdk.android.oss.model.ImagePersistRequest;
+import com.alibaba.sdk.android.oss.model.ImagePersistResult;
 import com.alibaba.sdk.android.oss.model.ListObjectsRequest;
 import com.alibaba.sdk.android.oss.model.ListObjectsResult;
 import com.alibaba.sdk.android.oss.model.OSSObjectSummary;
@@ -376,6 +378,32 @@ public class AliOSS implements CloudService {
                     Log.e("RawMessage", serviceException.getRawMessage());
                 }
                 handler.sendEmptyMessage(Utils.CLOUD_FAILURE);
+            }
+        });
+        return true;
+    }
+
+    /**
+     * Modify Image.
+     * @param filePath 文件名，包含后缀
+     * @param action operation, e.g. "resize,w_100".
+     * @author Cui Yuxin
+     */
+    public boolean modify(String filePath, String action){
+        ImagePersistRequest request = new ImagePersistRequest(token.get("bucketName"),
+                token.get("filePath") + filePath,
+                token.get("bucketName"),
+                token.get("filePath") + filePath,
+                action);
+        OSSAsyncTask task = ossClient.asyncImagePersist(request, new OSSCompletedCallback<ImagePersistRequest, ImagePersistResult>() {
+            @Override
+            public void onSuccess(ImagePersistRequest request, ImagePersistResult result) {
+                // sucess callback
+            }
+
+            @Override
+            public void onFailure(ImagePersistRequest request, ClientException clientException, ServiceException serviceException) {
+                // errror callback
             }
         });
         return true;
