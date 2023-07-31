@@ -1,6 +1,7 @@
 package cn.edu.scut.ppps;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -258,4 +259,38 @@ public class Utils {
 //                mSaturationMatrix.setSaturation(mSaturationValue);
 //                break;
     //裁剪 旋转
+
+    public static Bitmap modifySaturation(Bitmap bm, float val) {
+        Bitmap bmp = Bitmap.createBitmap(bm.getWidth(), bm.getHeight(),
+                Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bmp); // 得到画笔对象
+        Paint paint = new Paint(); // 新建paint
+        paint.setAntiAlias(true); // 设置抗锯齿,也即是边缘做平滑处理
+        ColorMatrix mSaturationMatrix = new ColorMatrix();
+        mSaturationMatrix.setSaturation(val);
+        paint.setColorFilter(new ColorMatrixColorFilter(mSaturationMatrix));// 设置颜色变换效果
+        canvas.drawBitmap(bm, 0, 0, paint); // 将颜色变化后的图片输出到新创建的位图区
+        // 返回新的位图，也即调色处理后的图片
+        return bmp;
+    }
+
+    /**
+     * 从相册选择照片进行裁剪
+     */
+    private void cropFromGallery() {
+        Intent intent=new Intent();
+        intent.setAction(Intent.ACTION_PICK);//Pick an item from the data
+        intent.setType("image/*");//从所有图片中进行选择
+        intent.putExtra("crop", "true");//设置为裁切
+        intent.putExtra("aspectX", 1);//裁切的宽比例
+        intent.putExtra("aspectY", 1);//裁切的高比例
+        intent.putExtra("outputX", 600);//裁切的宽度
+        intent.putExtra("outputY", 600);//裁切的高度
+        intent.putExtra("scale", true);//支持缩放
+        intent.putExtra("return-data", false);
+//        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);//将裁切的结果输出到指定的Uri
+//        intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());//裁切成的图片的格式
+//        intent.putExtra("noFaceDetection", true); // no face detection
+//        startActivityForResult(intent, SELECT_PIC);
+    }
 }
