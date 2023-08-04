@@ -24,6 +24,9 @@
         android:theme="@style/Theme.PPPS"
         tools:targetApi="31">
         <activity
+            android:name=".ThumbnailPreviewActivity"
+            android:exported="false" />
+        <activity
             android:name=".SingleDecryptActivity"
             android:exported="false" />
         <activity

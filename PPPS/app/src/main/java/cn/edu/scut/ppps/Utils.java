@@ -258,7 +258,7 @@ public class Utils {
 //                mSaturationMatrix.reset();
 //                mSaturationMatrix.setSaturation(mSaturationValue);
 //                break;
-    //裁剪 旋转
+    //裁剪 旋转\
 
     public static Bitmap modifySaturation(Bitmap bm, float val) {
         Bitmap bmp = Bitmap.createBitmap(bm.getWidth(), bm.getHeight(),

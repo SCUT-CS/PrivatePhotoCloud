@@ -261,7 +261,6 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
             updateCloud();
         } else if(requestCode == Utils.PREVIEW_RESULT && resultCode == RESULT_OK){
             String path = data.getStringExtra("path");
-
             if (path.contains("Thumbnail")) {
                 pipeline.decryptPipeline(new String[]{path});
             } else {
@@ -566,8 +565,14 @@ public class MainActivity extends WaterPermissionActivity<AlbumModel> implements
         intent.putExtra("imgPath", path);
         String cachePath = context.getCacheDir().getAbsolutePath();
         intent.putExtra("cachePath", cachePath);
-        intent.setClass(getApplicationContext(), PreviewActivity.class);
-        startActivityForResult(intent,Utils.PREVIEW_RESULT);
+
+        if (path.contains("Thumbnail")) {
+            intent.setClass(getApplicationContext(), ThumbnailPreviewActivity.class);
+            startActivityForResult(intent,Utils.PREVIEW_RESULT);
+        } else {
+            intent.setClass(getApplicationContext(), PreviewActivity.class);
+            startActivityForResult(intent,Utils.PREVIEW_RESULT);
+        }
     }
 
 
