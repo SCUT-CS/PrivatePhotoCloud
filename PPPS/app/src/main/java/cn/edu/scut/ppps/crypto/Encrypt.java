@@ -194,7 +194,8 @@ public class Encrypt implements Callable {
                 int[] argb = new int[4];
                 for (int row = rowStart; row < rowEnd; row++) {
                     for (int col = colStart; col < colEnd; col++) {
-                        int pixel = originalPixels[(row - rowStart) * (colEnd - colStart) + (col - colStart)];
+                        int index = (row - rowStart) * (colEnd - colStart) + (col - colStart);
+                        int pixel = originalPixels[index];
                         argb[0] = pixel >>> 24;
                         argb[1] = (pixel >> 16) & 0xFF;
                         argb[2] = (pixel >> 8) & 0xFF;
@@ -204,7 +205,7 @@ public class Encrypt implements Callable {
                         int g1 = rnd.nextInt(256);
                         int b1 = rnd.nextInt(256);
                         pixel = b1 | g1 << 8 | r1 << 16 | a1 << 24;
-                        encryptedPixels1[(row - rowStart) * (colEnd - colStart) + (col - colStart)] = pixel;
+                        encryptedPixels1[index] = pixel;
                         int rowIndex = (int) (row * scale);
                         int colIndex = (int) (col * scale);
                         int pixel3 = encryptedPixels3[rowIndex * scaledWidth + colIndex];
@@ -217,14 +218,15 @@ public class Encrypt implements Callable {
                         int g2 = (argb[2] - g1 - g3) & 0xff;
                         int b2 = (argb[3] - b1 - b3) & 0xff;
                         pixel = b2 | g2 << 8 | r2 << 16 | a2 << 24;
-                        encryptedPixels2[(row - rowStart) * (colEnd - colStart) + (col - colStart)] = pixel;
+                        encryptedPixels2[index] = pixel;
                     }
                 }
             } else {
                 int[] rgb = new int[3];
                 for (int row = rowStart; row < rowEnd; row++) {
                     for (int col = colStart; col < colEnd; col++) {
-                        int pixel = originalPixels[(row - rowStart) * (colEnd - colStart) + (col - colStart)];
+                        int index = (row - rowStart) * (colEnd - colStart) + (col - colStart);
+                        int pixel = originalPixels[index];
                         rgb[0] = (pixel >> 16) & 0xFF;
                         rgb[1] = (pixel >> 8) & 0xFF;
                         rgb[2] = pixel & 0xFF;
@@ -232,7 +234,7 @@ public class Encrypt implements Callable {
                         int g1 = rnd.nextInt(256);
                         int b1 = rnd.nextInt(256);
                         pixel = b1 | g1 << 8 | r1 << 16 | 0xff000000;
-                        encryptedPixels1[(row - rowStart) * (colEnd - colStart) + (col - colStart)] = pixel;
+                        encryptedPixels1[index] = pixel;
                         int rowIndex = (int) (row * scale);
                         int colIndex = (int) (col * scale);
                         int pixel3 = encryptedPixels3[rowIndex * scaledWidth + colIndex];
@@ -251,7 +253,7 @@ public class Encrypt implements Callable {
                         int g2 = (rgb[1] - g1 - g3) & 0xff;
                         int b2 = (rgb[2] - b1 - b3) & 0xff;
                         pixel = b2 | g2 << 8 | r2 << 16 | 0xff000000;
-                        encryptedPixels2[(row - rowStart) * (colEnd - colStart) + (col - colStart)] = pixel;
+                        encryptedPixels2[index] = pixel;
                     }
                 }
             }
