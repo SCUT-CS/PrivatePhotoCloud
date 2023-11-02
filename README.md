@@ -1,135 +1,57 @@
-#  项目架构
+#  隐私保护的安全图像云存储与云计算
 
-## Before Start
+## 云存储
 
-如果你遇到了任何问题，欢迎一起讨论解决。
+### 背景
 
-Part A是项目代码的相关规范，Part B是项目架构。
+近年来，随着移动端智能设备的普及，人们已经习惯于利用手机等其它带有摄像头的智能设备“随手拍”记录生活，并借助便捷的移动网络，将所记录的图片同步存储到云服务器，以便于随时预览和使用。云存储已经成为未来存储发展的一种趋势，对于个人而言，现在已经有很多大企业提供免费的云存储服务，如华为云、百度云、腾讯云、阿里云等等，是当今人们存储、备份、分享数据的重要选择，企业云存储更是占据了超过98%的云存储市场规模，其能够帮助企业在运营效率、业务灵活性、上市时间、竞争优势，以及降低成本方面获得不俗的收益。
 
-## Updates
+然而，云存储依靠网络联系用户与第三方云存储服务商，用户所存储的数据均可被服务商直接查看甚至删除，存在着巨大的数据安全隐患。虽然如Dropbox、AWS、微软和谷歌等云存储提供商提供了基本安全措施，但仍存在被黑客会攻击服务器而导致隐私泄露的风险。存储图片的云服务器并不完全可信，云服务器泄露图片数据的事故时有发生。例如，iCloud就曾泄露许多好莱坞女明星的私密图片。如何保护防止云服务器泄露图片并保证云图片服务的可用性，是目前云图片存储面临的难题。为此，本项目引入隐私计算的理念，设计了一个安全且高效的图像云存储系统，在确保图片隐私的前提下保证云图片存储服务的可用性。
 
-### 2022.9.19-2022.9.23
+本系统不仅可以有效的保护个人图片数据隐私，同时有助于云存储服务提供商实现数据隐私合规，有效应对了已正式施行的《中华人民共和国数据安全法》、《中华人民共和国个人信息保护法》对新技术的发展提出新要求。我们设计的图像云存储系统正是基于隐私计算技术，着手解决图片传输、分享过程中潜在的隐私泄露问题，促进数据价值的安全释放。
 
-#### Task：
+### 加密示意图
 
-完成UI的美化。
+![加密](https://github.com/SCUT-CS/PrivatePhotoCloud/blob/main/img/1.png?raw=true)
 
-## Part A
+### 功能模块
 
-### IDE和Git
+- 加密模块
+  - 单图片加密
+  - 多图片加密
+- 缩略图计算模块
+  - 计算缩略图
+- 解密模块
+  - 单图片解密
+  - 多图片解密
+- 相机模块
+  - 拍照并加密上传
+- 状态和设置模块
+  - 展示当前软件状态
+  - 设置云存储参数和拍照分辨率
 
-使用Java语言，Android Studio开发。（Android Studio基于Intellij开发，暂不支持中文，可以先使用Intellij来熟悉java）
+### 设计思路
 
-**熟悉一下GitHub Desktop的相关操作及Git的有关概念。**
+本项目属于移动端应用开发，项目的基本思路是利用加密技术保护图片的隐私，通过隐私计算的方法实现加密图片的操作。
 
-建议尝试一下GitHub的Copilot插件，学生认证后免费。
+目前，云图片的安全存储面临如下几个问题：
 
-### 代码规范
+（1）加密图片存储开销大；
 
-在开发分支上面编写代码，通过**Code Review**以及**代码风格检查**后合并进入主分支。
+（2）传统的加密方法不支持密文运算；
 
-<u>请注意：在提交代码到仓库主分支之前务必参考上面的内容**编写注释**并**通过代码风格检查**。</u>
+（3）同态加密的方法需要修改云服务器的操作。
 
-#### Code Style
+为解决上述问题，本项目基于安全两方计算与加秘密共享技术，构造双云服务器的图片数据安全存储架构。并利用加秘密共享的密文可计算和密文低开销特性，设计无需修改云服务器操作的加密图片缩略图计算方法。
 
-Some of the most important features of good coding style are:
+为实现所需功能，我们开发了一个云端协同的图像数据云存储系统。系统包含一个移动App以及2个用于存储图片的云服务器。其中，App负责本地加密和解密图片和预览图片，云服务器用于存储加密图片和基于加密图片计算加密的缩略图。
 
-- Size (**lines that are not too wide**, source files that are not too long)
-- **Descriptive naming** (variables, functions, classes), e.g. variables or functions with names like `year` or `getUserName` instead of `x` or `f`.
-- **Avoidance of repetitive code**: You should almost never have two significant blocks of code that are nearly identical except for a few changes.
+### 运行截图
 
-#### 注释格式
+![run](https://github.com/SCUT-CS/PrivatePhotoCloud/blob/main/img/2.png?raw=true)
 
-```java
-/** 
- * [Description here（return what）]
- * @param [Parameters and Description](optional)
- * @param [Parameters and Description](optional)
- * @author [Your name]
- * @source (optional)
- */
+## 云计算
 
-/**
- * encrypt a image and return true if success.
- * @param img the image to be encrypted.
- * @author Cui Yuxin
- */
-private boolean encrypt(Bitmap img) {
-        
-}
-```
+### 密文域的修图操作
 
-## Part B
-
-### 算法部分
-
-**Demo时间测试结果：**
-
-1. 低分辨率JPG：0.1s
-2. 中分辨率JPG：4s
-3. 高分辨率JPG：22s
-
-**以OneDrive为例：**
-
-原图大小：6016×4000
-
-中缩略图：1488×989
-
-小缩略图：400×265
-
-### 文件路径
-
-原图：img.*1
-
-密文1：img.*1.ori.webp		$cacheDir$/Disk1/
-
-密文2：img.*1.ori.webp		$cacheDir$/Disk2/
-
-溢出信息：img.*1		$dataDir$/overflow/
-
-缩略图：img.*1.ori.webp $picturesDir$/Thumbnail/
-
-解密结果：img.*1.jpg $picturesDir$/PPPS
-
-### 多线程
-
-加密和解密部分在文件层次上尝试使用多线程提高效率。
-
-上传下载多线程。
-
-### Camera API
-
-使用CameraX API开发。
-
-### 相册API
-
-实现照片的单选和多选（快捷手势）等。
-
-### 云服务API
-
-- 创建通用的Cloud Interface
-
-- 先使用阿里云OSS对象云存储服务实现
-  - [云存储API](https://help.aliyun.com/document_detail/32007.html)
-  - [图像处理API](https://help.aliyun.com/document_detail/101260.html)
-  
-- OSS存储桶已创建(ppps1和ppps2)
-
-  **Bucket 域名：ppps1.oss-cn-hangzhou.aliyuncs.com**
-
-  地域节点： oss-cn-hangzhou.aliyuncs.com
-
-- 调用API使用以下AccessKey
-
-  - **AccessKey泄露会带来极大的安全风险！**
-  - AccessKey ID：LTAI5t9Wx9ZwYxCuPEGoxoct
-  -  AccessKey Secret：IJWyl2xxwYC1vwaTkw8mZ4hWnKZXxP
-  -  LTAI5t9Wx9ZwYxCuPEGoxoct:IJWyl2xxwYC1vwaTkw8mZ4hWnKZXxP
-
-## Evaluation
-
-图片大小S：3024*4032 JJPEG格式 2.39mb
-
-图片大小M：4512*6016 JPEG格式 6.67mb
-
-~~图片大小L：9024*12032~~
+![修图](https://github.com/SCUT-CS/PrivatePhotoCloud/blob/main/img/3.png?raw=true)
